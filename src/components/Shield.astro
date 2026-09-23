@@ -1,0 +1,39 @@
+---
+import {
+  ICON_BOX,
+  shieldGuarding,
+  shieldAway,
+  shieldNotProtected,
+  shieldOff,
+  shieldConnecting,
+} from '../icons/paths';
+
+const shapes = {
+  guarding: shieldGuarding,
+  away: shieldAway,
+  'not-protected': shieldNotProtected,
+  off: shieldOff,
+  connecting: shieldConnecting,
+} as const;
+
+interface Props {
+  shape: keyof typeof shapes;
+  size?: number;
+  label?: string;
+}
+
+const { shape, size = 28, label } = Astro.props;
+const paths = shapes[shape];
+---
+
+<svg
+  viewBox={`0 0 ${ICON_BOX} ${ICON_BOX}`}
+  width={size}
+  height={size}
+  fill="currentColor"
+  role={label ? 'img' : 'presentation'}
+  aria-label={label}
+  aria-hidden={label ? undefined : 'true'}
+>
+  {paths.map((d) => <path d={d} fill-rule="evenodd" clip-rule="evenodd" />)}
+</svg>
