@@ -1,0 +1,82 @@
+---
+// A screenshot slot. Until the owner supplies real frames this renders a placeholder that
+// says so out loud -- ImageRenderer cannot draw the menu (toggles, sliders and pickers come
+// out as yellow blocks with no text), so no honest screenshot can be generated here.
+//
+// To fill one: drop the PNG in src/assets, `import shot from '../assets/<name>.png'` in the
+// page, and pass it as `src`. Astro resizes and serves it from there.
+import { Image } from 'astro:assets';
+
+interface Props {
+  caption: string;
+  ratio?: string;
+  src?: ImageMetadata;
+  alt?: string;
+}
+
+const { caption, ratio = '16 / 10', src, alt } = Astro.props;
+---
+
+<figure class="shot" style={`--ratio: ${ratio}`}>
+  {
+    src ? (
+      <Image src={src} alt={alt ?? caption} widths={[520, 900, 1400]} sizes="(max-width: 900px) 92vw, 900px" />
+    ) : (
+      <div class="placeholder">
+        <span class="tag">Screenshot to come</span>
+        <span class="what">{caption}</span>
+      </div>
+    )
+  }
+</figure>
+
+<style>
+  .shot {
+    margin: 0;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    box-shadow: var(--shadow);
+  }
+
+  .shot :global(img) {
+    width: 100%;
+    height: auto;
+  }
+
+  .placeholder {
+    aspect-ratio: var(--ratio);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1.5rem;
+    text-align: center;
+    background: repeating-linear-gradient(
+      -45deg,
+      var(--surface-raised) 0 12px,
+      var(--bg-sunken) 12px 24px
+    );
+  }
+
+  .tag {
+    padding: 0.25rem 0.7rem;
+    border-radius: 999px;
+    border: 1px dashed var(--line-strong);
+    background: var(--surface);
+    font-size: 0.75rem;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .what {
+    max-width: 32ch;
+    color: var(--ink-soft);
+    font-size: 0.9375rem;
+    line-height: 1.45;
+  }
+</style>

@@ -1,0 +1,425 @@
+---
+import { ICON_BOX, shieldGuarding, shieldAway, bluetoothGlyph, signalArcs } from '../icons/paths';
+
+// The numbers are the In public setting: far at -65 dBm, lock five seconds later. The
+// readings are the ones measured on hardware -- about -50 dBm on the desk (V11), -67 to
+// -75 at roughly five metres.
+const steps = [
+  {
+    kicker: 'Sitting down',
+    title: 'Your iPhone is nearby',
+    body: 'MacAway holds a Bluetooth link to the device and reads the signal once a second, averaged over the last five to eight readings. On the desk that is about −50 dBm.',
+    reading: '−50 dBm',
+    status: 'Protected',
+    tone: 'ok',
+  },
+  {
+    kicker: 'You stand up',
+    title: 'The signal drops',
+    body: 'A dead zone between near and far stops the boundary flapping, so one weak reading is not a departure. Several in a row are.',
+    reading: '−62 dBm',
+    status: 'Checking',
+    tone: 'ok',
+  },
+  {
+    kicker: 'You walk out',
+    title: 'Far enough is away',
+    body: 'On In public, anything weaker than −65 dBm counts as far. MacAway waits five more seconds in case you turn straight back.',
+    reading: '−72 dBm',
+    status: 'Locking in',
+    countdown: true,
+    tone: 'warn',
+  },
+  {
+    kicker: 'Locked',
+    title: 'The screen is locked',
+    body: 'About fifteen seconds from standing up: roughly ten to read you as far away, then the five-second wait. Home, which a new Mac starts on, waits fifteen seconds instead of five.',
+    reading: 'no reading',
+    status: 'Locked',
+    tone: 'locked',
+  },
+];
+---
+
+<section class="walkaway" id="walkaway" aria-labelledby="walkaway-heading">
+  <div class="stage">
+    <div class="wrap stage-grid">
+      <div class="copy">
+        <p class="eyebrow">Walking away</p>
+        <h2 id="walkaway-heading">Stand up, and the countdown starts</h2>
+
+        <ol class="steps">
+          {
+            steps.map((step, i) => (
+              <li class="step" data-step={i}>
+                <span class="kicker">{step.kicker}</span>
+                <h3>{step.title}</h3>
+                <p>{step.body}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+
+      <figure class="art" aria-hidden="true">
+        <svg class="art-svg" viewBox="0 0 900 470">
+          <g class="device" transform={`translate(30 105) scale(${250 / ICON_BOX})`}>
+            <path d={bluetoothGlyph[0]} fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" />
+            <path class="arc" data-arc="2" d={signalArcs[0]} fill="currentColor" />
+            <path class="arc" data-arc="1" d={signalArcs[1]} fill="currentColor" />
+            <path class="arc" data-arc="0" d={signalArcs[2]} fill="currentColor" />
+          </g>
+
+          <g class="shield-slot" transform={`translate(520 55) scale(${340 / ICON_BOX})`}>
+            <g class="shield shield-guard">
+              {shieldGuarding.map((d) => <path d={d} fill="currentColor" />)}
+            </g>
+            <g class="shield shield-away">
+              {shieldAway.map((d) => <path d={d} fill="currentColor" />)}
+            </g>
+          </g>
+        </svg>
+
+        <div class="readout">
+          <div class="cell">
+            <span class="cell-label">iPhone</span>
+            <span class="cell-values">
+              {
+                steps.map((step, i) => (
+                  <span class="cell-value" data-step={i}>
+                    {step.reading}
+                  </span>
+                ))
+              }
+            </span>
+          </div>
+          <div class="cell cell-right">
+            <span class="cell-label">Menu bar says</span>
+            <span class="cell-values">
+              {
+                steps.map((step, i) => (
+                  <span class={`cell-value chip tone-${step.tone}`} data-step={i}>
+                    {step.status}
+                    {step.countdown && <> <b class="count">5</b> s</>}
+                  </span>
+                ))
+              }
+            </span>
+          </div>
+        </div>
+
+        <div class="veil"><span>Locked</span></div>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<style>
+  .walkaway {
+    background: var(--bg-sunken);
+    border-block: 1px solid var(--line);
+    padding-block: clamp(4rem, 9vw, 6.5rem);
+  }
+
+  .stage-grid {
+    display: grid;
+    gap: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .copy h2 {
+    max-width: 16ch;
+  }
+
+  .steps {
+    list-style: none;
+    margin: 2.25rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 1.75rem;
+  }
+
+  .step {
+    border-left: 2px solid var(--line-strong);
+    padding-left: 1.25rem;
+  }
+
+  .kicker {
+    display: block;
+    font-size: 0.8125rem;
+    font-weight: 620;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 0.35rem;
+  }
+
+  .step h3 {
+    margin-bottom: 0.4rem;
+  }
+
+  .step p {
+    color: var(--ink-soft);
+    font-size: 1rem;
+  }
+
+  .art {
+    position: relative;
+    margin: 0;
+    padding: clamp(1.25rem, 3vw, 2rem);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  .art-svg {
+    width: 100%;
+    height: auto;
+    color: var(--ink-faint);
+  }
+
+  .device {
+    color: var(--ink-soft);
+  }
+
+  .shield-slot {
+    position: relative;
+  }
+
+  .shield-guard {
+    color: var(--accent);
+  }
+
+  .shield-away {
+    color: var(--warn-graphic);
+    opacity: 0;
+  }
+
+  .readout {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 1.1rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .cell-right {
+    text-align: right;
+  }
+
+  .cell-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 0.3rem;
+  }
+
+  .cell-values {
+    display: grid;
+  }
+
+  .cell-value {
+    grid-area: 1 / 1;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    justify-self: start;
+  }
+
+  .cell-right .cell-value {
+    justify-self: end;
+  }
+
+  .chip {
+    padding: 0.18rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.9375rem;
+    border: 1px solid transparent;
+  }
+
+  .tone-ok {
+    color: var(--accent);
+    background: var(--accent-wash);
+    border-color: var(--accent-line);
+  }
+
+  .count {
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .tone-warn {
+    color: var(--warn);
+    background: var(--warn-wash);
+    border-color: var(--warn-line);
+  }
+
+  .tone-locked {
+    color: var(--ink-soft);
+    background: var(--surface-raised);
+    border-color: var(--line-strong);
+  }
+
+  .veil {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background: #050806;
+    color: #6f7d76;
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  /* No JS, or reduced motion: every step is read as a list and the artwork rests on the
+     end state, which is a locked screen. */
+  .art-svg,
+  .readout {
+    opacity: 0.999;
+  }
+
+  :where(.walkaway:not([data-mode='scrub'])) .cell-value:not([data-step='3']) {
+    display: none;
+  }
+
+  :where(.walkaway:not([data-mode='scrub'])) .shield-guard {
+    opacity: 0;
+  }
+
+  :where(.walkaway:not([data-mode='scrub'])) .shield-away {
+    opacity: 1;
+  }
+
+  :where(.walkaway:not([data-mode='scrub'])) .arc {
+    opacity: 0.18;
+  }
+
+  /* Scrubbed mode. The steps stack on top of each other and GSAP crossfades them. */
+  .walkaway[data-mode='scrub'] {
+    padding-block: 0;
+  }
+
+  .walkaway[data-mode='scrub'] .stage {
+    min-height: 100svh;
+    display: grid;
+    align-items: center;
+  }
+
+  .walkaway[data-mode='scrub'] .steps {
+    display: grid;
+    margin-top: 1.75rem;
+  }
+
+  .walkaway[data-mode='scrub'] .step {
+    grid-area: 1 / 1;
+  }
+
+  .walkaway[data-mode='scrub'] .veil {
+    opacity: 0;
+  }
+
+  @media (min-width: 900px) {
+    .stage-grid {
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      align-items: center;
+    }
+  }
+
+  @media (max-width: 899px) {
+    .walkaway[data-mode='scrub'] .steps {
+      min-height: 11.5rem;
+      align-content: start;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  const section = document.querySelector<HTMLElement>('.walkaway');
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  function setup() {
+    if (!section || reduced.matches) return;
+
+    gsap.registerPlugin(ScrollTrigger);
+    section.dataset.mode = 'scrub';
+
+    const stage = section.querySelector('.stage')!;
+    const steps = gsap.utils.toArray<HTMLElement>('.step', section);
+    const arcs = gsap.utils.toArray<SVGPathElement>('.arc', section);
+    const veil = section.querySelector('.veil')!;
+
+    // Each readout column holds one value per step, stacked in the same grid cell.
+    const columns = gsap.utils
+      .toArray<HTMLElement>('.cell-values', section)
+      .map((col) => gsap.utils.toArray<HTMLElement>('.cell-value', col));
+
+    const show = (els: Element[], index: number, at: number, tl: gsap.core.Timeline) => {
+      els.forEach((el, i) => {
+        tl.to(el, { opacity: i === index ? 1 : 0, duration: 0.25 }, at);
+      });
+    };
+
+    gsap.set(steps.slice(1), { opacity: 0, y: 14 });
+    columns.forEach((col) => gsap.set(col.slice(1), { opacity: 0 }));
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: section,
+        start: 'top top',
+        end: window.matchMedia('(max-width: 899px)').matches ? '+=1700' : '+=2400',
+        pin: stage,
+        pinSpacing: true,
+        scrub: 0.5,
+        anticipatePin: 1,
+      },
+    });
+
+    // Beat 2: the outermost arc goes, the reading weakens.
+    tl.to(steps[0], { opacity: 0, y: -14, duration: 0.2 }, 1);
+    tl.to(steps[1], { opacity: 1, y: 0, duration: 0.2 }, 1.22);
+    tl.to(arcs[0], { opacity: 0.12, duration: 0.3 }, 1);
+    columns.forEach((col) => show(col, 1, 1, tl));
+
+    // Beat 3: the rest of the signal goes and the shield takes the exclamation.
+    tl.to(steps[1], { opacity: 0, y: -14, duration: 0.2 }, 2);
+    tl.to(steps[2], { opacity: 1, y: 0, duration: 0.2 }, 2.22);
+    tl.to([arcs[1], arcs[2]], { opacity: 0.12, duration: 0.3, stagger: 0.12 }, 2);
+    tl.to('.shield-guard', { opacity: 0, duration: 0.3 }, 2.1);
+    tl.to('.shield-away', { opacity: 1, duration: 0.3 }, 2.1);
+    columns.forEach((col) => show(col, 2, 2, tl));
+
+    // Beat 4: the five seconds run out. Scrubbing back counts them up again, because the
+    // number is read off the tween rather than stepped by a callback.
+    const clock = { left: 5 };
+    const countEl = section.querySelector<HTMLElement>('.count');
+    tl.to(
+      clock,
+      {
+        left: 0,
+        duration: 1.2,
+        ease: 'none',
+        onUpdate: () => {
+          if (countEl) countEl.textContent = String(Math.ceil(clock.left));
+        },
+      },
+      2.3
+    );
+
+    tl.to(steps[2], { opacity: 0, y: -14, duration: 0.2 }, 3.2);
+    tl.to(steps[3], { opacity: 1, y: 0, duration: 0.2 }, 3.42);
+    columns.forEach((col) => show(col, 3, 3.2, tl));
+    tl.to(veil, { opacity: 1, duration: 0.35 }, 3.45);
+    tl.to({}, { duration: 0.4 });
+  }
+
+  setup();
+</script>
