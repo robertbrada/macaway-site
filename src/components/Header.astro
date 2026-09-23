@@ -1,0 +1,77 @@
+---
+import { Image } from 'astro:assets';
+import appicon from '../assets/appicon.png';
+
+import { link } from '../lib/links';
+---
+
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="brand" href={link('')}>
+      <Image src={appicon} alt="" width={30} height={30} densities={[1, 2]} loading="eager" />
+      <span>MacAway</span>
+    </a>
+    <nav aria-label="Primary">
+      <a href={`${link('')}#walkaway`}>How it works</a>
+      <a href={link('privacy')}>Privacy</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter: saturate(150%) blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    height: 62px;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 640;
+    font-size: 1.0625rem;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+  }
+
+  .brand :global(img) {
+    border-radius: 7px;
+  }
+
+  nav {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    font-size: 0.9375rem;
+    font-weight: 520;
+  }
+
+  nav a {
+    color: var(--ink-soft);
+    text-decoration: none;
+    transition: color 0.16s ease;
+  }
+
+  nav a:hover {
+    color: var(--ink);
+  }
+
+  @media (max-width: 420px) {
+    nav {
+      gap: 1.05rem;
+      font-size: 0.875rem;
+    }
+  }
+</style>
