@@ -1,77 +1,76 @@
 ---
-import { Image } from 'astro:assets';
-import appicon from '../assets/appicon.png';
-
+import DownloadButton from './DownloadButton.astro';
+import Logo from './Logo.astro';
 import { link } from '../lib/links';
 ---
 
 <header class="site-header">
   <div class="wrap bar">
     <a class="brand" href={link('')}>
-      <Image src={appicon} alt="" width={30} height={30} densities={[1, 2]} loading="eager" />
-      <span>MacAway</span>
+      <Logo />
     </a>
-    <nav aria-label="Primary">
-      <a href={`${link('')}#walkaway`}>How it works</a>
-      <a href={link('privacy')}>Privacy</a>
-    </nav>
+    <DownloadButton label="Download" small />
   </div>
 </header>
 
 <style>
+  /* The settled bar is the base state, so a browser without scroll timelines still gets a
+     readable header. On the home page it fades in as you leave the hero. */
   .site-header {
-    position: sticky;
-    top: 0;
-    z-index: 20;
-    background: color-mix(in srgb, var(--bg) 82%, transparent);
-    backdrop-filter: saturate(150%) blur(14px);
-    border-bottom: 1px solid var(--line);
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 30;
+    padding-block: 14px;
+    color: var(--ink);
+  }
+
+  .site-header::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: rgb(255 255 255 / 0.72);
+    backdrop-filter: saturate(160%) blur(14px);
+    box-shadow: 0 1px 0 var(--line);
   }
 
   .bar {
+    position: relative;
+    z-index: 1;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    height: 62px;
   }
 
   .brand {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    font-weight: 640;
-    font-size: 1.0625rem;
-    letter-spacing: -0.02em;
+    color: inherit;
     text-decoration: none;
   }
 
-  .brand :global(img) {
-    border-radius: 7px;
-  }
-
-  nav {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
+  .bar :global(.small) {
+    padding: 0.5rem 1rem;
     font-size: 0.9375rem;
-    font-weight: 520;
   }
 
-  nav a {
-    color: var(--ink-soft);
-    text-decoration: none;
-    transition: color 0.16s ease;
-  }
-
-  nav a:hover {
-    color: var(--ink);
-  }
-
-  @media (max-width: 420px) {
-    nav {
-      gap: 1.05rem;
-      font-size: 0.875rem;
+  @supports (animation-timeline: scroll()) {
+    .site-header:global(:has(~ main .hero))::after,
+    .site-header:global(:has(~ main .hero)) :global(.download-btn) {
+      animation-name: fade-in;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 260px;
     }
   }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
 </style>

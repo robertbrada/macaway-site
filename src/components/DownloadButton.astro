@@ -1,0 +1,29 @@
+---
+// Every Download button on the site. While there is no release, DOWNLOAD_URL is null and
+// this renders a disabled button; once it is set, the same markup becomes a real link.
+import Icon from './Icon.astro';
+import { DOWNLOAD_URL } from '../lib/pricing';
+
+interface Props {
+  label?: string;
+  small?: boolean;
+}
+
+const { label = 'Download free trial', small = false } = Astro.props;
+const className = small ? 'download-btn small' : 'download-btn';
+const iconSize = small ? 16 : 18;
+---
+
+{
+  DOWNLOAD_URL ? (
+    <a class={className} href={DOWNLOAD_URL}>
+      <Icon name="download" size={iconSize} />
+      {label}
+    </a>
+  ) : (
+    <button class={className} type="button" disabled>
+      <Icon name="download" size={iconSize} />
+      {label}
+    </button>
+  )
+}

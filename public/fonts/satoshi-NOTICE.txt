@@ -1,0 +1,26 @@
+Satoshi
+Published by the Indian Type Foundry (ITF), distributed through Fontshare.
+
+Source:   https://www.fontshare.com/fonts/satoshi
+File:     satoshi-variable.woff2 — the upright variable font, weight axis 300-900,
+          downloaded unmodified from the Fontshare CDN.
+Licence:  ITF Free Font Licence ("Closed Source" on Fontshare), version 2.0,
+          dated 17 August 2026. https://www.fontshare.com/licenses/itf-ffl
+Checked:  24 September 2026.
+
+Free for personal and commercial use, at any scale, anywhere, with no fee and no time
+limit. Self-hosting via @font-face is expressly permitted and is what this site does.
+Crediting ITF is permitted but not required.
+
+Two limits that matter for this repository:
+
+  1. The font may NOT be modified — and the licence counts SUBSETTING and FORMAT
+     CONVERSION as modification. Do not run this file through a subsetter, re-compress
+     it, or convert it to another format to save bytes. Ship it exactly as downloaded.
+
+  2. The font may NOT be redistributed. The licence names repositories, publicly
+     accessible servers and download services. Serving it from the built site is fine;
+     committing it to a PUBLIC source repository is worth a second look, and anyone
+     else who wants the font must get their own copy from Fontshare.
+
+The full licence text is not reproduced here. Read it at the link above.

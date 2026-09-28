@@ -29,7 +29,7 @@ SITE_URL=https://robertbrada.github.io SITE_BASE=/macaway-site npm run build
 | `src/pages` | `/` and `/privacy` |
 | `src/components` | header, footer, the scroll sequence, the shield icons, screenshot slots |
 | `src/icons/paths.ts` | shield and Bluetooth path data, extracted from the app's own artwork |
-| `public/` | the app icon, the self-hosted Inter subset and its licence, `robots.txt` |
+| `public/` | the app icon, the self-hosted Satoshi variable font and its notice, `robots.txt` |
 
 The page carries `noindex, nofollow` and `robots.txt` disallows everything, deliberately,
 until there is a release worth finding.

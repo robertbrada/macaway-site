@@ -1,179 +1,203 @@
 ---
 import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Icon from '../components/Icon.astro';
+import LockPanel from '../components/LockPanel.astro';
 import Shield from '../components/Shield.astro';
-import Shot from '../components/Shot.astro';
-import WalkAway from '../components/WalkAway.astro';
 import { link } from '../lib/links';
+import DownloadButton from '../components/DownloadButton.astro';
+import CopyEmail from '../components/CopyEmail.astro';
+import { BUY_PATH, CHECKOUT_OPEN, PRICE, REFUND_DAYS, TRIAL_DAYS } from '../lib/pricing';
+
+const places = [
+  { title: 'Conferences', line: 'Leave it at your seat. If someone takes it, it locks.' },
+  { title: 'Cafés', line: 'Go to the counter to order. Your laptop locks at the table.' },
+  { title: 'Coworking spaces', line: 'Step out to take a call. Your screen locks at your desk.' },
+  { title: 'Offices', line: 'Go to a meeting. Nobody can read your email.' },
+];
+
+// What happens, in order. It answers "what happens after the trial?" before anyone asks.
+const trial = [
+  { when: 'Today', line: `Download MacAway and use it free for ${TRIAL_DAYS} days. No card needed.` },
+  { when: `Day ${TRIAL_DAYS}`, line: 'MacAway stops locking and tells you.' },
+  { when: 'When you are ready', line: `Buy it once for ${PRICE} and keep it.` },
+];
+
+// Only what people ask before they download or pay. `draft` marks an answer that waits on
+// the owner, and shows a Placeholder tag on the page until it is filled in. `contact` ends
+// the answer with the support address.
+const questions = [
+  {
+    q: 'Who made MacAway?',
+    a: 'One person who kept leaving their Mac open at the desk. A short line about who they are goes here.',
+    draft: true,
+  },
+  {
+    q: 'How do I know it never goes online?',
+    a: 'There is no networking code in the app at all. You can check it yourself: a free firewall such as LuLu shows every connection an app tries to make.',
+  },
+  {
+    q: 'Can MacAway see my password?',
+    a: 'No. It only locks your Mac. It never sees or stores your password, and you unlock your Mac the way you always do.',
+  },
+  {
+    q: 'Can it lock while I am still at my Mac?',
+    a: 'Sometimes, yes. If the signal from your phone drops, MacAway counts that as you leaving. If it happens too often, switch to Home, or set your own distance in Advanced.',
+  },
+  {
+    q: `What happens after the ${TRIAL_DAYS} free days?`,
+    a: `MacAway stops locking and tells you. Buy it once for ${PRICE} to keep it.`,
+  },
+  {
+    q: 'Is there anything to cancel?',
+    a: `No. There is no subscription and nothing renews. If MacAway is not for you, write to us within ${REFUND_DAYS} days for a full refund.`,
+  },
+  {
+    q: 'Can I use it on more than one Mac?',
+    a: 'Yes. One purchase covers all your Macs.',
+  },
+  {
+    q: 'Does it work with an Android phone?',
+    a: 'Not yet. Today MacAway only follows Apple devices, like an iPhone or an Apple Watch. Want it on Android? Write to',
+    contact: true,
+  },
+];
+
+const facts = [
+  'Pay once. No subscription',
+  'For all your Macs',
+  `Full refund within ${REFUND_DAYS} days`,
+  'Secure checkout with Stripe and Apple\u00a0Pay',
+];
+
+const steps = [
+  {
+    icon: 'iphone' as const,
+    title: 'Pick what you carry',
+    line: 'Any device on the same Apple ID as your Mac: a phone, a watch, even an AirTag on your keys.',
+  },
+  {
+    icon: 'bluetooth' as const,
+    title: 'Your Mac keeps an eye on it',
+    line: 'It stays connected over Bluetooth and checks how close it is, once a second.',
+  },
+  {
+    icon: 'lock' as const,
+    title: 'Walk away and it locks',
+    line: 'When the signal gets weak, your Mac locks itself. Come back in time and it stops.',
+  },
+];
 
 const shields = [
-  { shape: 'guarding', name: 'Padlock', text: 'A followed device is measured near right now.' },
-  { shape: 'connecting', name: 'Outline', text: 'Starting, or still working out where the devices are.' },
-  { shape: 'away', name: 'Exclamation', text: 'A device has left, and the Mac is about to lock.' },
-  {
-    shape: 'not-protected',
-    name: 'Cross',
-    text: 'Not protected: nothing followed, this Mac’s Bluetooth off or not allowed, or a lock that did not work.',
-  },
-  { shape: 'off', name: 'Slash', text: 'Off, paused, or every device on hold.' },
+  { shape: 'guarding', label: "You're covered" },
+  { shape: 'connecting', label: 'Still checking' },
+  { shape: 'away', label: 'Locking soon' },
+  { shape: 'not-protected', label: 'Not protected' },
+  { shape: 'off', label: 'Off or paused' },
 ] as const;
 
-const points = [
+const promises = [
   {
-    title: 'It measures, it does not guess',
-    body: 'Your Mac holds a Bluetooth link to each device and reads the signal once a second, averaged over the last five to eight readings. An advertisement only proves a device is in range, so MacAway never reads one as a distance.',
+    title: 'It works without the internet',
+    line: 'There is no networking code in the app at all. It has nowhere to send anything, and no account to sign up for.',
   },
   {
-    title: 'Follow more than one thing',
-    body: 'Any device measured leaving means you left. The phone you left on the desk never masks the watch that walked out of the room with you.',
+    title: 'It never sees your password',
+    line: 'MacAway only locks your Mac. You unlock it the way you always do.',
   },
   {
-    title: 'A phone is not the only answer',
-    body: 'The picker offers every device macOS already names, so an AirTag on your keyring or a pair of AirPods answers just as well. What matters is that it is on you, and not on the desk.',
+    title: 'It asks for one thing: Bluetooth',
+    line: 'That is the only permission macOS shows you. Not your camera, not your location, not your files.',
   },
   {
-    title: 'Cheap enough to leave on',
-    body: 'Measured while following two devices at once: 1.4% of one core. There is no telemetry to send and no server to talk to, so that is the whole cost.',
+    title: "If it can't tell, it locks",
+    line: 'A flat battery, or a phone left at home, counts as you walking away. It then tells you why it locked.',
   },
 ];
 ---
 
 <Base
-  title="MacAway — your Mac locks when you walk away"
-  description="MacAway locks your Mac within seconds of you walking away, following the iPhone or Apple Watch already on you over Bluetooth. No account, no server, no app on your phone."
+  title="MacAway — locks your Mac when you forget to"
+  description="MacAway is a menu bar app that locks your Mac when you step away. It follows a device you already carry over Bluetooth. No account, no server, nothing to install on your phone."
 >
-  <section class="hero">
-    <div class="wrap">
-      <p class="status-pill">Not released yet</p>
-      <h1>MacAway locks your Mac within seconds of you walking away.</h1>
-      <p class="lede">
-        It follows the iPhone or Apple Watch already on you, over Bluetooth. There is nothing
-        to install on them, as long as they are signed in to the same Apple&nbsp;ID as your
-        Mac. No account, no server, and nothing is sent anywhere.
-      </p>
-      <p class="requirements">
-        Built for macOS&nbsp;13 and later, universal for Apple silicon and Intel &middot; it
-        has only ever been run on Apple silicon, on macOS&nbsp;26
-      </p>
-    </div>
+  <Hero />
 
-    <div class="wrap hero-shot rise">
-      <Shot
-        caption="The menu, open on a protected Mac: the status line, the followed devices with what each one reads, and the on/off switch."
-        ratio="16 / 10"
-      />
+  <section class="where">
+    <div class="wrap where-grid rise">
+      <h2 class="eyebrow">Where it helps</h2>
+
+      <dl class="places">
+        {
+          places.map((place) => (
+            <div>
+              <dt>{place.title}</dt>
+              <dd>{place.line}</dd>
+            </div>
+          ))
+        }
+      </dl>
     </div>
   </section>
 
-  <WalkAway />
-
-  <section class="section">
+  <section class="section" id="how">
     <div class="wrap">
-      <p class="eyebrow rise">What it does</p>
-      <h2 class="rise">The threat is the thirty seconds after you stand up</h2>
-      <p class="lede rise">
-        Find&nbsp;My and Activation Lock own what happens after a laptop is gone. MacAway is
-        for the moment it is still happening: a conference, a coworking desk, a café, a
-        shared office &mdash; anywhere the Mac is somewhere you do not control.
-      </p>
+      <div class="head rise">
+        <h2>How it works</h2>
+        <p class="lede">
+          It uses your phone, your watch or an AirTag on your keys. There is nothing to
+          install on them. Your Mac does all the work.
+        </p>
+      </div>
 
-      <ul class="points rise">
+      <ol class="steps rise">
         {
-          points.map((point) => (
+          steps.map((step, i) => (
             <li>
-              <h3>{point.title}</h3>
-              <p>{point.body}</p>
+              <span class="step-icon">
+                <Icon name={step.icon} size={20} />
+              </span>
+              <h3>
+                <span class="step-num">{i + 1}.</span> {step.title}
+              </h3>
+              <p>{step.line}</p>
             </li>
           ))
         }
-      </ul>
+      </ol>
     </div>
   </section>
 
-  <section class="section section-sunken">
-    <div class="wrap">
-      <p class="eyebrow rise">When it cannot tell</p>
-      <h2 class="rise">Not knowing where you are is not the same as you being there</h2>
-
-      <div class="rules rise">
-        <div class="rule">
-          <h3>Thirty seconds without a reading counts as away</h3>
-          <p>
-            A flat battery, a device switched off, a walk out of range. Which one it was does
-            not matter, because none of them is evidence that you are still at the Mac.
-          </p>
-        </div>
-        <div class="rule">
-          <h3>Twelve seconds of hearing nothing at all is gone</h3>
-          <p>
-            The link to an iPhone drops for a few seconds every minute or two while it is
-            being handled. That reads as unknown, never as gone.
-          </p>
-        </div>
-        <div class="rule rule-wide">
-          <h3>A fault at this end is not a departure</h3>
-          <p>
-            If this Mac&rsquo;s own Bluetooth is off, not allowed or resetting, no countdown
-            starts and nothing locks &mdash; nobody can turn Bluetooth off on a Mac that is
-            already locked, so treating it as a departure would only lock the Mac on its
-            owner. The clock restarts when the radio comes back.
-          </p>
-        </div>
+  <section class="section section-grey">
+    <div class="wrap modes rise">
+      <div class="panel-slot">
+        <LockPanel />
       </div>
-    </div>
-  </section>
 
-  <section class="section">
-    <div class="wrap two-col">
-      <div>
-        <p class="eyebrow rise">Every lock explains itself</p>
-        <h2 class="rise">MacAway errs towards locking</h2>
-        <p class="lede rise">
-          A lock you did not need is the accepted price. The work goes into making each one
-          cost almost nothing.
+      <div class="modes-copy">
+        <p class="eyebrow">Security mode</p>
+        <h2>Choose how it locks</h2>
+        <p class="lede">
+          <strong>At home</strong> it waits longer, so you can walk further before it locks.{' '}
+          <strong>In public</strong> it locks sooner, and from closer.
         </p>
-        <div class="prose rise">
-          <p>
-            Unlock while a device still reads away and that device goes on hold, so the same
-            reading cannot lock the Mac twice. A window tells you which device it was, what it
-            read, and which numbers were in force at the time.
-          </p>
-          <p>
-            It offers the one correction for whatever caused this lock &mdash; a less
-            sensitive threshold after a weak reading, a longer wait after hearing nothing
-            &mdash; and closes itself when the device comes back. Every lock, and every
-            answer, goes into a journal that keeps a week.
-          </p>
-        </div>
-      </div>
-      <div class="rise">
-        <Shot
-          caption="The window after a lock: the device, its reading, the numbers in force, and the one correction offered."
-          ratio="4 / 3"
-        />
+        <p class="fine">
+          Want something in between? Open <strong>Advanced</strong> and set your own distance and
+          delay.
+        </p>
       </div>
     </div>
   </section>
 
-  <section class="section section-sunken">
+  <section class="section icons">
     <div class="wrap">
-      <p class="eyebrow rise">The menu bar</p>
-      <h2 class="rise">Five shapes, and only one of them claims cover</h2>
-      <p class="lede rise">
-        The shield in the menu bar and the status line inside the menu are drawn by the same
-        code, so the two cannot disagree with each other.
-      </p>
+      <h2 class="eyebrow rise">Menu bar icon</h2>
 
       <ul class="shields rise">
         {
-          shields.map((s) => (
-            <li>
-              <span class={`glyph glyph-${s.shape}`}>
-                <Shield shape={s.shape} size={30} />
-              </span>
-              <div>
-                <h3>{s.name}</h3>
-                <p>{s.text}</p>
-              </div>
+          shields.map((shield) => (
+            <li class={`shield-${shield.shape}`}>
+              <Shield shape={shield.shape} size={24} />
+              <span>{shield.label}</span>
             </li>
           ))
         }
@@ -181,319 +205,662 @@ const points = [
     </div>
   </section>
 
-  <section class="section">
-    <div class="wrap">
-      <p class="eyebrow rise">Two settings</p>
-      <h2 class="rise">One for a room you control, one for a room you do not</h2>
-
-      <div class="settings rise">
-        <div class="setting">
-          <h3>Home</h3>
-          <p class="numbers">Far at &minus;75 dBm &middot; locks 15 s later</p>
-          <p>
-            The looser of the two, and what a new Mac starts on. The stricter one produced
-            five wrong locks out of six on the day that was measured, which is no way to meet
-            a piece of software.
-          </p>
-        </div>
-        <div class="setting">
-          <h3>In public</h3>
-          <p class="numbers">Far at &minus;65 dBm &middot; locks 5 s later</p>
-          <p>
-            For a desk you are sharing with strangers. It reads you as gone sooner and waits
-            less, and it wears a yellow badge on the menu bar shield so you can see at a
-            glance which one is running.
-          </p>
-        </div>
+  <section class="section section-soft">
+    <div class="wrap good">
+      <div class="good-head rise">
+        <h2>Nothing leaves your Mac</h2>
+        <p class="lede">
+          MacAway never goes online. It locks your screen, and that is the whole of it.
+        </p>
       </div>
 
-      <p class="footnote rise">
-        Either one&rsquo;s numbers can be changed under Advanced and put back. The lock delay
-        takes any value from 3 to 90 seconds, and the sliders reach settings stricter than
-        either choice &mdash; MacAway says so in amber when you go there. One switch pauses
-        everything, and any single device can be paused on its own.
+      <dl class="promises rise">
+        {
+          promises.map((promise) => (
+            <div>
+              <dt>{promise.title}</dt>
+              <dd>{promise.line}</dd>
+            </div>
+          ))
+        }
+      </dl>
+
+      <p class="more rise">
+        <a class="text-link" href={link('privacy')}>What MacAway keeps, and where &rarr;</a>
       </p>
     </div>
   </section>
 
-  <section class="section section-sunken">
-    <div class="wrap never">
-      <p class="eyebrow rise">What it never does</p>
-      <h2 class="rise">It locks. That is all it does.</h2>
-      <ul class="rise">
-        <li>
-          <strong>It never unlocks your Mac</strong>, and it never stores or types your
-          password. You type it yourself, as usual.
-        </li>
-        <li>
-          <strong>It has no account and no server.</strong> Today&rsquo;s app contains no
-          networking code at all &mdash; the measuring happens on your Mac and stays there.
-        </li>
-        <li>
-          <strong>It sends no telemetry</strong>, and it asks for one permission: Bluetooth.
-        </li>
-      </ul>
-      <p class="rise">
-        <a class="text-link" href={link('privacy')}>Read the privacy notice &rarr;</a>
-      </p>
+  <section class="section pricing" id="pricing">
+    <div class="wrap pricing-grid rise">
+      <div class="pricing-copy">
+        <h2>Try it free. Pay once.</h2>
+
+        <ol class="trial">
+          {
+            trial.map((step) => (
+              <li>
+                <span class="when">{step.when}</span>
+                <span class="what">{step.line}</span>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+
+      <div class="price-panel">
+        <p class="price">
+          <span class="amount">{PRICE}</span>
+          <span class="per">one-time payment</span>
+        </p>
+
+        <ul class="facts">{facts.map((fact) => <li>{fact}</li>)}</ul>
+
+        <DownloadButton />
+
+        <p class="buy">
+          Already sure?{' '}
+          {
+            CHECKOUT_OPEN ? (
+              <a href={link(BUY_PATH)}>Buy now</a>
+            ) : (
+              <a class="is-off" aria-disabled="true">Buy now</a>
+            )
+          }
+        </p>
+      </div>
     </div>
   </section>
 
-  <section class="section closing">
-    <div class="wrap wrap-narrow">
-      <h2 class="rise">Not released yet</h2>
-      <p class="lede rise">
-        MacAway is not finished and there is nothing to download. Nobody but its author has
-        run it, so there is no version here, no sign-up, and nothing to try.
-      </p>
-      <p class="rise closing-note">
-        When it is ready it will be a direct download, signed and notarised. It cannot go on
-        the Mac App Store: locking a screen instantly needs a private macOS interface that has
-        no public alternative.
-      </p>
+  <section class="section section-soft faq" id="faq">
+    <div class="wrap faq-grid rise">
+      <div class="faq-head">
+        <h2>Common questions</h2>
+        <p class="faq-more">
+          Something else? Write to{' '}
+          <CopyEmail />
+        </p>
+      </div>
+
+      <div class="faq-list">
+        {
+          questions.map((item) => (
+            <details>
+              <summary>{item.q}</summary>
+              <p>
+                {item.draft && <span class="draft">Placeholder</span>}
+                {item.a}
+                {item.contact && (
+                  <>
+                    {' '}
+                    <span class="faq-contact">
+                      <CopyEmail />
+                    </span>
+                  </>
+                )}
+              </p>
+            </details>
+          ))
+        }
+      </div>
     </div>
   </section>
 </Base>
 
 <style>
-  .hero {
-    padding-block: clamp(3.5rem, 9vw, 7rem) clamp(3rem, 7vw, 5.5rem);
+  .head {
+    max-width: 38rem;
+    margin-bottom: clamp(2.75rem, 5vw, 4rem);
   }
 
-  .hero h1 {
-    margin-top: 1.5rem;
-    max-width: 17ch;
+  /* Where it helps ---------------------------------------------------------- */
+
+  /* A strip, not a full section: one label and three short lines, framed by a rule above
+     and below so it reads as its own band between the hero and the steps. */
+  .where {
+    padding-block: clamp(1.5rem, 3vw, 2.5rem) clamp(1rem, 2vw, 1.5rem);
   }
 
-  .requirements {
-    margin-top: 1.75rem;
-    font-size: 0.9375rem;
-    color: var(--ink-faint);
-    max-width: 46ch;
-  }
-
-  .hero-shot {
-    margin-top: clamp(3rem, 6vw, 4.5rem);
-  }
-
-  .points {
-    list-style: none;
-    margin: clamp(2.5rem, 5vw, 3.5rem) 0 0;
-    padding: 0;
+  .where-grid {
     display: grid;
-    gap: 2rem 2.5rem;
+    gap: clamp(1.25rem, 2.5vw, 1.75rem);
   }
 
-  .points h3,
-  .rule h3 {
-    margin-bottom: 0.5rem;
+  .where-grid::before,
+  .where-grid::after {
+    content: '';
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--line-strong);
   }
 
-  .points p,
-  .rule p {
-    color: var(--ink-soft);
-    font-size: 1rem;
+  .where .eyebrow {
+    margin: 0;
   }
 
-  .rules {
-    margin-top: clamp(2.5rem, 5vw, 3.5rem);
+  .places {
     display: grid;
     gap: 1.25rem;
+    margin: 0;
   }
 
-  .rule {
-    padding: 1.6rem 1.75rem;
-    background: var(--surface);
+
+  .places dt {
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .places dd {
+    margin: 0.2rem 0 0;
+    text-wrap: pretty;
+    font-size: 0.9375rem;
+    color: var(--ink-muted);
+  }
+
+  /* Four places: two by two on a tablet, one row once there is room for four. */
+  @media (min-width: 720px) {
+    .places {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: clamp(1.5rem, 3vw, 2.5rem);
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .places {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  /* On a wide screen the label sits beside the three, which keeps the strip one row tall. */
+  @media (min-width: 1000px) {
+    .where-grid {
+      grid-template-columns: 9.5rem minmax(0, 1fr);
+      align-items: baseline;
+    }
+
+  }
+
+  /* Steps ------------------------------------------------------------------ */
+
+  .steps {
+    display: grid;
+    gap: 2.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .steps li {
+    position: relative;
+  }
+
+  .step-icon {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    margin-bottom: 1.25rem;
+    border-radius: 50%;
+    background: var(--green-deep);
+    color: #fff;
+  }
+
+  /* The count belongs in the sentence you read, not in a badge of its own. */
+  .step-num {
+    color: var(--green-deep);
+  }
+
+  .steps p {
+    margin-top: 0.5rem;
+    max-width: 32ch;
+    color: var(--ink-muted);
+  }
+
+  /* Modes ------------------------------------------------------------------ */
+
+  .modes {
+    display: grid;
+    gap: clamp(2.5rem, 5vw, 4.5rem);
+    align-items: center;
+  }
+
+  .panel-slot {
+    max-width: 23rem;
+  }
+
+  .modes .lede {
+    max-width: 30rem;
+  }
+
+  .modes .lede strong {
+    color: var(--ink);
+    font-weight: 700;
+  }
+
+  /* The name of a view in the app, so it stands out from the sentence, but less than the
+     two mode names above it. */
+  .fine strong {
+    color: var(--ink);
+    font-weight: 560;
+  }
+
+  .fine {
+    margin-top: 1.5rem;
+    max-width: 30rem;
+    font-size: 0.9375rem;
+    color: var(--ink-muted);
+  }
+
+  /* Menu bar icon ----------------------------------------------------------- */
+
+  /* The five icon states are a legend, not a headline. */
+  .icons {
+    padding-block: clamp(3.5rem, 7vw, 5.5rem);
+  }
+
+  .icons .eyebrow {
+    margin-bottom: 1.5rem;
+  }
+
+  .shields {
+    display: grid;
+    gap: 1px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
     border: 1px solid var(--line);
     border-radius: var(--radius-lg);
+    background: var(--line);
+    overflow: hidden;
   }
 
-  .two-col {
+  .shields li {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 1.1rem 1.35rem;
+    background: var(--bg);
+    font-size: 0.9375rem;
+    font-weight: 500;
+  }
+
+  .shields :global(svg) {
+    flex: none;
+    color: var(--ink-faint);
+  }
+
+  .shield-guarding :global(svg) {
+    color: var(--green-deep);
+  }
+
+  .shield-away :global(svg) {
+    color: var(--amber-graphic);
+  }
+
+  /* Good to know ------------------------------------------------------------ */
+
+  .good-head {
+    max-width: 30rem;
+    margin-bottom: 2rem;
+  }
+
+  .more {
+    margin-top: 1.75rem;
+  }
+
+  /* Ruled rows, not four boxes: the point is the reading, not the packaging. The rule
+     closing the set lives on the list so it runs the full width whatever the columns do. */
+  .promises {
+    display: grid;
+    margin: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .promises > div {
+    padding-block: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .promises dt {
+    font-size: 1.0625rem;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+  }
+
+  .promises dd {
+    margin: 0.3rem 0 0;
+    max-width: 44ch;
+    color: var(--ink-muted);
+  }
+
+  /* Pricing ---------------------------------------------------------------- */
+
+  .pricing-grid {
     display: grid;
     gap: clamp(2.5rem, 5vw, 4rem);
     align-items: center;
   }
 
-  .prose {
-    margin-top: 1.5rem;
-    display: grid;
-    gap: 1rem;
-    color: var(--ink-soft);
-    max-width: var(--measure);
+  .pricing h2 {
+    font-size: clamp(1.875rem, 3.6vw, 2.75rem);
   }
 
-  .shields {
-    list-style: none;
-    margin: clamp(2.5rem, 5vw, 3.5rem) 0 0;
+  /* The trial as a short timeline: three stops joined by a line, the first one filled
+     because it is where the reader is. */
+  .trial {
+    display: grid;
+    gap: 1.6rem;
+    margin: clamp(1.75rem, 3vw, 2.25rem) 0 0;
     padding: 0;
-    display: grid;
-    gap: 1.5rem 2.5rem;
-  }
-
-  .shields li {
-    display: flex;
-    gap: 1rem;
-    align-items: flex-start;
-  }
-
-  .shields h3 {
-    font-size: 1.0625rem;
-    margin-bottom: 0.2rem;
-  }
-
-  .shields p {
-    color: var(--ink-soft);
-    font-size: 0.9375rem;
-  }
-
-  .glyph {
-    flex: none;
-    display: grid;
-    place-items: center;
-    width: 52px;
-    height: 52px;
-    border-radius: var(--radius);
-    background: var(--surface);
-    border: 1px solid var(--line);
-    color: var(--ink-soft);
-  }
-
-  .glyph-guarding {
-    color: var(--accent);
-    background: var(--accent-wash);
-    border-color: var(--accent-line);
-  }
-
-  .glyph-away {
-    color: var(--warn-graphic);
-    background: var(--warn-wash);
-    border-color: var(--warn-line);
-  }
-
-  .settings {
-    margin-top: clamp(2.5rem, 5vw, 3.5rem);
-    display: grid;
-    gap: 1.25rem;
-  }
-
-  .setting {
-    padding: 1.75rem;
-    border: 1px solid var(--line);
-    border-radius: var(--radius-lg);
-    background: var(--surface);
-  }
-
-  .setting h3 {
-    font-size: 1.375rem;
-  }
-
-  .numbers {
-    margin: 0.4rem 0 0.9rem;
-    font-size: 0.9375rem;
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-    color: var(--accent);
-  }
-
-  .setting p:last-child {
-    color: var(--ink-soft);
-    font-size: 1rem;
-  }
-
-  .footnote {
-    margin-top: 1.75rem;
-    max-width: var(--measure);
-    font-size: 0.9375rem;
-    color: var(--ink-faint);
-  }
-
-  .never h2,
-  .never ul,
-  .never p {
-    max-width: 44rem;
-  }
-
-  .never ul {
     list-style: none;
-    margin: 2rem 0;
-    padding: 0;
-    display: grid;
-    gap: 1.1rem;
-    color: var(--ink-soft);
   }
 
-  .never li {
-    padding-left: 1.6rem;
+
+  .trial li {
     position: relative;
+    display: grid;
+    gap: 0.15rem;
+    padding-left: 2rem;
   }
 
-  .never li::before {
+  .trial li::before {
     content: '';
     position: absolute;
+    top: 0.4rem;
     left: 0;
-    top: 0.62em;
-    width: 8px;
-    height: 8px;
+    width: 11px;
+    height: 11px;
+    border: 1.5px solid var(--green-deep);
     border-radius: 50%;
-    background: var(--accent);
+    background: var(--bg);
+    box-sizing: border-box;
   }
 
-  .never strong {
-    color: var(--ink);
-    font-weight: 620;
+  .trial li:first-child::before {
+    background: var(--green-deep);
   }
 
-  .text-link {
-    color: var(--accent);
+  /* Each stop draws the line down to the next one, so it ends at the last stop. */
+  .trial li:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: calc(0.4rem + 11px);
+    bottom: calc(-1.6rem - 0.4rem);
+    left: 5px;
+    border-left: 1px solid var(--line-strong);
+  }
+
+  .when {
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .what {
+    max-width: 34ch;
+    color: var(--ink-muted);
+  }
+
+  /* Dark, like the app's own menu, so the price reads as the one thing to act on. */
+  .price-panel {
+    padding: clamp(1.75rem, 4vw, 2.5rem);
+    border-radius: var(--radius-xl);
+    background: var(--bg-dark);
+    color: #fff;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .price {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.25rem 0.75rem;
+  }
+
+  .amount {
+    font-size: clamp(2.75rem, 6vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .per {
+    color: var(--ink-on-dark-muted);
+  }
+
+  .facts {
+    margin: 1.5rem 0 1.75rem;
+    padding: 0;
+    list-style: none;
+    border-bottom: 1px solid var(--line-dark);
+  }
+
+  .facts li {
+    padding-block: 0.7rem;
+    border-top: 1px solid var(--line-dark);
+    color: var(--ink-on-dark-muted);
+  }
+
+  .price-panel :global(.download-btn) {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .buy {
+    margin-top: 1rem;
+    font-size: 0.9375rem;
+    text-align: center;
+    color: var(--ink-on-dark-muted);
+  }
+
+  .buy a {
+    color: #fff;
     font-weight: 600;
-    text-decoration: none;
-  }
-
-  .text-link:hover {
-    text-decoration: underline;
     text-underline-offset: 4px;
   }
 
-  .closing {
-    text-align: center;
+  /* No checkout yet: it reads as a link, but it goes nowhere. */
+  .buy .is-off {
+    text-decoration: none;
+    cursor: not-allowed;
   }
 
-  .closing .lede {
-    margin-inline: auto;
+  @media (min-width: 900px) {
+    .pricing-grid {
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      column-gap: clamp(3rem, 7vw, 6rem);
+    }
   }
 
-  .closing-note {
-    margin: 1.75rem auto 0;
-    max-width: 44ch;
-    font-size: 0.9375rem;
-    color: var(--ink-faint);
+  /* Questions --------------------------------------------------------------- */
+
+  .faq-grid {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .faq-more {
+    margin-top: 1rem;
+    color: var(--ink-muted);
+  }
+
+  .faq-more :global(.contact) {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* Ruled rows like the promises, closed by default, so the questions read as one short
+     list you can scan before opening any of them. */
+  .faq-list {
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .faq-list details {
+    border-top: 1px solid var(--line-strong);
+  }
+
+  .faq-list summary {
+    position: relative;
+    padding: 1.1rem 2.5rem 1.1rem 0;
+    font-size: 1.0625rem;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    list-style: none;
+    cursor: pointer;
+  }
+
+  .faq-list summary::-webkit-details-marker {
+    display: none;
+  }
+
+  /* A plus that turns into a minus: two bars, the upright one folds away when open. */
+  .faq-list summary::before,
+  .faq-list summary::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 0.25rem;
+    width: 14px;
+    height: 1.5px;
+    border-radius: 1px;
+    background: var(--ink-muted);
+  }
+
+  .faq-list summary::after {
+    transform: rotate(90deg);
+  }
+
+  .faq-list details[open] summary::after {
+    transform: rotate(0deg);
+  }
+
+  .faq-list summary:hover::before,
+  .faq-list summary:hover::after {
+    background: var(--ink);
+  }
+
+  .faq-list summary:focus-visible {
+    outline: 2px solid var(--green-deep);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  .faq-list details p {
+    max-width: 60ch;
+    padding-bottom: 1.25rem;
+    color: var(--ink-muted);
+  }
+
+  .faq-contact {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .draft {
+    display: inline-block;
+    margin-right: 0.5rem;
+    padding: 0.1rem 0.55rem;
+    border: 1px dashed var(--line-strong);
+    border-radius: var(--radius-pill);
+    background: var(--bg);
+    font-size: 0.75rem;
+    font-weight: 650;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    vertical-align: 0.1em;
+    color: var(--ink-muted);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .faq-list summary::after {
+      transition: transform 200ms ease;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .faq-grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
+      column-gap: clamp(3rem, 7vw, 6rem);
+      align-items: start;
+    }
+
+    /* The same cap-height match as the privacy heading, against the first question. */
+    .faq-head h2 {
+      margin-top: calc(1.5625rem - 0.13em);
+    }
   }
 
   @media (min-width: 720px) {
-    .points {
-      grid-template-columns: 1fr 1fr;
+    .steps {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
     }
 
-    .rules {
-      grid-template-columns: 1fr 1fr;
-    }
-
-    .rule-wide {
-      grid-column: 1 / -1;
+    /* A rule between the numbers reads as one sequence, not three tiles. */
+    .steps li:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 21px;
+      left: 54px;
+      right: -2rem;
+      height: 1px;
+      background: var(--line);
     }
 
     .shields {
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(5, 1fr);
     }
 
-    .settings {
-      grid-template-columns: 1fr 1fr;
+    .shields li {
+      flex-direction: column;
+      gap: 0.75rem;
+      padding: 1.6rem 1rem;
+      text-align: center;
     }
   }
 
-  @media (min-width: 960px) {
-    .two-col {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
+  @media (min-width: 900px) {
+    .modes {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+
+    /* Picture and words on the left, the four promises down the right. */
+    .good {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+      grid-template-areas:
+        'head list'
+        'more list';
+      grid-template-rows: auto 1fr;
+      column-gap: clamp(3rem, 7vw, 6rem);
+      align-items: start;
+    }
+
+    .good-head {
+      grid-area: head;
+      margin-bottom: 0;
+    }
+
+    /* Line the heading's capitals up with the first promise's: the list starts with a rule
+       and 1.5rem of padding, so the heading drops by that, less the small gap above its own
+       capitals, which grows with its size. */
+    .good-head h2 {
+      margin-top: calc(2rem - 0.13em);
+    }
+
+    .promises {
+      grid-area: list;
+    }
+
+    .more {
+      grid-area: more;
+    }
+  }
+
+  /* Below the fold on a phone the picture is the caption, so the words come first. */
+  @media (max-width: 899px) {
+    .panel-slot {
+      order: 2;
+      max-width: none;
     }
   }
 </style>

@@ -5,3 +5,10 @@ const base = import.meta.env.BASE_URL.replace(/\/+$/, '');
 
 /** A page or asset path, without a leading slash. `link('')` is the home page. */
 export const link = (path: string) => `${base}/${path}`.replace(/\/$/, '') || '/';
+
+/**
+ * Where people write in. A placeholder on the site's own domain: the mailbox does not
+ * exist yet, so set it up (or change this) before the page is public. It is here rather
+ * than typed into each page so that is a one-line job.
+ */
+export const CONTACT_EMAIL = 'support@macaway.app';

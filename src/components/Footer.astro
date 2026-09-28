@@ -1,25 +1,27 @@
 ---
+import CopyEmail from './CopyEmail.astro';
 import { link } from '../lib/links';
-
-const year = new Date().getFullYear();
 ---
 
-<footer class="site-footer">
+<footer>
   <div class="wrap inner">
-    <p class="note">MacAway &middot; a menu bar app for the Mac. Not released yet.</p>
-    <nav aria-label="Secondary">
-      <a href={link('privacy')}>Privacy</a>
-      <span aria-hidden="true">&middot;</span>
-      <span>&copy; {year}</span>
-    </nav>
+    <span>MacAway &middot; a menu bar app for the Mac</span>
+    <div class="ends">
+      <CopyEmail />
+      <nav aria-label="Secondary">
+        <a href={link('privacy')}>Privacy</a>
+        <span>&copy; {new Date().getFullYear()}</span>
+      </nav>
+    </div>
   </div>
 </footer>
 
 <style>
-  .site-footer {
-    border-top: 1px solid var(--line);
-    background: var(--bg-sunken);
-    padding-block: 2.25rem;
+  footer {
+    background: var(--bg);
+    color: var(--ink-muted);
+    padding-block: 2rem;
+    font-size: 0.9375rem;
   }
 
   .inner {
@@ -27,25 +29,35 @@ const year = new Date().getFullYear();
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 0.75rem 1.5rem;
-    font-size: 0.9375rem;
-    color: var(--ink-faint);
+    gap: 0.5rem 1.5rem;
+    border-top: 1px solid var(--line);
+    padding-top: 2rem;
+  }
+
+  .ends {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 1.5rem;
+  }
+
+  /* Only a phone gets to stack these. */
+  @media (min-width: 720px) {
+    .ends {
+      flex-wrap: nowrap;
+    }
   }
 
   nav {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
+    display: flex;
+    gap: 1.25rem;
   }
 
   nav a {
-    color: var(--ink-soft);
     text-decoration: none;
   }
 
   nav a:hover {
     color: var(--ink);
-    text-decoration: underline;
-    text-underline-offset: 3px;
   }
 </style>

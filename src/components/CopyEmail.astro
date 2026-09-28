@@ -1,0 +1,47 @@
+---
+// On a phone there is always a mail app, so the address is worth tapping. On a desktop a
+// mailto: is as likely to open something nobody has ever set up, so there it is plain
+// text you read and copy. No button: the address is short enough to select by hand.
+import { CONTACT_EMAIL } from '../lib/links';
+---
+
+<span class="contact">
+  <a class="tap" href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+  <span class="read">{CONTACT_EMAIL}</span>
+</span>
+
+<style>
+  /* Wide enough to keep the address on the footer's one line; on a phone it may break
+     rather than push the layout sideways. */
+  .contact {
+    overflow-wrap: anywhere;
+  }
+
+  @media (min-width: 720px) {
+    .contact {
+      white-space: nowrap;
+    }
+  }
+
+  .tap {
+    display: none;
+  }
+
+  .read {
+    /* One click takes the whole address, for anyone who does not want to drag over it. */
+    user-select: all;
+  }
+
+  @media (max-width: 719px) {
+    .tap {
+      display: inline;
+      color: var(--green-deep);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .read {
+      display: none;
+    }
+  }
+</style>

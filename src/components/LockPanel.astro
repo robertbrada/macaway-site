@@ -1,0 +1,414 @@
+---
+// The app menu's Advanced view, rebuilt in HTML so it can be handled and can wear this
+// site's colours instead of the system accent. Every number here mirrors
+// LockProfile.swift in the app repo — Home is -75 dBm / 15 s, In public -65 dBm / 5 s.
+//
+// Both sliders are real range inputs, so dragging, tapping and the arrow keys all work
+// without any of it being written here.
+const FAR_SOONEST = -60; // LockSettings.strongestFar, the "locks sooner" end
+const FAR_LATEST = -95; // LockSettings.weakestFar, the "locks later" end
+const FAR_STEPS = FAR_SOONEST - FAR_LATEST; // 35 whole dBm between the two ends
+const DELAY_STOPS = [3, 4, 5, 10, 15, 20, 30, 45, 60, 90];
+
+/** Slider position for a signal threshold: 0 at -60 dBm, 35 at -95. */
+const farStop = (dbm: number) => FAR_SOONEST - dbm;
+/** Slider position for a wait: its index among the stops the app offers. */
+const delayStop = (seconds: number) => DELAY_STOPS.indexOf(seconds);
+
+const modes = [
+  { id: 'home', name: 'Home', far: -75, delay: 15 },
+  { id: 'public', name: 'In public', far: -65, delay: 5 },
+] as const;
+
+// Home is what a new Mac starts on, so it is what the page shows before anything is
+// touched — and what someone without JavaScript sees.
+const start = modes[0];
+
+const settings = Object.fromEntries(
+  modes.map((mode) => [
+    mode.id,
+    { far: farStop(mode.far), delay: delayStop(mode.delay) },
+  ])
+);
+
+const pct = (stop: number, of: number) => `${(stop / of) * 100}%`;
+---
+
+<div
+  class="panel"
+  data-mode={start.id}
+  data-settings={JSON.stringify(settings)}
+  data-delay-stops={JSON.stringify(DELAY_STOPS)}
+  data-far-soonest={FAR_SOONEST}
+  data-far-steps={FAR_STEPS}
+>
+  <div class="seg" role="group" aria-label="Security mode">
+    <span class="thumb" aria-hidden="true"></span>
+    {
+      modes.map((mode) => (
+        <button type="button" data-mode-btn={mode.id} aria-pressed={mode.id === start.id}>
+          {mode.name}
+        </button>
+      ))
+    }
+  </div>
+
+  <p class="hint">Change how soon your Mac locks.</p>
+
+  <div class="setting">
+    <p class="row">
+      <label for="far-slider">Far away means weaker than</label>
+      <span class="value">
+        <b data-far-value>{start.far} dBm</b>
+        <small>signal strength</small>
+      </span>
+    </p>
+    <input
+      class="slider"
+      id="far-slider"
+      type="range"
+      min="0"
+      max={FAR_STEPS}
+      step="any"
+      value={farStop(start.far)}
+      style={`--pos:${pct(farStop(start.far), FAR_STEPS)}`}
+      data-far-input
+      aria-valuetext={`${start.far} dBm`}
+    />
+    <p class="ends"><span>Locks sooner</span><span>Locks later</span></p>
+  </div>
+
+  <div class="setting">
+    <p class="row">
+      <label for="delay-slider">Wait before locking</label>
+      <span class="value"><b data-delay-value>{start.delay} seconds</b></span>
+    </p>
+    <input
+      class="slider"
+      id="delay-slider"
+      type="range"
+      min="0"
+      max={DELAY_STOPS.length - 1}
+      step="any"
+      value={delayStop(start.delay)}
+      style={`--pos:${pct(delayStop(start.delay), DELAY_STOPS.length - 1)}`}
+      data-delay-input
+      aria-valuetext={`${start.delay} seconds`}
+    />
+    <p class="ends"><span>Locks sooner</span><span>Locks later</span></p>
+  </div>
+
+  <p class="foot">Coming back needs a little more signal.</p>
+</div>
+
+<style>
+  /* Green while it is relaxed, amber while it is strict — the same pairing the app uses,
+     so the colour is a signal rather than a decoration. */
+  .panel {
+    --accent: var(--green);
+    --accent-ink: var(--green-ink);
+    --panel-muted: #93a79b;
+    --rail: rgb(255 255 255 / 0.16);
+
+    padding: 1.4rem 1.3rem 1.5rem;
+    border-radius: var(--radius-lg);
+    background: var(--bg-dark);
+    color: #fff;
+    box-shadow: var(--shadow-lg);
+    font-size: 0.9375rem;
+    line-height: 1.4;
+  }
+
+  .panel[data-mode='public'] {
+    --accent: #f7bf2e;
+    --accent-ink: #2a1c00;
+  }
+
+  /* Segmented control ------------------------------------------------------ */
+
+  .seg {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: max-content;
+    margin-inline: auto;
+    padding: 3px;
+    border-radius: 9px;
+    background: rgb(255 255 255 / 0.08);
+  }
+
+  .thumb {
+    position: absolute;
+    inset: 3px 50% 3px 3px;
+    border-radius: 7px;
+    background: var(--accent);
+  }
+
+  .panel[data-mode='public'] .thumb {
+    transform: translateX(100%);
+  }
+
+  .seg button {
+    position: relative;
+    z-index: 1;
+    padding: 0.3rem 1.4rem;
+    border: 0;
+    border-radius: 7px;
+    background: none;
+    color: var(--panel-muted);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .seg button[aria-pressed='true'] {
+    color: var(--accent-ink);
+  }
+
+  .seg button:not([aria-pressed='true']):hover {
+    color: #fff;
+  }
+
+  /* Rows ------------------------------------------------------------------- */
+
+  .hint {
+    margin-top: 1.4rem;
+    color: var(--panel-muted);
+  }
+
+  .setting {
+    margin-top: 1.4rem;
+  }
+
+  .row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .row label {
+    cursor: pointer;
+  }
+
+  .value {
+    flex: none;
+    text-align: right;
+  }
+
+  .value b {
+    display: block;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+  }
+
+  /* dBm means nothing to most people, so the row says what it is measuring. */
+  .value small {
+    display: block;
+    margin-top: 0.1rem;
+    font-size: 0.75rem;
+    line-height: 1.2;
+    color: var(--panel-muted);
+  }
+
+  /* Sliders ---------------------------------------------------------------- */
+
+  .slider {
+    -webkit-appearance: none;
+    appearance: none;
+    display: block;
+    width: 100%;
+    height: 20px;
+    margin: 0.55rem 0 0.35rem;
+    background: none;
+    cursor: grab;
+  }
+
+  .slider:active {
+    cursor: grabbing;
+  }
+
+  /* WebKit draws no progress part, so the fill is a hard-stop gradient driven by --pos.
+     Firefox has ::-moz-range-progress and gets it for free below. */
+  .slider::-webkit-slider-runnable-track {
+    height: 4px;
+    border-radius: var(--radius-pill);
+    background: linear-gradient(
+      to right,
+      var(--accent) 0 var(--pos),
+      var(--rail) var(--pos) 100%
+    );
+  }
+
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    margin-top: -6px;
+    border: 0;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 3px rgb(0 0 0 / 0.45);
+  }
+
+  .slider::-moz-range-track {
+    height: 4px;
+    border-radius: var(--radius-pill);
+    background: var(--rail);
+  }
+
+  .slider::-moz-range-progress {
+    height: 4px;
+    border-radius: var(--radius-pill);
+    background: var(--accent);
+  }
+
+  .slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border: 0;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 3px rgb(0 0 0 / 0.45);
+  }
+
+  .slider:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+    border-radius: var(--radius-pill);
+  }
+
+  .ends {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: 0.8125rem;
+    color: var(--panel-muted);
+  }
+
+  .foot {
+    margin-top: 1.4rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid rgb(255 255 255 / 0.1);
+    color: var(--panel-muted);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .thumb,
+    .seg button {
+      transition:
+        transform 420ms cubic-bezier(0.4, 0, 0.2, 1),
+        background-color 420ms cubic-bezier(0.4, 0, 0.2, 1),
+        color 200ms linear;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .panel {
+      padding: 1.6rem 1.5rem 1.7rem;
+      font-size: 0.9375rem;
+    }
+  }
+</style>
+
+<script>
+  type Preset = { far: number; delay: number };
+
+  const DURATION = 420;
+  const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+  const clamp = (n: number, low: number, high: number) => Math.min(Math.max(n, low), high);
+
+  for (const panel of document.querySelectorAll<HTMLElement>('.panel[data-settings]')) {
+    const presets: Record<string, Preset> = JSON.parse(panel.dataset.settings ?? '{}');
+    const stops: number[] = JSON.parse(panel.dataset.delayStops ?? '[]');
+    const farSoonest = Number(panel.dataset.farSoonest);
+    const farSteps = Number(panel.dataset.farSteps);
+    const buttons = panel.querySelectorAll<HTMLButtonElement>('[data-mode-btn]');
+
+    // Both sliders are driven by their position, and the reading is derived from it, so
+    // the thumb and the number can never disagree — including part-way through a tween.
+    const dials = {
+      far: {
+        input: panel.querySelector<HTMLInputElement>('[data-far-input]'),
+        value: panel.querySelector<HTMLElement>('[data-far-value]'),
+        max: farSteps,
+        read: (stop: number) => `${Math.round(farSoonest - stop)} dBm`,
+      },
+      delay: {
+        input: panel.querySelector<HTMLInputElement>('[data-delay-input]'),
+        value: panel.querySelector<HTMLElement>('[data-delay-value]'),
+        max: stops.length - 1,
+        // Between two stops, read between their seconds, so a slide looks continuous.
+        read: (stop: number) => {
+          const low = Math.floor(clamp(stop, 0, stops.length - 1));
+          const high = Math.min(low + 1, stops.length - 1);
+          return `${Math.round(stops[low] + (stops[high] - stops[low]) * (stop - low))} seconds`;
+        },
+      },
+    };
+
+    type Dial = keyof typeof dials;
+    const live: Record<Dial, number> = { far: 0, delay: 0 };
+    let frame = 0;
+
+    const paint = (name: Dial, stop: number, moveThumb = true) => {
+      const dial = dials[name];
+      live[name] = stop;
+      const reading = dial.read(stop);
+      if (dial.value) dial.value.textContent = reading;
+      if (dial.input) {
+        if (moveThumb) dial.input.value = String(stop);
+        dial.input.style.setProperty('--pos', `${(stop / dial.max) * 100}%`);
+        dial.input.setAttribute('aria-valuetext', reading);
+      }
+    };
+
+    for (const name of Object.keys(dials) as Dial[]) {
+      const input = dials[name].input;
+      if (!input) continue;
+      live[name] = input.valueAsNumber;
+      // Dragging snaps to whole dBm and to the waits the app actually offers, rather than
+      // landing on a number the app could never store.
+      input.addEventListener('input', () => {
+        cancelAnimationFrame(frame);
+        const stop = Math.round(input.valueAsNumber);
+        input.value = String(stop);
+        paint(name, stop, false);
+      });
+    }
+
+    const show = (id: string) => {
+      const next = presets[id];
+      if (!next) return;
+
+      const from = { ...live };
+      panel.dataset.mode = id;
+      for (const button of buttons) {
+        button.setAttribute('aria-pressed', String(button.dataset.modeBtn === id));
+      }
+
+      cancelAnimationFrame(frame);
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        paint('far', next.far);
+        paint('delay', next.delay);
+        return;
+      }
+
+      const started = performance.now();
+      const step = (now: number) => {
+        const t = ease(Math.min((now - started) / DURATION, 1));
+        paint('far', from.far + (next.far - from.far) * t);
+        paint('delay', from.delay + (next.delay - from.delay) * t);
+        if (t < 1) frame = requestAnimationFrame(step);
+      };
+      frame = requestAnimationFrame(step);
+    };
+
+    for (const button of buttons) {
+      // Clicking the mode already showing puts its numbers back, which is the way out of
+      // any set of sliders you have dragged somewhere you did not mean.
+      button.addEventListener('click', () => show(button.dataset.modeBtn ?? ''));
+    }
+  }
+</script>

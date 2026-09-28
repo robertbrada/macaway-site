@@ -15,41 +15,41 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font-family: 'Inter Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui,
+  font-family: 'Satoshi', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui,
     sans-serif;
   font-size: 17px;
+  font-weight: 400;
   line-height: 1.6;
-  font-feature-settings: 'cv05' 1, 'ss03' 1;
   -webkit-font-smoothing: antialiased;
 }
 
-:target,
 [id] {
-  scroll-margin-top: 80px;
+  scroll-margin-top: 100px;
 }
 
+/* Satoshi's lightest weight is 300, so headings sit at 700 and body copy at 400-500. */
 h1,
 h2,
 h3 {
   margin: 0;
-  font-weight: 620;
-  letter-spacing: -0.025em;
-  line-height: 1.08;
+  font-weight: 700;
+  line-height: 1.06;
+  letter-spacing: -0.03em;
   text-wrap: balance;
 }
 
 h1 {
-  font-size: clamp(2.5rem, 6.6vw, 4.75rem);
-  letter-spacing: -0.035em;
+  font-size: clamp(2.5rem, 5.4vw, 4rem);
+  letter-spacing: -0.04em;
 }
 
 h2 {
-  font-size: clamp(1.95rem, 4.2vw, 3rem);
+  font-size: clamp(1.875rem, 3.6vw, 2.75rem);
 }
 
 h3 {
-  font-size: 1.2rem;
-  line-height: 1.3;
+  font-size: 1.125rem;
+  line-height: 1.35;
   letter-spacing: -0.015em;
 }
 
@@ -62,28 +62,24 @@ a {
   color: inherit;
 }
 
-img,
-svg {
+img {
   display: block;
   max-width: 100%;
 }
 
-::selection {
-  background: var(--accent-wash);
-  color: var(--ink);
+svg {
+  max-width: 100%;
 }
 
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--green-deep);
   outline-offset: 3px;
-  border-radius: 4px;
+  border-radius: 6px;
 }
-
-/* Layout ------------------------------------------------------------------ */
 
 .wrap {
   width: 100%;
-  max-width: 1140px;
+  max-width: 1120px;
   margin-inline: auto;
   padding-inline: var(--gutter);
 }
@@ -93,29 +89,72 @@ svg {
 }
 
 .section {
-  padding-block: clamp(4.5rem, 11vw, 8.5rem);
+  padding-block: clamp(4.5rem, 9vw, 7rem);
 }
 
-.section-sunken {
-  background: var(--bg-sunken);
-  border-block: 1px solid var(--line);
+.section-soft {
+  background: var(--bg-soft);
+}
+
+.section-grey {
+  background: var(--bg-grey);
 }
 
 .eyebrow {
-  margin: 0 0 1.25rem;
+  margin: 0 0 1.1rem;
   font-size: 0.8125rem;
-  font-weight: 620;
-  letter-spacing: 0.1em;
+  font-weight: 700;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--green-deep);
 }
 
 .lede {
-  margin-top: 1.5rem;
-  max-width: var(--measure);
-  font-size: clamp(1.0625rem, 1.9vw, 1.3125rem);
-  line-height: 1.55;
-  color: var(--ink-soft);
+  margin-top: 1.25rem;
+  max-width: 36rem;
+  font-size: clamp(1.0625rem, 1.6vw, 1.1875rem);
+  color: var(--ink-muted);
+}
+
+/* Buttons ------------------------------------------------------------------ */
+
+.download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.9rem 1.6rem;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--green);
+  color: var(--green-ink);
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* No release yet, so every Download button is disabled (see src/lib/pricing.ts). */
+.download-btn:disabled {
+  cursor: not-allowed;
+}
+
+a.download-btn:hover {
+  filter: brightness(0.95);
+}
+
+/* Links -------------------------------------------------------------------- */
+
+.text-link {
+  color: var(--green-deep);
+  font-weight: 600;
+  text-decoration: none;
+  text-underline-offset: 4px;
+}
+
+.text-link:hover {
+  text-decoration: underline;
 }
 
 .skip-link {
@@ -124,46 +163,21 @@ svg {
   top: 0;
   z-index: 100;
   padding: 0.75rem 1.25rem;
-  background: var(--accent);
-  color: var(--accent-ink);
+  background: var(--ink);
+  color: var(--bg);
   font-weight: 600;
-  border-radius: 0 0 var(--radius) 0;
 }
 
 .skip-link:focus {
   left: 0;
 }
 
-/* A pill that states the honest status. Never a download button: there is no release. */
-.status-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-  padding: 0.4rem 0.9rem 0.4rem 0.7rem;
-  border: 1px solid var(--line-strong);
-  border-radius: 999px;
-  font-size: 0.875rem;
-  font-weight: 560;
-  color: var(--ink-soft);
-  background: var(--surface);
-}
-
-.status-pill::before {
-  content: '';
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--ink-faint);
-}
-
-/* Sections arrive as you reach them. Pure CSS, and in a browser without scroll-driven
-   animations nothing is hidden in the first place. */
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) {
     .rise {
       animation: rise linear both;
       animation-timeline: view();
-      animation-range: entry 0% entry 62%;
+      animation-range: entry 0% entry 55%;
     }
   }
 }
@@ -171,11 +185,10 @@ svg {
 @keyframes rise {
   from {
     opacity: 0;
-    transform: translateY(22px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
     transform: none;
   }
 }
-

@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import CopyEmail from '../components/CopyEmail.astro';
 import { link } from '../lib/links';
 
 const updated = '23 September 2026';
@@ -10,9 +11,8 @@ const updated = '23 September 2026';
   description="What MacAway keeps, where it keeps it, and why nothing leaves your Mac. Today's app contains no networking code at all."
 >
   <article class="doc">
-    <div class="wrap wrap-narrow">
+    <div class="wrap">
       <header class="doc-head">
-        <p class="status-pill">Not released yet</p>
         <h1>Privacy</h1>
         <p class="lede">
           This describes MacAway as it is built today and this website as it is served today.
@@ -142,11 +142,15 @@ const updated = '23 September 2026';
         <div class="tbd">
           <span class="tbd-tag">To be supplied by the owner</span>
           <p>
-            The name and contact address of the person or company responsible for this site and
-            for MacAway go here. This placeholder is deliberate: inventing them would be worse
-            than leaving the section visibly unfinished, and this notice is not final until it
-            is filled in.
+            The name of the person or company responsible for this site and for MacAway goes
+            here. This placeholder is deliberate: inventing it would be worse than leaving the
+            section visibly unfinished, and this notice is not final until it is filled in.
           </p>
+          <p>
+            Write to the address below. That is a placeholder too, and the mailbox behind it
+            is not set up yet.
+          </p>
+          <CopyEmail />
         </div>
       </section>
 
@@ -156,7 +160,7 @@ const updated = '23 September 2026';
           The app holds no personal data of yours anywhere but on your own Mac, where it is
           already yours to read and to delete, and it has no account attached to you. That
           leaves the website&rsquo;s server logs, which GitHub holds as the host. Once the
-          contact details above are filled in, you can use them to ask about any of this.
+          contact address above is working, you can use it to ask about any of this.
         </p>
       </section>
 
@@ -175,7 +179,11 @@ const updated = '23 September 2026';
 
 <style>
   .doc {
-    padding-block: clamp(3rem, 7vw, 5rem) clamp(4rem, 8vw, 6rem);
+    padding-block: clamp(6rem, 10vw, 8rem) clamp(4rem, 8vw, 6rem);
+  }
+
+  .doc :global(.wrap) > * {
+    max-width: 44rem;
   }
 
   .doc-head {
@@ -185,14 +193,13 @@ const updated = '23 September 2026';
   }
 
   .doc-head h1 {
-    margin-top: 1.25rem;
     font-size: clamp(2.5rem, 7vw, 3.75rem);
   }
 
   .updated {
     margin-top: 1.5rem;
     font-size: 0.875rem;
-    color: var(--ink-faint);
+    color: var(--ink-muted);
   }
 
   .doc section {
@@ -205,7 +212,7 @@ const updated = '23 September 2026';
   }
 
   .doc p {
-    color: var(--ink-soft);
+    color: var(--ink-muted);
     margin-bottom: 1rem;
   }
 
@@ -214,7 +221,7 @@ const updated = '23 September 2026';
     padding-left: 1.2rem;
     display: grid;
     gap: 0.75rem;
-    color: var(--ink-soft);
+    color: var(--ink-muted);
   }
 
   .doc ul.plain {
@@ -235,7 +242,7 @@ const updated = '23 September 2026';
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: var(--accent);
+    background: var(--green-deep);
   }
 
   .doc strong {
@@ -244,29 +251,31 @@ const updated = '23 September 2026';
   }
 
   .doc a {
-    color: var(--accent);
+    color: var(--green-deep);
     text-underline-offset: 3px;
   }
 
   .tbd {
+    display: grid;
+    justify-items: start;
+    gap: 0.85rem;
     padding: 1.5rem 1.6rem;
-    border: 1px dashed var(--line-strong);
+    border: 1px dashed var(--line);
     border-radius: var(--radius-lg);
-    background: var(--bg-sunken);
+    background: var(--bg-soft);
   }
 
   .tbd-tag {
     display: inline-block;
-    margin-bottom: 0.75rem;
     padding: 0.25rem 0.7rem;
     border-radius: 999px;
-    background: var(--surface);
-    border: 1px solid var(--line-strong);
+    background: var(--bg);
+    border: 1px solid var(--line);
     font-size: 0.75rem;
     font-weight: 650;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--ink-faint);
+    color: var(--ink-muted);
   }
 
   .tbd p {
@@ -280,7 +289,7 @@ const updated = '23 September 2026';
   }
 
   .text-link {
-    color: var(--accent);
+    color: var(--green-deep);
     font-weight: 600;
     text-decoration: none;
   }

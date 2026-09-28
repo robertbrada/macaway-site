@@ -1,90 +1,46 @@
-/* The greens are sampled from the app icon's gradient: #4fd074 at the top, #1da45b at the
-   bottom. Light mode darkens them so green text and green-on-white pass AA. */
-
 :root {
+  /* Two greys and two greens carry the whole page: a white band, a tinted band, ink for
+     text, and one green that means "MacAway is doing its job". Nothing else is invented
+     further down. */
   --bg: #ffffff;
-  --bg-sunken: #f4f7f5;
-  --surface: #ffffff;
-  --surface-raised: #f7faf8;
-  --ink: #0d1411;
-  --ink-soft: #44514b;
-  --ink-faint: #65716c;
-  --line: #e2e7e4;
-  --line-strong: #cbd4cf;
+  --bg-soft: #f2f8f4;
+  /* Neutral, for the band the dark settings panel sits on: the green tint fought it. */
+  --bg-grey: #f4f5f7;
+  /* The top of the hero. Cool and neutral, so the green button stands out against it. */
+  --bg-hero: #e9eef5;
+  --bg-dark: #0b1a12;
+  --ink: #0b1a12;
+  --ink-muted: #56645c;
+  --ink-faint: #76847b;
+  --line: #e3ede7;
+  /* For a rule that has to frame a block rather than sit quietly between rows. */
+  --line-strong: #cfd8d2;
+  --line-dark: #21382b;
+  /* Text on the dark band: full white for what matters, this for everything under it. */
+  --ink-on-dark-muted: #b7c7bd;
 
-  --accent: #0f7a42;
-  --accent-bright: #1da45b;
-  --accent-ink: #ffffff;
-  --accent-wash: #eaf6ef;
-  --accent-line: #b6dfc8;
+  --green: #42e26a;
+  --green-deep: #0a7a35;
+  --green-wash: #e9f8ee;
+  /* The shield mark, kept in the same family as the download button rather than the
+     darker green that text uses. */
+  --green-mark: #2ec45f;
+  --green-ink: #07140c;
 
-  --warn: #8a5200;
-  --warn-graphic: #d17700;
-  --warn-wash: #fdf2e0;
-  --warn-line: #f0cf99;
+  --amber: #8a5200;
+  --amber-graphic: #d17700;
+  --amber-wash: #fdf2e0;
 
-  --radius: 14px;
-  --radius-lg: 22px;
+  --radius: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-pill: 999px;
   --gutter: 20px;
-  --measure: 34rem;
 
-  --shadow: 0 1px 2px rgb(13 20 17 / 0.05), 0 14px 34px -14px rgb(13 20 17 / 0.14);
+  --shadow-sm: 0 1px 2px rgb(11 26 18 / 0.06), 0 6px 16px -8px rgb(11 26 18 / 0.12);
+  --shadow-lg: 0 2px 4px rgb(11 26 18 / 0.04), 0 30px 60px -28px rgb(11 26 18 / 0.25);
+  /* Neutral grey, for the hero screenshot. A filter, because the menu's corners are cut. */
+  --shadow-shot: drop-shadow(0 2px 4px rgb(0 0 0 / 0.08)) drop-shadow(0 24px 40px rgb(0 0 0 / 0.18));
 
   color-scheme: light;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --bg: #0b0f0d;
-    --bg-sunken: #070b09;
-    --surface: #121815;
-    --surface-raised: #182019;
-    --ink: #e9efeb;
-    --ink-soft: #a6b2ac;
-    --ink-faint: #7d8a84;
-    --line: #232c27;
-    --line-strong: #33403a;
-
-    --accent: #3fc97a;
-    --accent-bright: #4fd074;
-    --accent-ink: #04170c;
-    --accent-wash: #0e1f16;
-    --accent-line: #1e4430;
-
-    --warn: #efb45c;
-    --warn-graphic: #ff9f38;
-    --warn-wash: #241a0b;
-    --warn-line: #4f3c17;
-
-    --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 14px 34px -14px rgb(0 0 0 / 0.6);
-
-    color-scheme: dark;
-  }
-}
-
-:root[data-theme='dark'] {
-  --bg: #0b0f0d;
-  --bg-sunken: #070b09;
-  --surface: #121815;
-  --surface-raised: #182019;
-  --ink: #e9efeb;
-  --ink-soft: #a6b2ac;
-  --ink-faint: #7d8a84;
-  --line: #232c27;
-  --line-strong: #33403a;
-
-  --accent: #3fc97a;
-  --accent-bright: #4fd074;
-  --accent-ink: #04170c;
-  --accent-wash: #0e1f16;
-  --accent-line: #1e4430;
-
-  --warn: #efb45c;
-  --warn-graphic: #ff9f38;
-  --warn-wash: #241a0b;
-  --warn-line: #4f3c17;
-
-  --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 14px 34px -14px rgb(0 0 0 / 0.6);
-
-  color-scheme: dark;
 }

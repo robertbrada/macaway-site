@@ -15,11 +15,11 @@ const { title, description } = Astro.props;
 // Inlined rather than left in base.css so the URL picks up Astro's `base`, which the
 // github.io project page needs and a plain stylesheet cannot express.
 const fontFace = `@font-face {
-  font-family: 'Inter Variable';
+  font-family: 'Satoshi';
   font-style: normal;
-  font-weight: 100 900;
+  font-weight: 300 900;
   font-display: swap;
-  src: url('${link('fonts/inter-latin-variable.woff2')}') format('woff2');
+  src: url('${link('fonts/satoshi-variable.woff2')}') format('woff2');
 }`;
 ---
 
@@ -32,13 +32,14 @@ const fontFace = `@font-face {
     <meta name="robots" content="noindex, nofollow" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#0f7a42" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#0b0f0d" media="(prefers-color-scheme: dark)" />
-    <link rel="icon" href={link('icon.png')} type="image/png" />
+    <meta name="theme-color" content="#ffffff" />
+    <!-- The header's shield, as the tab icon. The PNG is for browsers without SVG icons. -->
+    <link rel="icon" href={link('favicon.svg')} type="image/svg+xml" />
+    <link rel="icon" href={link('favicon.png')} type="image/png" sizes="64x64" />
     <link rel="apple-touch-icon" href={link('icon.png')} />
     <link
       rel="preload"
-      href={link('fonts/inter-latin-variable.woff2')}
+      href={link('fonts/satoshi-variable.woff2')}
       as="font"
       type="font/woff2"
       crossorigin
