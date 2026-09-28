@@ -7,7 +7,7 @@
 html {
   -webkit-text-size-adjust: 100%;
   /* `clip`, not `hidden`: `hidden` would make this a scroll container, and that breaks
-     both position: sticky and ScrollTrigger's pinning. */
+     position: sticky. */
   overflow-x: clip;
 }
 
@@ -84,10 +84,6 @@ svg {
   padding-inline: var(--gutter);
 }
 
-.wrap-narrow {
-  max-width: 760px;
-}
-
 .section {
   padding-block: clamp(4.5rem, 9vw, 7rem);
 }
@@ -133,6 +129,11 @@ svg {
   letter-spacing: -0.01em;
   text-decoration: none;
   cursor: pointer;
+}
+
+.download-btn.small {
+  padding: 0.5rem 1rem;
+  font-size: 0.9375rem;
 }
 
 /* No release yet, so every Download button is disabled (see src/lib/pricing.ts). */

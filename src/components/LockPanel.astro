@@ -8,12 +8,12 @@
 const FAR_SOONEST = -60; // LockSettings.strongestFar, the "locks sooner" end
 const FAR_LATEST = -95; // LockSettings.weakestFar, the "locks later" end
 const FAR_STEPS = FAR_SOONEST - FAR_LATEST; // 35 whole dBm between the two ends
-const DELAY_STOPS = [3, 4, 5, 10, 15, 20, 30, 45, 60, 90];
+const DELAY_SECONDS = [3, 4, 5, 10, 15, 20, 30, 45, 60, 90];
 
 /** Slider position for a signal threshold: 0 at -60 dBm, 35 at -95. */
 const farStop = (dbm: number) => FAR_SOONEST - dbm;
-/** Slider position for a wait: its index among the stops the app offers. */
-const delayStop = (seconds: number) => DELAY_STOPS.indexOf(seconds);
+/** Slider position for a wait: its index among the waits the app offers. */
+const delayStop = (seconds: number) => DELAY_SECONDS.indexOf(seconds);
 
 const modes = [
   { id: 'home', name: 'Home', far: -75, delay: 15 },
@@ -38,7 +38,7 @@ const pct = (stop: number, of: number) => `${(stop / of) * 100}%`;
   class="panel"
   data-mode={start.id}
   data-settings={JSON.stringify(settings)}
-  data-delay-stops={JSON.stringify(DELAY_STOPS)}
+  data-delay-seconds={JSON.stringify(DELAY_SECONDS)}
   data-far-soonest={FAR_SOONEST}
   data-far-steps={FAR_STEPS}
 >
@@ -88,10 +88,10 @@ const pct = (stop: number, of: number) => `${(stop / of) * 100}%`;
       id="delay-slider"
       type="range"
       min="0"
-      max={DELAY_STOPS.length - 1}
+      max={DELAY_SECONDS.length - 1}
       step="any"
       value={delayStop(start.delay)}
-      style={`--pos:${pct(delayStop(start.delay), DELAY_STOPS.length - 1)}`}
+      style={`--pos:${pct(delayStop(start.delay), DELAY_SECONDS.length - 1)}`}
       data-delay-input
       aria-valuetext={`${start.delay} seconds`}
     />
@@ -307,7 +307,6 @@ const pct = (stop: number, of: number) => `${(stop / of) * 100}%`;
   @media (min-width: 900px) {
     .panel {
       padding: 1.6rem 1.5rem 1.7rem;
-      font-size: 0.9375rem;
     }
   }
 </style>
@@ -321,7 +320,7 @@ const pct = (stop: number, of: number) => `${(stop / of) * 100}%`;
 
   for (const panel of document.querySelectorAll<HTMLElement>('.panel[data-settings]')) {
     const presets: Record<string, Preset> = JSON.parse(panel.dataset.settings ?? '{}');
-    const stops: number[] = JSON.parse(panel.dataset.delayStops ?? '[]');
+    const delaySeconds: number[] = JSON.parse(panel.dataset.delaySeconds ?? '[]');
     const farSoonest = Number(panel.dataset.farSoonest);
     const farSteps = Number(panel.dataset.farSteps);
     const buttons = panel.querySelectorAll<HTMLButtonElement>('[data-mode-btn]');
@@ -338,12 +337,13 @@ const pct = (stop: number, of: number) => `${(stop / of) * 100}%`;
       delay: {
         input: panel.querySelector<HTMLInputElement>('[data-delay-input]'),
         value: panel.querySelector<HTMLElement>('[data-delay-value]'),
-        max: stops.length - 1,
+        max: delaySeconds.length - 1,
         // Between two stops, read between their seconds, so a slide looks continuous.
         read: (stop: number) => {
-          const low = Math.floor(clamp(stop, 0, stops.length - 1));
-          const high = Math.min(low + 1, stops.length - 1);
-          return `${Math.round(stops[low] + (stops[high] - stops[low]) * (stop - low))} seconds`;
+          const low = Math.floor(clamp(stop, 0, delaySeconds.length - 1));
+          const high = Math.min(low + 1, delaySeconds.length - 1);
+          const seconds = delaySeconds[low] + (delaySeconds[high] - delaySeconds[low]) * (stop - low);
+          return `${Math.round(seconds)} seconds`;
         },
       },
     };
@@ -396,13 +396,13 @@ const pct = (stop: number, of: number) => `${(stop / of) * 100}%`;
       }
 
       const started = performance.now();
-      const step = (now: number) => {
+      const tick = (now: number) => {
         const t = ease(Math.min((now - started) / DURATION, 1));
         paint('far', from.far + (next.far - from.far) * t);
         paint('delay', from.delay + (next.delay - from.delay) * t);
-        if (t < 1) frame = requestAnimationFrame(step);
+        if (t < 1) frame = requestAnimationFrame(tick);
       };
-      frame = requestAnimationFrame(step);
+      frame = requestAnimationFrame(tick);
     };
 
     for (const button of buttons) {

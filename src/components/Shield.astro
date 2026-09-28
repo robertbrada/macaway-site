@@ -19,10 +19,9 @@ const shapes = {
 interface Props {
   shape: keyof typeof shapes;
   size?: number;
-  label?: string;
 }
 
-const { shape, size = 28, label } = Astro.props;
+const { shape, size = 28 } = Astro.props;
 const paths = shapes[shape];
 ---
 
@@ -31,9 +30,7 @@ const paths = shapes[shape];
   width={size}
   height={size}
   fill="currentColor"
-  role={label ? 'img' : 'presentation'}
-  aria-label={label}
-  aria-hidden={label ? undefined : 'true'}
+  aria-hidden="true"
 >
   {paths.map((d) => <path d={d} fill-rule="evenodd" clip-rule="evenodd" />)}
 </svg>

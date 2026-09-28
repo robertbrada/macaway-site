@@ -21,15 +21,9 @@
 
   --green: #42e26a;
   --green-deep: #0a7a35;
-  --green-wash: #e9f8ee;
-  /* The shield mark, kept in the same family as the download button rather than the
-     darker green that text uses. */
-  --green-mark: #2ec45f;
   --green-ink: #07140c;
 
-  --amber: #8a5200;
   --amber-graphic: #d17700;
-  --amber-wash: #fdf2e0;
 
   --radius: 12px;
   --radius-lg: 20px;
@@ -37,7 +31,6 @@
   --radius-pill: 999px;
   --gutter: 20px;
 
-  --shadow-sm: 0 1px 2px rgb(11 26 18 / 0.06), 0 6px 16px -8px rgb(11 26 18 / 0.12);
   --shadow-lg: 0 2px 4px rgb(11 26 18 / 0.04), 0 30px 60px -28px rgb(11 26 18 / 0.25);
   /* Neutral grey, for the hero screenshot. A filter, because the menu's corners are cut. */
   --shadow-shot: drop-shadow(0 2px 4px rgb(0 0 0 / 0.08)) drop-shadow(0 24px 40px rgb(0 0 0 / 0.18));

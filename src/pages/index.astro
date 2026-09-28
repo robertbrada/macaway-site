@@ -4,9 +4,9 @@ import Hero from '../components/Hero.astro';
 import Icon from '../components/Icon.astro';
 import LockPanel from '../components/LockPanel.astro';
 import Shield from '../components/Shield.astro';
-import { link } from '../lib/links';
 import DownloadButton from '../components/DownloadButton.astro';
 import CopyEmail from '../components/CopyEmail.astro';
+import { link } from '../lib/links';
 import { BUY_PATH, CHECKOUT_OPEN, PRICE, REFUND_DAYS, TRIAL_DAYS } from '../lib/pricing';
 
 const places = [
@@ -17,49 +17,48 @@ const places = [
 ];
 
 // What happens, in order. It answers "what happens after the trial?" before anyone asks.
-const trial = [
+const trialStops = [
   { when: 'Today', line: `Download MacAway and use it free for ${TRIAL_DAYS} days. No card needed.` },
   { when: `Day ${TRIAL_DAYS}`, line: 'MacAway stops locking and tells you.' },
   { when: 'When you are ready', line: `Buy it once for ${PRICE} and keep it.` },
 ];
 
-// Only what people ask before they download or pay. `draft` marks an answer that waits on
-// the owner, and shows a Placeholder tag on the page until it is filled in. `contact` ends
-// the answer with the support address.
+// Only what people ask before they download or pay. `placeholder` shows a tag on an answer
+// the owner still has to write.
 const questions = [
   {
-    q: 'Who made MacAway?',
-    a: 'One person who kept leaving their Mac open at the desk. A short line about who they are goes here.',
-    draft: true,
+    question: 'Who made MacAway?',
+    answer: 'One person who kept leaving their Mac open at the desk. A short line about who they are goes here.',
+    placeholder: true,
   },
   {
-    q: 'How do I know it never goes online?',
-    a: 'There is no networking code in the app at all. You can check it yourself: a free firewall such as LuLu shows every connection an app tries to make.',
+    question: 'How do I know it never goes online?',
+    answer: 'There is no networking code in the app at all. You can check it yourself: a free firewall such as LuLu shows every connection an app tries to make.',
   },
   {
-    q: 'Can MacAway see my password?',
-    a: 'No. It only locks your Mac. It never sees or stores your password, and you unlock your Mac the way you always do.',
+    question: 'Can MacAway see my password?',
+    answer: 'No. It only locks your Mac. It never sees or stores your password, and you unlock your Mac the way you always do.',
   },
   {
-    q: 'Can it lock while I am still at my Mac?',
-    a: 'Sometimes, yes. If the signal from your phone drops, MacAway counts that as you leaving. If it happens too often, switch to Home, or set your own distance in Advanced.',
+    question: 'Can it lock while I am still at my Mac?',
+    answer: 'Sometimes, yes. If the signal from your phone drops, MacAway counts that as you leaving. If it happens too often, switch to Home, or set your own distance in Advanced.',
   },
   {
-    q: `What happens after the ${TRIAL_DAYS} free days?`,
-    a: `MacAway stops locking and tells you. Buy it once for ${PRICE} to keep it.`,
+    question: `What happens after the ${TRIAL_DAYS} free days?`,
+    answer: `MacAway stops locking and tells you. Buy it once for ${PRICE} to keep it.`,
   },
   {
-    q: 'Is there anything to cancel?',
-    a: `No. There is no subscription and nothing renews. If MacAway is not for you, write to us within ${REFUND_DAYS} days for a full refund.`,
+    question: 'Is there anything to cancel?',
+    answer: `No. There is no subscription and nothing renews. If MacAway is not for you, write to us within ${REFUND_DAYS} days for a full refund.`,
   },
   {
-    q: 'Can I use it on more than one Mac?',
-    a: 'Yes. One purchase covers all your Macs.',
+    question: 'Can I use it on more than one Mac?',
+    answer: 'Yes. One purchase covers all your Macs.',
   },
   {
-    q: 'Does it work with an Android phone?',
-    a: 'Not yet. Today MacAway only follows Apple devices, like an iPhone or an Apple Watch. Want it on Android? Write to',
-    contact: true,
+    question: 'Does it work with an Android phone?',
+    answer: 'Not yet. Today MacAway only follows Apple devices, like an iPhone or an Apple Watch. Want it on Android? Write to',
+    endsWithEmail: true,
   },
 ];
 
@@ -72,21 +71,21 @@ const facts = [
 
 const steps = [
   {
-    icon: 'iphone' as const,
+    icon: 'iphone',
     title: 'Pick what you carry',
     line: 'Any device on the same Apple ID as your Mac: a phone, a watch, even an AirTag on your keys.',
   },
   {
-    icon: 'bluetooth' as const,
+    icon: 'bluetooth',
     title: 'Your Mac keeps an eye on it',
     line: 'It stays connected over Bluetooth and checks how close it is, once a second.',
   },
   {
-    icon: 'lock' as const,
+    icon: 'lock',
     title: 'Walk away and it locks',
     line: 'When the signal gets weak, your Mac locks itself. Come back in time and it stops.',
   },
-];
+] as const;
 
 const shields = [
   { shape: 'guarding', label: "You're covered" },
@@ -206,8 +205,8 @@ const promises = [
   </section>
 
   <section class="section section-soft">
-    <div class="wrap good">
-      <div class="good-head rise">
+    <div class="wrap privacy-section">
+      <div class="privacy-head rise">
         <h2>Nothing leaves your Mac</h2>
         <p class="lede">
           MacAway never goes online. It locks your screen, and that is the whole of it.
@@ -238,10 +237,10 @@ const promises = [
 
         <ol class="trial">
           {
-            trial.map((step) => (
+            trialStops.map((stop) => (
               <li>
-                <span class="when">{step.when}</span>
-                <span class="what">{step.line}</span>
+                <span class="when">{stop.when}</span>
+                <span class="what">{stop.line}</span>
               </li>
             ))
           }
@@ -284,18 +283,16 @@ const promises = [
 
       <div class="faq-list">
         {
-          questions.map((item) => (
+          questions.map((faq) => (
             <details>
-              <summary>{item.q}</summary>
+              <summary>{faq.question}</summary>
               <p>
-                {item.draft && <span class="draft">Placeholder</span>}
-                {item.a}
-                {item.contact && (
+                {faq.placeholder && <span class="placeholder">Placeholder</span>}
+                {faq.answer}
+                {faq.endsWithEmail && (
                   <>
                     {' '}
-                    <span class="faq-contact">
-                      <CopyEmail />
-                    </span>
+                    <CopyEmail />
                   </>
                 )}
               </p>
@@ -315,7 +312,7 @@ const promises = [
 
   /* Where it helps ---------------------------------------------------------- */
 
-  /* A strip, not a full section: one label and three short lines, framed by a rule above
+  /* A strip, not a full section: one label and four short lines, framed by a rule above
      and below so it reads as its own band between the hero and the steps. */
   .where {
     padding-block: clamp(1.5rem, 3vw, 2.5rem) clamp(1rem, 2vw, 1.5rem);
@@ -343,7 +340,6 @@ const promises = [
     margin: 0;
   }
 
-
   .places dt {
     font-weight: 700;
     letter-spacing: -0.01em;
@@ -370,13 +366,12 @@ const promises = [
     }
   }
 
-  /* On a wide screen the label sits beside the three, which keeps the strip one row tall. */
+  /* On a wide screen the label sits beside the four, which keeps the strip one row tall. */
   @media (min-width: 1000px) {
     .where-grid {
       grid-template-columns: 9.5rem minmax(0, 1fr);
       align-items: baseline;
     }
-
   }
 
   /* Steps ------------------------------------------------------------------ */
@@ -496,9 +491,9 @@ const promises = [
     color: var(--amber-graphic);
   }
 
-  /* Good to know ------------------------------------------------------------ */
+  /* Nothing leaves your Mac ------------------------------------------------- */
 
-  .good-head {
+  .privacy-head {
     max-width: 30rem;
     margin-bottom: 2rem;
   }
@@ -553,7 +548,6 @@ const promises = [
     padding: 0;
     list-style: none;
   }
-
 
   .trial li {
     position: relative;
@@ -683,7 +677,7 @@ const promises = [
     color: var(--ink-muted);
   }
 
-  .faq-more :global(.contact) {
+  .faq :global(.contact) {
     color: var(--ink);
     font-weight: 600;
   }
@@ -750,12 +744,7 @@ const promises = [
     color: var(--ink-muted);
   }
 
-  .faq-contact {
-    color: var(--ink);
-    font-weight: 600;
-  }
-
-  .draft {
+  .placeholder {
     display: inline-block;
     margin-right: 0.5rem;
     padding: 0.1rem 0.55rem;
@@ -783,7 +772,7 @@ const promises = [
       align-items: start;
     }
 
-    /* The same cap-height match as the privacy heading, against the first question. */
+    /* Lines the heading's capitals up with the first question's, as in the section above. */
     .faq-head h2 {
       margin-top: calc(1.5625rem - 0.13em);
     }
@@ -823,8 +812,8 @@ const promises = [
       grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     }
 
-    /* Picture and words on the left, the four promises down the right. */
-    .good {
+    /* Heading and words on the left, the four promises down the right. */
+    .privacy-section {
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
       grid-template-areas:
@@ -835,7 +824,7 @@ const promises = [
       align-items: start;
     }
 
-    .good-head {
+    .privacy-head {
       grid-area: head;
       margin-bottom: 0;
     }
@@ -843,7 +832,7 @@ const promises = [
     /* Line the heading's capitals up with the first promise's: the list starts with a rule
        and 1.5rem of padding, so the heading drops by that, less the small gap above its own
        capitals, which grows with its size. */
-    .good-head h2 {
+    .privacy-head h2 {
       margin-top: calc(2rem - 0.13em);
     }
 

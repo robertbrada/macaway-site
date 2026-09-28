@@ -48,11 +48,6 @@ import { link } from '../lib/links';
     text-decoration: none;
   }
 
-  .bar :global(.small) {
-    padding: 0.5rem 1rem;
-    font-size: 0.9375rem;
-  }
-
   @supports (animation-timeline: scroll()) {
     .site-header:global(:has(~ main .hero))::after,
     .site-header:global(:has(~ main .hero)) :global(.download-btn) {
@@ -72,5 +67,4 @@ import { link } from '../lib/links';
       opacity: 1;
     }
   }
-
 </style>

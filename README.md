@@ -27,12 +27,10 @@ SITE_URL=https://robertbrada.github.io SITE_BASE=/macaway-site npm run build
 | | |
 |---|---|
 | `src/pages` | `/` and `/privacy` |
-| `src/components` | header, footer, the scroll sequence, the shield icons, screenshot slots |
-| `src/icons/paths.ts` | shield and Bluetooth path data, extracted from the app's own artwork |
-| `public/` | the app icon, the self-hosted Satoshi variable font and its notice, `robots.txt` |
+| `src/components` | header, footer, the hero, the settings panel, the shield icons, the Download button |
+| `src/icons/paths.ts` | shield path data, extracted from the app's own artwork |
+| `src/lib/pricing.ts` | the trial, the price, and the two switches that turn on Download and Buy |
+| `public/` | the app icon, the tab icon, the self-hosted Satoshi variable font and its notice, `robots.txt` |
 
 The page carries `noindex, nofollow` and `robots.txt` disallows everything, deliberately,
 until there is a release worth finding.
-
-GSAP is used for one scroll-scrubbed sequence, under GreenSock's standard "no charge"
-licence.
