@@ -1,0 +1,6 @@
+{
+  "name": "macaway-site",
+  "compatibility_date": "2026-09-30",
+  // The site is files, not code: Cloudflare serves what `npm run build` puts in dist.
+  "assets": { "directory": "./dist" }
+}
