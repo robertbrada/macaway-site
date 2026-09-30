@@ -12,3 +12,7 @@ export const link = (path: string) => `${base}/${path}`.replace(/\/$/, '') || '/
  * than typed into each page so that is a one-line job.
  */
 export const CONTACT_EMAIL = 'support@macaway.app';
+
+/** Where the "Who built this" section points. Both open in a new tab. */
+export const MAKER_LINKEDIN = 'https://www.linkedin.com/in/robert-brada-252474112/';
+export const MAKER_PORTFOLIO = 'https://robertbrada.github.io/portfolio/';

@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
 import Icon from '../components/Icon.astro';
@@ -6,7 +7,8 @@ import LockPanel from '../components/LockPanel.astro';
 import Shield from '../components/Shield.astro';
 import DownloadButton from '../components/DownloadButton.astro';
 import CopyEmail from '../components/CopyEmail.astro';
-import { link } from '../lib/links';
+import portrait from '../assets/author.webp';
+import { link, MAKER_LINKEDIN, MAKER_PORTFOLIO } from '../lib/links';
 import { BUY_PATH, CHECKOUT_OPEN, PRICE, REFUND_DAYS, TRIAL_DAYS } from '../lib/pricing';
 
 const places = [
@@ -23,43 +25,44 @@ const trialStops = [
   { when: 'When you are ready', line: `Buy it once for ${PRICE} and keep it.` },
 ];
 
-// Only what people ask before they download or pay. `placeholder` shows a tag on an answer
-// the owner still has to write.
+// Only what people ask before they buy: how to get it, whether it fits their kit, and what
+// the money buys. Anything a section above already answers stays out.
 const questions = [
   {
-    question: 'Who made MacAway?',
-    answer: 'One person who kept leaving their Mac open at the desk. A short line about who they are goes here.',
-    placeholder: true,
+    question: 'Is MacAway on the App Store?',
+    answer:
+      'No. You download it straight from this page. It is signed and checked by Apple, so macOS opens it like any other app.',
   },
   {
-    question: 'How do I know it never goes online?',
-    answer: 'There is no networking code in the app at all. You can check it yourself: a free firewall such as LuLu shows every connection an app tries to make.',
+    question: 'Is MacAway safe?',
+    answer:
+      'It locks your screen and does nothing else. It never sees your password. It asks for Bluetooth and no other permission. It has no networking code at all, so it cannot send anything anywhere. You can check that yourself with a free firewall such as LuLu.',
   },
   {
-    question: 'Can MacAway see my password?',
-    answer: 'No. It only locks your Mac. It never sees or stores your password, and you unlock your Mac the way you always do.',
+    question: 'Do I need to install anything on my phone?',
+    answer:
+      'No. There is nothing to install and nothing to set up. Your Mac does all the work. You only pick which device it should follow.',
   },
   {
-    question: 'Can it lock while I am still at my Mac?',
-    answer: 'Sometimes, yes. If the signal from your phone drops, MacAway counts that as you leaving. If it happens too often, switch to Home, or set your own distance in Advanced.',
+    question: 'Does it work with an Android phone?',
+    answer:
+      'Not yet. Today MacAway only follows Apple devices, like an iPhone or an Apple Watch. Want it on Android? Write to',
+    endsWithEmail: true,
   },
   {
     question: `What happens after the ${TRIAL_DAYS} free days?`,
-    answer: `MacAway stops locking and tells you. Buy it once for ${PRICE} to keep it.`,
-  },
-  {
-    question: 'Is there anything to cancel?',
-    answer: `No. There is no subscription and nothing renews. If MacAway is not for you, write to us within ${REFUND_DAYS} days for a full refund.`,
+    answer: `MacAway stops locking and tells you. Buy it once for ${PRICE} to keep it. Nothing renews, so there is nothing to cancel.`,
   },
   {
     question: 'Can I use it on more than one Mac?',
     answer: 'Yes. One purchase covers all your Macs.',
   },
-  {
-    question: 'Does it work with an Android phone?',
-    answer: 'Not yet. Today MacAway only follows Apple devices, like an iPhone or an Apple Watch. Want it on Android? Write to',
-    endsWithEmail: true,
-  },
+];
+
+// Two places to look me up. Both leave the site, so both open in a new tab.
+const profiles = [
+  { href: MAKER_LINKEDIN, label: 'LinkedIn' },
+  { href: MAKER_PORTFOLIO, label: 'My other work' },
 ];
 
 const facts = [
@@ -287,7 +290,6 @@ const promises = [
             <details>
               <summary>{faq.question}</summary>
               <p>
-                {faq.placeholder && <span class="placeholder">Placeholder</span>}
                 {faq.answer}
                 {faq.endsWithEmail && (
                   <>
@@ -299,6 +301,40 @@ const promises = [
             </details>
           ))
         }
+      </div>
+    </div>
+  </section>
+
+  <section class="maker" id="maker">
+    <div class="wrap maker-row rise">
+      <div class="portrait">
+        <Image
+          src={portrait}
+          alt="Robert Brada, who makes MacAway."
+          widths={[128, 256, 384]}
+          sizes="128px"
+          loading="lazy"
+        />
+      </div>
+
+      <div class="maker-copy">
+        <h2>Author</h2>
+        <p>
+          I am Robert. My colleagues kept walking away from their laptops with everything
+          still open. So I built a small app that locks the screen for them.
+        </p>
+        <p>If you write in, I am the one who answers.</p>
+
+        <p class="profiles">
+          {
+            profiles.map((profile) => (
+              <a class="text-link" href={profile.href} target="_blank" rel="noopener">
+                {profile.label}
+                <span aria-hidden="true"> &#8599;</span>
+              </a>
+            ))
+          }
+        </p>
       </div>
     </div>
   </section>
@@ -669,7 +705,14 @@ const promises = [
 
   .faq-grid {
     display: grid;
-    gap: 2rem;
+    gap: clamp(1.75rem, 3vw, 2.25rem);
+  }
+
+  /* The measure goes on the rows, not on the wrap, so the block still starts at the same
+     left edge as every other section. */
+  .faq-head,
+  .faq-list {
+    max-width: 48rem;
   }
 
   .faq-more {
@@ -744,37 +787,69 @@ const promises = [
     color: var(--ink-muted);
   }
 
-  .placeholder {
-    display: inline-block;
-    margin-right: 0.5rem;
-    padding: 0.1rem 0.55rem;
-    border: 1px dashed var(--line-strong);
-    border-radius: var(--radius-pill);
-    background: var(--bg);
-    font-size: 0.75rem;
-    font-weight: 650;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    vertical-align: 0.1em;
-    color: var(--ink-muted);
-  }
-
   @media (prefers-reduced-motion: no-preference) {
     .faq-list summary::after {
       transition: transform 200ms ease;
     }
   }
 
-  @media (min-width: 900px) {
-    .faq-grid {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
-      column-gap: clamp(3rem, 7vw, 6rem);
+  /* Who built this ---------------------------------------------------------- */
+
+  /* A quiet closing band: a face, two short lines and two links. Less padding than a
+     full section, because it is a sign-off rather than a part of the pitch. */
+  .maker {
+    padding-block: clamp(3.5rem, 7vw, 5rem);
+  }
+
+  .maker-row {
+    display: grid;
+    gap: 1.5rem;
+    justify-items: start;
+  }
+
+  /* A hairline ring rather than a shadow: it separates the photo from the white band
+     without adding weight. */
+  .portrait :global(img) {
+    width: 112px;
+    height: 112px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 0 0 1px var(--line-strong);
+  }
+
+  /* Smaller than a section heading: this band closes the page, it does not sell. */
+  .maker h2 {
+    font-size: clamp(1.5rem, 2.6vw, 1.875rem);
+  }
+
+  .maker p {
+    margin-top: 0.8rem;
+    max-width: 46ch;
+    color: var(--ink-muted);
+  }
+
+  .profiles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.75rem;
+    margin-top: 1.4rem;
+  }
+
+  @media (min-width: 720px) {
+    .maker-row {
+      grid-template-columns: auto minmax(0, 1fr);
+      column-gap: clamp(2rem, 4vw, 3rem);
       align-items: start;
     }
 
-    /* Lines the heading's capitals up with the first question's, as in the section above. */
-    .faq-head h2 {
-      margin-top: calc(1.5625rem - 0.13em);
+    .portrait :global(img) {
+      width: 128px;
+      height: 128px;
+    }
+
+    /* Lines the heading's capitals up with the top of the photo. */
+    .maker-copy {
+      padding-top: 0.35rem;
     }
   }
 
