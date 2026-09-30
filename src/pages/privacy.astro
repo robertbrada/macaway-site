@@ -3,134 +3,106 @@ import Base from '../layouts/Base.astro';
 import CopyEmail from '../components/CopyEmail.astro';
 import { link } from '../lib/links';
 
-const updated = '23 September 2026';
+const updated = '30 September 2026';
 ---
 
 <Base
   title="Privacy — MacAway"
-  description="What MacAway keeps, where it keeps it, and why nothing leaves your Mac. Today's app contains no networking code at all."
+  description="What MacAway keeps, and where. Everything stays on your Mac. The only thing the app contacts is its own update feed."
 >
   <article class="doc">
     <div class="wrap">
       <header class="doc-head">
         <h1>Privacy</h1>
         <p class="lede">
-          This describes MacAway as it is built today and this website as it is served today.
-          It will be rewritten before anything is released, and the date below will say so.
+          This describes MacAway and this website as they are built today. When either
+          changes, this page changes with it, and so does the date below.
         </p>
         <p class="updated">Last updated {updated}</p>
       </header>
 
       <section>
-        <h2>The short version</h2>
+        <h2>In short</h2>
         <ul class="plain">
-          <li>The app collects nothing and sends nothing. It contains no networking code.</li>
+          <li>
+            The app collects nothing and sends nothing about you. The only thing it contacts is
+            its own update feed.
+          </li>
           <li>It asks for one permission: Bluetooth.</li>
-          <li>It never stores, reads or types your password. It locks; you unlock.</li>
-          <li>
-            This website sets no cookies and runs no analytics. GitHub, which hosts it, keeps
-            its own server logs.
-          </li>
+          <li>It never reads, stores or types your password. It locks; you unlock.</li>
+          <li>This website sets no cookies and runs no analytics.</li>
         </ul>
       </section>
 
       <section>
-        <h2>What the app keeps, and where</h2>
-        <p>
-          Everything MacAway remembers is in its own settings on your Mac, in the usual place
-          macOS keeps an app&rsquo;s preferences. It is readable by you and by anything else
-          running as you, and it goes when you remove the app&rsquo;s settings.
-        </p>
+        <h2>What the app keeps</h2>
+        <p>Everything MacAway remembers stays on your Mac, in its own settings.</p>
         <ul>
           <li>
-            <strong>The devices you chose to follow.</strong> For each one: the name macOS
-            already gives it, and the identifier CoreBluetooth assigns to it on this Mac. That
-            identifier is local to this Mac &mdash; it is not a serial number and it means
-            nothing on another machine.
+            <strong>The devices you follow.</strong> The name macOS already gives each one, and
+            an identifier that means nothing on any other Mac.
           </li>
           <li>
-            <strong>Which sensitivity setting is chosen</strong>, and any numbers you changed
-            under Advanced.
-          </li>
-          <li><strong>Whether MacAway is paused</strong>, and until when.</li>
-          <li><strong>Whether it launches at login.</strong></li>
-          <li>
-            <strong>A journal of locks, kept for one week.</strong> Each entry holds the time,
-            which device caused the lock, the reason, the signal reading, the numbers in force
-            at the time, and your answer if you told MacAway whether that lock was wrong.
-            Entries older than a week are dropped.
-          </li>
-        </ul>
-        <p>None of it is sent anywhere, because there is nowhere for it to be sent to.</p>
-      </section>
-
-      <section>
-        <h2>The one permission</h2>
-        <p>
-          Bluetooth, and nothing else. The prompt macOS shows says: &ldquo;MacAway uses
-          Bluetooth to measure how close your iPhone or Apple Watch is, so it can lock this Mac
-          when you walk away from it.&rdquo; MacAway uses the Bluetooth link to read signal
-          strength, once a second, and that is the whole of it.
-        </p>
-        <p>
-          It does not ask for, and does not use, the camera, the microphone, location
-          services, your contacts, Accessibility or Full Disk Access.
-        </p>
-      </section>
-
-      <section>
-        <h2>Your password</h2>
-        <p>
-          MacAway locks the screen. It has no way to unlock it, and it contains no code that
-          reads, stores or types a password. Locking and unlocking are not symmetrical here on
-          purpose: an app that can put your password back is an app that has to hold it.
-        </p>
-      </section>
-
-      <section>
-        <h2>Diagnostic logs</h2>
-        <p>
-          macOS keeps its own log of what the apps on your Mac are doing. MacAway writes to it
-          &mdash; what it measured, why it locked &mdash; which is how a problem gets diagnosed.
-          That log lives on your Mac and is rotated by macOS. Nothing in it is sent anywhere.
-        </p>
-      </section>
-
-      <section>
-        <h2>Updates and licensing</h2>
-        <p>
-          Neither is built. Today&rsquo;s app never connects to anything at all. Two things are
-          planned, and both would change the sentence above, so both are written here before
-          they exist rather than after:
-        </p>
-        <ul>
-          <li>
-            <strong>Automatic updates.</strong> The app would check an update feed for a newer
-            version. That is a request to that feed and nothing else.
+            <strong>Your settings.</strong> Which mode you chose, any numbers you changed,
+            whether MacAway is paused, and whether it starts at login.
           </li>
           <li>
-            <strong>A paid licence.</strong> The plan is an offline key, checked on your Mac,
-            with no server involved and no activation call.
+            <strong>When your free days started</strong>, and, once you buy, your licence key.
+            The key is checked on your Mac. Checking it needs no internet.
+          </li>
+          <li>
+            <strong>The locks from the past week.</strong> When each one happened, which device
+            caused it, and why. Older ones are dropped.
           </li>
         </ul>
         <p>
-          This notice describes what exists. It will be updated before either of those ships,
-          not afterwards.
+          MacAway also writes to the log macOS keeps for every app, which is how a problem gets
+          found. That log stays on your Mac too.
+        </p>
+        <p>
+          None of it goes anywhere. Nothing MacAway keeps about you or your devices is ever
+          sent. When you choose <strong>Buy</strong> or <strong>Send feedback</strong>, MacAway
+          opens that page in your browser, the way any link does.
+        </p>
+      </section>
+
+      <section>
+        <h2>Checking for updates</h2>
+        <p>
+          MacAway asks this website whether a newer version exists, and tells it which version
+          you already have so the answer is right. It sends nothing about you or the devices
+          you follow. The request reaches GitHub&rsquo;s servers, which keep their own logs
+          including your IP address, exactly as reading this page does.
+        </p>
+        <p>
+          MacAway asks your permission the first time it runs before checking on its own, and
+          you can change your mind afterwards. Either way you can check whenever you like, from
+          the gear in the menu.
+        </p>
+      </section>
+
+      <section>
+        <h2>What it asks for</h2>
+        <p>
+          Bluetooth, and nothing else. MacAway uses it to read how strong the signal from your
+          device is, once a second.
+        </p>
+        <p>
+          It does not ask for your camera, your microphone, your location, your contacts, your
+          files or Accessibility.
         </p>
       </section>
 
       <section>
         <h2>This website</h2>
         <p>
-          The page you are reading is a set of static files served by GitHub Pages. It sets no
-          cookies, runs no analytics, embeds nothing from anyone else, and has no sign-up form.
-          The typeface is served from this site rather than from a font network, so loading
-          this page tells no third party that you visited.
+          This page is a set of static files on GitHub Pages. No cookies, no analytics, nothing
+          loaded from anyone else. The typeface comes from this site rather than a font network,
+          so opening this page tells nobody else that you were here.
         </p>
         <p>
-          GitHub logs the IP addresses of visitors to Pages sites and keeps them for a limited
-          period to keep the service secure and to deal with abuse. Those logs are GitHub&rsquo;s,
-          not ours, and are covered by <a
+          GitHub keeps its own server logs, including visitors&rsquo; IP addresses. Those logs
+          are GitHub&rsquo;s, not ours, and are covered by <a
             href="https://docs.github.com/site-policy/privacy-policies/github-privacy-statement"
             >GitHub&rsquo;s privacy statement</a
           >.
@@ -139,36 +111,11 @@ const updated = '23 September 2026';
 
       <section>
         <h2>Who is responsible</h2>
-        <div class="tbd">
-          <span class="tbd-tag">To be supplied by the owner</span>
-          <p>
-            The name of the person or company responsible for this site and for MacAway goes
-            here. This placeholder is deliberate: inventing it would be worse than leaving the
-            section visibly unfinished, and this notice is not final until it is filled in.
-          </p>
-          <p>
-            Write to the address below. That is a placeholder too, and the mailbox behind it
-            is not set up yet.
-          </p>
+        <p>MacAway is made by Robert Brada.</p>
+        <p>
+          The app keeps nothing about you anywhere but on your own Mac, where it is already
+          yours to read and to delete. If you have a question about any of this, write to{' '}
           <CopyEmail />
-        </div>
-      </section>
-
-      <section>
-        <h2>Your rights</h2>
-        <p>
-          The app holds no personal data of yours anywhere but on your own Mac, where it is
-          already yours to read and to delete, and it has no account attached to you. That
-          leaves the website&rsquo;s server logs, which GitHub holds as the host. Once the
-          contact address above is working, you can use it to ask about any of this.
-        </p>
-      </section>
-
-      <section>
-        <h2>Changes to this notice</h2>
-        <p>
-          When it changes, the date at the top changes with it. There is no mailing list to
-          announce it on, because there is no mailing list.
         </p>
       </section>
 
@@ -253,33 +200,6 @@ const updated = '23 September 2026';
   .doc a {
     color: var(--green-deep);
     text-underline-offset: 3px;
-  }
-
-  .tbd {
-    display: grid;
-    justify-items: start;
-    gap: 0.85rem;
-    padding: 1.5rem 1.6rem;
-    border: 1px dashed var(--line);
-    border-radius: var(--radius-lg);
-    background: var(--bg-soft);
-  }
-
-  .tbd-tag {
-    display: inline-block;
-    padding: 0.25rem 0.7rem;
-    border-radius: 999px;
-    background: var(--bg);
-    border: 1px solid var(--line);
-    font-size: 0.75rem;
-    font-weight: 650;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--ink-muted);
-  }
-
-  .tbd p {
-    margin: 0;
   }
 
   .back {
