@@ -1,0 +1,15 @@
+<?xml version="1.0" standalone="yes"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+    <channel>
+        <title>MacAway</title>
+        <item>
+            <title>1.0.0</title>
+            <pubDate>Thu, 01 Oct 2026 10:07:36 +0200</pubDate>
+            <link>https://macaway.app</link>
+            <sparkle:version>300</sparkle:version>
+            <sparkle:shortVersionString>1.0.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/robertbrada/macaway-releases/releases/download/archives/MacAway-1.0.0.zip" length="2541552" type="application/octet-stream" sparkle:edSignature="QHn5rzdXcSHKGiFIvUXHlof4i7tQnNj+XzoAokGzzGqwxR+QJ4bfchtNN6IwVgYCQy04z/zZ5MnPGu0tJgEvBA=="/>
+        </item>
+    </channel>
+</rss>
