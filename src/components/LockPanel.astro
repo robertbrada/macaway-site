@@ -1,7 +1,7 @@
 ---
 // The app menu's Advanced view, rebuilt in HTML so it can be handled and can wear this
 // site's colours instead of the system accent. Every number here mirrors
-// LockProfile.swift in the app repo — Home is -75 dBm / 15 s, In public -65 dBm / 5 s.
+// LockProfile.swift in the app repo — Home is -80 dBm / 15 s, In public -65 dBm / 5 s.
 //
 // Both sliders are real range inputs, so dragging, tapping and the arrow keys all work
 // without any of it being written here.
@@ -16,7 +16,7 @@ const farStop = (dbm: number) => FAR_SOONEST - dbm;
 const delayStop = (seconds: number) => DELAY_SECONDS.indexOf(seconds);
 
 const modes = [
-  { id: 'home', name: 'Home', far: -75, delay: 15 },
+  { id: 'home', name: 'Home', far: -80, delay: 15 },
   { id: 'public', name: 'In public', far: -65, delay: 5 },
 ] as const;
 

@@ -71,10 +71,11 @@ Headings that are currently right, as a reference for tone: *Locks your Mac when
 separate repo at `~/Documents/Personal/macaway` (Swift, `mac/Sources/MacAwayCore`). The
 site's own older copy is not evidence.
 
-Verified on 2026-09-23, and worth re-checking before you lean on any of it:
+Verified on 2026-10-01, and worth re-checking before you lean on any of it:
 
-- No networking of any kind. No `URLSession`, `import Network`, socket, HTTP string or
-  WebKit anywhere in `Sources/`.
+- The app contacts one thing: its own update feed at `macaway.app/appcast.xml`, through
+  Sparkle. Nothing else — no analytics, and the licence is checked on the Mac. Any claim that
+  it "connects to nothing" is now wrong.
 - No password handling. No Keychain, `SecItem` or `LocalAuthentication`. Locking goes
   through `SACLockScreenImmediate` in the private `login.framework`.
 - One permission. `mac/Resources/Info.plist` declares only
@@ -83,7 +84,7 @@ Verified on 2026-09-23, and worth re-checking before you lean on any of it:
   (`App/FollowedDevice.swift`). But when the Mac's *own* Bluetooth is unavailable,
   nothing counts as away (`App/GuardController.swift`) — so "if it can't tell, it locks"
   is true of the device and must not be widened to the Mac.
-- The two profiles are Home (−75 dBm, 15 s) and In public (−65 dBm, 5 s), from
+- The two profiles are Home (−80 dBm, 15 s) and In public (−65 dBm, 5 s), from
   `App/LockProfile.swift`, with the slider ends (-60 to -95 dBm) and the ten waits from
   `LockSettings`. `src/components/LockPanel.astro` mirrors all of it; if they change in
   the app, change them here.
