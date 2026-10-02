@@ -11,6 +11,28 @@ export interface StripeEvent {
   data: { object: { id: string } };
 }
 
+export async function startCheckout(priceId: string, secretKey: string, origin: string) {
+  const response = await fetch(`${STRIPE_API}/checkout/sessions`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${secretKey}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: new URLSearchParams({
+      'line_items[0][price]': priceId,
+      'line_items[0][quantity]': '1',
+      mode: 'payment',
+      'managed_payments[enabled]': 'true',
+      success_url: `${origin}/thanks?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${origin}/`,
+    }),
+  });
+  if (!response.ok) return null;
+
+  const session = (await response.json()) as { url: string };
+  return session.url;
+}
+
 export async function fetchPaidSession(
   sessionId: string,
   secretKey: string,

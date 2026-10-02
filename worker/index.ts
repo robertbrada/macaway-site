@@ -1,10 +1,10 @@
 import { sendLicenceKey } from './email.ts';
 import { licenceKeyForSession } from './licence.ts';
-import { fetchPaidSession, verifiedWebhookEvent } from './stripe.ts';
+import { fetchPaidSession, startCheckout, verifiedWebhookEvent } from './stripe.ts';
 
 interface Env {
   ASSETS: { fetch(request: Request): Promise<Response> };
-  CHECKOUT_URL: string;
+  CHECKOUT_PRICE_ID: string;
   LICENCE_EMAIL_FROM: string;
   SUPPORT_EMAIL: string;
   STRIPE_SECRET_KEY: string;
@@ -25,13 +25,23 @@ export default {
   async fetch(request: Request, env: Env) {
     const url = new URL(request.url);
 
-    if (url.pathname === '/buy') return Response.redirect(env.CHECKOUT_URL, 302);
+    if (url.pathname === '/buy') return redirectToCheckout(url.origin, env);
     if (url.pathname === '/api/licence') return licenceForSession(url, env);
     if (url.pathname === '/api/stripe-webhook') return emailKeyForPayment(request, env);
 
     return env.ASSETS.fetch(request);
   },
 };
+
+async function redirectToCheckout(origin: string, env: Env) {
+  const checkout = await startCheckout(env.CHECKOUT_PRICE_ID, env.STRIPE_SECRET_KEY, origin);
+  if (checkout) return Response.redirect(checkout, 302);
+
+  return new Response(`Checkout is not working right now. Write to ${env.SUPPORT_EMAIL}.`, {
+    status: 503,
+    headers: { 'content-type': 'text/plain; charset=utf-8' },
+  });
+}
 
 async function licenceForSession(url: URL, env: Env) {
   const sessionId = url.searchParams.get('session_id');

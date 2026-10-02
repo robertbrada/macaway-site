@@ -6,8 +6,8 @@
   // only runs for paths with no file behind them: /buy and /api/*.
   "assets": { "directory": "./dist", "binding": "ASSETS" },
   "vars": {
-    // Sandbox. Swap for the live payment link before the download is opened.
-    "CHECKOUT_URL": "https://buy.stripe.com/test_8x23cwgpueO3bRb74v24000",
+    // Sandbox. Swap for the live price, together with the live secret key.
+    "CHECKOUT_PRICE_ID": "price_1UM1BjKB1uND0xu7BB4Nhg2W",
     "LICENCE_EMAIL_FROM": "MacAway <keys@macaway.app>",
     "SUPPORT_EMAIL": "support@macaway.app"
   }

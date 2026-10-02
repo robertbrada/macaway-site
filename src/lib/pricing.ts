@@ -19,9 +19,9 @@ export const REFUND_DAYS = 30;
 export const DOWNLOAD_URL: string | null = null;
 
 /**
- * `/buy` is a redirect the worker serves, straight to Stripe, so this site never loads
- * Stripe's script. `CHECKOUT_OPEN` stays false until the live Stripe account is activated;
- * while it is false the Buy link renders disabled.
+ * `/buy` is served by the worker, which opens a Stripe checkout and redirects to it, so this
+ * site never loads Stripe's script. `CHECKOUT_OPEN` stays false until the live Stripe account
+ * is activated; while it is false the Buy link renders disabled.
  */
 export const BUY_PATH = 'buy';
 export const CHECKOUT_OPEN = false;
