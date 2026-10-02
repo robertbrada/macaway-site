@@ -139,6 +139,7 @@ svg {
 /* No release yet, so every Download button is disabled (see src/lib/pricing.ts). */
 .download-btn:disabled {
   cursor: not-allowed;
+  opacity: 0.45;
 }
 
 a.download-btn:hover {

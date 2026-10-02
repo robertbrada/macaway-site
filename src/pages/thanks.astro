@@ -130,7 +130,8 @@ import { link } from '../lib/links';
     font-weight: 620;
   }
 
-  .doc a {
+  /* The Activate button is a link too, and would take the link colour over its own. */
+  .doc a:not(.download-btn) {
     color: var(--green-deep);
     text-underline-offset: 3px;
   }
