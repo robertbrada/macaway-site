@@ -6,8 +6,8 @@
   // only runs for paths with no file behind them: /buy and /api/*.
   "assets": { "directory": "./dist", "binding": "ASSETS" },
   "vars": {
-    // Sandbox. Swap for the live price, together with the live secret key.
-    "CHECKOUT_PRICE_ID": "price_1UM1BjKB1uND0xu7BB4Nhg2W",
+    // Live. Swap together with the secret key, or /buy asks one mode for the other's price.
+    "CHECKOUT_PRICE_ID": "price_1UM7ajGgMwqVpLzKnT8PI06Q",
     "LICENCE_EMAIL_FROM": "MacAway <keys@macaway.app>",
     "SUPPORT_EMAIL": "support@macaway.app"
   }
