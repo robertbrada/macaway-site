@@ -1,6 +1,14 @@
 {
   "name": "macaway-site",
   "compatibility_date": "2026-09-30",
-  // The site is files, not code: Cloudflare serves what `npm run build` puts in dist.
-  "assets": { "directory": "./dist" }
+  "main": "./worker/index.ts",
+  // The pages are files Cloudflare serves from what `npm run build` puts in dist. The worker
+  // only runs for paths with no file behind them: /buy and /api/*.
+  "assets": { "directory": "./dist", "binding": "ASSETS" },
+  "vars": {
+    // Sandbox. Swap for the live payment link before the download is opened.
+    "CHECKOUT_URL": "https://buy.stripe.com/test_8x23cwgpueO3bRb74v24000",
+    "LICENCE_EMAIL_FROM": "MacAway <keys@macaway.app>",
+    "SUPPORT_EMAIL": "support@macaway.app"
+  }
 }

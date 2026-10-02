@@ -1,0 +1,92 @@
+---
+import CopyEmail from '../components/CopyEmail.astro';
+import Base from '../layouts/Base.astro';
+import { link } from '../lib/links';
+---
+
+<Base
+  title="Lost your key — MacAway"
+  description="How to get your MacAway licence key back."
+>
+  <article class="doc">
+    <div class="wrap">
+      <header class="doc-head">
+        <h1>Lost your key</h1>
+        <p class="lede">There are three places it may still be.</p>
+      </header>
+
+      <section>
+        <h2>On a Mac that still has it</h2>
+        <p>
+          Open MacAway, click the gear at the bottom of the panel and choose
+          <strong>Copy licence key</strong>. One key covers every Mac you own.
+        </p>
+      </section>
+
+      <section>
+        <h2>In your email</h2>
+        <p>
+          We email the key when you buy. Search for <strong>MacAway licence key</strong>. The
+          same email has a link to a page that shows the key again.
+        </p>
+      </section>
+
+      <section>
+        <h2>Ask us</h2>
+        <p>
+          Write to <CopyEmail /> from the address you paid with and we will send your key back.
+        </p>
+      </section>
+
+      <p class="back"><a href={link('')}>Back to the home page</a></p>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .doc {
+    padding-block: clamp(6rem, 10vw, 8rem) clamp(4rem, 8vw, 6rem);
+  }
+
+  .doc :global(.wrap) > * {
+    max-width: 44rem;
+  }
+
+  .doc-head {
+    padding-bottom: 2.5rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .doc-head h1 {
+    font-size: clamp(2.5rem, 7vw, 3.75rem);
+  }
+
+  .doc section {
+    margin-top: 3rem;
+  }
+
+  .doc h2 {
+    font-size: clamp(1.375rem, 3vw, 1.75rem);
+    margin-bottom: 1rem;
+  }
+
+  .doc p {
+    color: var(--ink-muted);
+    margin-bottom: 1rem;
+  }
+
+  .doc strong {
+    color: var(--ink);
+    font-weight: 620;
+  }
+
+  .doc a {
+    color: var(--green-deep);
+    text-underline-offset: 3px;
+  }
+
+  .back {
+    margin-top: 3.5rem;
+  }
+</style>
