@@ -9,7 +9,7 @@
             <sparkle:version>303</sparkle:version>
             <sparkle:shortVersionString>1.0.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/robertbrada/macaway-releases/releases/download/archives/MacAway-1.0.1.zip" length="2536339" type="application/octet-stream" sparkle:edSignature="RyXraAFrtI60RV+Hq/VwoyFtig9HqD9wSTKVCoGowaJbdjdkh0hN9XGxum+lnnDzc/FTX3kkxWNaJ+wunbxVBw=="/>
+            <enclosure url="https://github.com/robertbrada/macaway-releases/releases/download/archives/MacAway-1.0.1.zip" length="2475523" type="application/octet-stream" sparkle:edSignature="GSMVGOgsrpMwsRkfamckkfpztRSPU3nD/CY7vEqLGb2vIU9FYbWzeDSjssrrMqTzpgyQ2frHibKWWeW47VxBBw=="/>
             <sparkle:deltas>
                 <enclosure url="https://github.com/robertbrada/macaway-releases/releases/download/archives/MacAway303-300.delta" sparkle:deltaFrom="300" length="308178" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976432" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="C+PPp56QRM49UrNljoWZ/tBL0DOFrstoIA2klJopm8r+Qap41J1piMZFk1W6RCGdIh63257JR8t3Po7/e6vwDw=="/>
             </sparkle:deltas>
