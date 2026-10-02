@@ -11,17 +11,16 @@ export const PRICE = '$14';
 export const REFUND_DAYS = 30;
 
 /**
- * Where the Download buttons go. `null` until an archive is published, and while it is `null`
- * every Download button on the site renders disabled. Archives hang off one release in the
- * public repo, so the URL will read:
- * https://github.com/robertbrada/macaway-releases/releases/download/archives/MacAway-1.0.0.zip
+ * Where the Download buttons go. Point it at the newest archive on every release; Sparkle
+ * takes people forward from there. Setting it to `null` disables every Download button again.
  */
-export const DOWNLOAD_URL: string | null = null;
+export const DOWNLOAD_URL: string | null =
+  'https://github.com/robertbrada/macaway-releases/releases/download/archives/MacAway-1.0.1.zip';
 
 /**
  * `/buy` is served by the worker, which opens a Stripe checkout and redirects to it, so this
- * site never loads Stripe's script. `CHECKOUT_OPEN` stays false until the live Stripe account
- * is activated; while it is false the Buy link renders disabled.
+ * site never loads Stripe's script. Setting `CHECKOUT_OPEN` to false disables the Buy link,
+ * which is the way to stop selling without taking the page down.
  */
 export const BUY_PATH = 'buy';
-export const CHECKOUT_OPEN = false;
+export const CHECKOUT_OPEN = true;
