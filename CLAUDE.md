@@ -1,7 +1,8 @@
 # MacAway site — house rules
 
-The marketing site for MacAway, a menu bar app that locks your Mac when you walk away
-from it. Astro, no client framework, two pages: `/` and `/privacy`.
+The site that sells MacAway, a menu bar app that locks your Mac when you walk away from it.
+Astro with no client framework — four pages, `/`, `/privacy`, `/thanks` and `/lost-key` — plus
+`worker/`, the Cloudflare Worker that takes the money and issues the licence keys.
 
 ## Wording
 
@@ -89,7 +90,34 @@ Verified on 2026-10-01, and worth re-checking before you lean on any of it:
   `LockSettings`. `src/components/LockPanel.astro` mirrors all of it; if they change in
   the app, change them here.
 
+## The worker
+
+`wrangler.jsonc` carries `assets` for the built pages and `main` for `worker/`, so the worker
+runs only for paths with no file behind them.
+
+- `/buy` asks Stripe for a Checkout Session and redirects to it. Deliberately not a Payment
+  Link: a link cannot set `cancel_url`, so leaving checkout dropped people on stripe.com.
+- `/api/licence?session_id=…` refuses anything unpaid, then returns the key. `/thanks` fetches
+  it and shows it.
+- `/api/stripe-webhook` verifies Stripe's signature and emails the same key through Resend.
+
+The key is a function of the Checkout Session id, so one purchase always yields one key and
+nothing has to be stored: there is no customer list and no order table here. Of everything
+Stripe hands over, only `customer_details.email` is read; the buyer's name and home address are
+left alone, and the privacy page says so.
+
+`worker/licence.ts` has to keep matching `Licence.swift` in the app's repo. `npm test` checks it
+against the same vector that repo's own tests pin, so a drift fails loudly rather than shipping
+keys the app rejects.
+
+Four secrets, set with `wrangler secret put` and never readable afterwards: `STRIPE_SECRET_KEY`
+(restricted — Checkout Sessions write, Prices and Products read, which is all the worker calls),
+`STRIPE_WEBHOOK_SECRET`, `LICENCE_PRIVATE_KEY` (PKCS#8, because Workers refuse a raw private
+key) and `RESEND_API_KEY`. `CHECKOUT_PRICE_ID` and the two addresses are plain vars in
+`wrangler.jsonc`, and the live price must be swapped together with the live secret key.
+
 ## Building
 
-`npm run dev` serves on 4321. `npm run build` is the gate — `npm run check` needs
-`@astrojs/check`, which is not installed.
+`npm run dev` serves on 4321. `npm run build` and `npm test` are the gates — `npm run check`
+needs `@astrojs/check`, which is not installed. Node runs the TypeScript tests directly, so
+there is no test framework to install. Deploying is a push: Cloudflare builds `main`.
