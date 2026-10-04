@@ -258,13 +258,13 @@ const promises = [
 
         <ul class="facts">{facts.map((fact) => <li>{fact}</li>)}</ul>
 
-        <DownloadButton />
+        <DownloadButton place="pricing" />
 
         <p class="buy">
           Already sure?{' '}
           {
             CHECKOUT_OPEN ? (
-              <a href={link(BUY_PATH)}>Buy now</a>
+              <a href={link(BUY_PATH)} data-track="buy" data-track-place="pricing">Buy now</a>
             ) : (
               <a class="is-off" aria-disabled="true">Buy now</a>
             )
@@ -288,7 +288,7 @@ const promises = [
         {
           questions.map((faq) => (
             <details>
-              <summary>{faq.question}</summary>
+              <summary data-track="faq">{faq.question}</summary>
               <p>
                 {faq.answer}
                 {faq.endsWithEmail && (

@@ -22,8 +22,8 @@ import { link } from '../lib/links';
         <div id="key-ready" hidden>
           <p class="key" id="licence-key"></p>
           <p class="actions">
-            <a class="download-btn" id="activate" href="#">Activate MacAway</a>
-            <button class="copy" id="copy" type="button">Copy key</button>
+            <a class="download-btn" id="activate" href="#" data-track="activate">Activate MacAway</a>
+            <button class="copy" id="copy" type="button" data-track="copy_key">Copy key</button>
           </p>
           <p>
             Keep this key somewhere safe. We have emailed it to you as well, and this page
@@ -50,7 +50,7 @@ import { link } from '../lib/links';
       <section>
         <h2>If MacAway is not on this Mac yet</h2>
         <p>Download it first, then come back to this page for the key.</p>
-        <DownloadButton label="Download MacAway" />
+        <DownloadButton label="Download MacAway" place="thanks" />
       </section>
 
       <p class="back"><a href={link('')}>Back to the home page</a></p>

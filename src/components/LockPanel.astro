@@ -46,7 +46,13 @@ const pct = (stop: number, of: number) => `${(stop / of) * 100}%`;
     <span class="thumb" aria-hidden="true"></span>
     {
       modes.map((mode) => (
-        <button type="button" data-mode-btn={mode.id} aria-pressed={mode.id === start.id}>
+        <button
+          type="button"
+          data-mode-btn={mode.id}
+          data-track="mode"
+          data-track-place="modes"
+          aria-pressed={mode.id === start.id}
+        >
           {mode.name}
         </button>
       ))

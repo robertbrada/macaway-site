@@ -7,16 +7,18 @@ import { DOWNLOAD_URL } from '../lib/pricing';
 interface Props {
   label?: string;
   small?: boolean;
+  /** Which of the four buttons this is, so the click event says which one was pressed. */
+  place?: 'header' | 'hero' | 'pricing' | 'thanks';
 }
 
-const { label = 'Download free trial', small = false } = Astro.props;
+const { label = 'Download free trial', small = false, place } = Astro.props;
 const className = small ? 'download-btn small' : 'download-btn';
 const iconSize = small ? 16 : 18;
 ---
 
 {
   DOWNLOAD_URL ? (
-    <a class={className} href={DOWNLOAD_URL}>
+    <a class={className} href={DOWNLOAD_URL} data-track="download" data-track-place={place}>
       <Icon name="download" size={iconSize} />
       {label}
     </a>

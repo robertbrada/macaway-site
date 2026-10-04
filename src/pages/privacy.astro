@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import CopyEmail from '../components/CopyEmail.astro';
 import { link } from '../lib/links';
 
-const updated = '2 October 2026';
+const updated = '4 October 2026';
 ---
 
 <Base
@@ -30,7 +30,10 @@ const updated = '2 October 2026';
           </li>
           <li>It asks for one permission: Bluetooth.</li>
           <li>It never reads, stores or types your password. It locks; you unlock.</li>
-          <li>This website sets no cookies and runs no analytics.</li>
+          <li>
+            This website counts page views and clicks. It sets no cookies and saves nothing in
+            your browser.
+          </li>
         </ul>
       </section>
 
@@ -96,9 +99,23 @@ const updated = '2 October 2026';
       <section>
         <h2>This website</h2>
         <p>
-          This page is a set of static files served by Cloudflare. No cookies, no analytics,
-          nothing loaded from anyone else. The typeface comes from this site rather than a font
-          network, so opening this page tells nobody else that you were here.
+          This page is a set of static files served by Cloudflare. The typeface comes from this
+          site rather than a font network, so opening this page tells no font company that you
+          were here.
+        </p>
+        <p>
+          We count how many people open this page, and which buttons and links they click. That
+          is how we learn which parts of the page help and which parts nobody reads. <a
+            href="https://posthog.com/privacy">PostHog</a
+          > does the counting for us.
+        </p>
+        <p>
+          It sets no cookies and saves nothing in your browser. Nothing ties this visit to your
+          next one, and nothing follows you to another website. What it sends is the page you
+          opened, what you clicked and which browser you use. PostHog also sees your IP address,
+          as every website you open does, and works out from it roughly where you are. The web
+          address it sends is cut short before the part that carries your licence key, so the key
+          never goes with it.
         </p>
         <p>
           Cloudflare keeps its own server logs, including visitors&rsquo; IP addresses. Those

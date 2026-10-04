@@ -116,6 +116,26 @@ Four secrets, set with `wrangler secret put` and never readable afterwards: `STR
 key) and `RESEND_API_KEY`. `CHECKOUT_PRICE_ID` and the two addresses are plain vars in
 `wrangler.jsonc`, and the live price must be swapped together with the live secret key.
 
+## Counting clicks
+
+PostHog counts page views and clicks. `src/lib/analytics.ts` is all of it, started from
+`Base.astro` so every page has it.
+
+- **One listener counts every link, button and FAQ question**, so a new button is counted
+  without a call being added for it. `data-track="download"` names that element's event
+  `download_clicked`; anything without one is `link_clicked`. `data-track-place` is how the
+  four Download buttons are told apart.
+- **No autocapture, no session replay, and no cookie**, whatever the PostHog project's own
+  settings say. `persistence: 'memory'` is why the site needs no consent banner; the cost is
+  that someone counts as new on every page load, so visitor counts are really visit counts.
+- **Every address is cut at the first `?`.** `/thanks` carries the Stripe session id, and the
+  licence key is worked out from that id. The scrubbing goes by the look of the value, not by
+  a list of property names, because PostHog sends the address under several. `utm_*` arrives
+  separately and survives, so campaigns still work.
+- Without `PUBLIC_POSTHOG_KEY` nothing is loaded and nothing is sent, and PostHog drops out of
+  the build. Set it in Cloudflare's build settings, or in `.env.local` to try it locally.
+- **The privacy page says what is counted.** Change it whenever this changes.
+
 ## Building
 
 `npm run dev` serves on 4321. `npm run build` and `npm test` are the gates — `npm run check`

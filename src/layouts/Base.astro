@@ -3,6 +3,7 @@ import '../styles/tokens.css';
 import '../styles/base.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Analytics from '../components/Analytics.astro';
 import { link } from '../lib/links';
 
 interface Props {
@@ -49,6 +50,7 @@ const fontFace = `@font-face {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={new URL(link('icon.png'), Astro.site)} />
+    <Analytics />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
