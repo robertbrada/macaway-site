@@ -7,9 +7,9 @@ const base = import.meta.env.BASE_URL.replace(/\/+$/, '');
 export const link = (path: string) => `${base}/${path}`.replace(/\/$/, '') || '/';
 
 /**
- * Where people write in. A placeholder on the site's own domain: the mailbox does not
- * exist yet, so set it up (or change this) before the page is public. It is here rather
- * than typed into each page so that is a one-line job.
+ * Where people write in, through Cloudflare Email Routing. Five places point at it, including
+ * `/lost-key`, so a buyer who loses their key has nowhere else to go if it stops forwarding.
+ * It is here rather than typed into each page so changing it is a one-line job.
  */
 export const CONTACT_EMAIL = 'support@macaway.app';
 

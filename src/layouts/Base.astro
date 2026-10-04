@@ -9,9 +9,11 @@ import { link } from '../lib/links';
 interface Props {
   title: string;
   description: string;
+  /** For pages with nothing to find: /thanks shows one buyer's licence key. */
+  noindex?: boolean;
 }
 
-const { title, description } = Astro.props;
+const { title, description, noindex = false } = Astro.props;
 
 // Inlined rather than left in base.css so the URL picks up Astro's `base`, which the
 // github.io project page needs and a plain stylesheet cannot express.
@@ -29,8 +31,7 @@ const fontFace = `@font-face {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- Stays until the owner says otherwise: there is no release to be found yet. -->
-    <meta name="robots" content="noindex, nofollow" />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="theme-color" content="#ffffff" />
