@@ -97,6 +97,9 @@ runs only for paths with no file behind them.
 
 - `/buy` asks Stripe for a Checkout Session and redirects to it. Deliberately not a Payment
   Link: a link cannot set `cancel_url`, so leaving checkout dropped people on stripe.com.
+  It also sets `allow_promotion_codes`, without which Checkout shows no code field at all.
+  Stripe never says whether codes work under Managed Payments. They do: checked on the live
+  checkout on 2026-10-06, where a 30% code took $14.00 to $9.80.
 - `/api/licence?session_id=…` refuses anything unpaid, then returns the key. `/thanks` fetches
   it and shows it.
 - `/api/stripe-webhook` verifies Stripe's signature and emails the same key through Resend.
