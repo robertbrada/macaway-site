@@ -7,7 +7,8 @@
  * on is a change of one line.
  */
 export const TRIAL_DAYS = 14;
-export const PRICE = '$14';
+export const PRICE_USD = 14;
+export const PRICE = `$${PRICE_USD}`;
 export const REFUND_DAYS = 30;
 
 /**

@@ -9,7 +9,7 @@ import DownloadButton from '../components/DownloadButton.astro';
 import CopyEmail from '../components/CopyEmail.astro';
 import portrait from '../assets/author.webp';
 import { link, MAKER_LINKEDIN, MAKER_PORTFOLIO } from '../lib/links';
-import { BUY_PATH, CHECKOUT_OPEN, PRICE, REFUND_DAYS, TRIAL_DAYS } from '../lib/pricing';
+import { BUY_PATH, CHECKOUT_OPEN, PRICE, PRICE_USD, REFUND_DAYS, TRIAL_DAYS } from '../lib/pricing';
 
 const places = [
   { title: 'Conferences', line: 'Leave it at your seat. If someone takes it, it locks.' },
@@ -116,12 +116,30 @@ const promises = [
     line: 'A flat battery, or a phone left at home, counts as you walking away. It then tells you why it locked.',
   },
 ];
+
+// Lets a search engine read the price and the platform as values rather than out of the prose.
+// Built from pricing.ts for the same reason llms.txt is: one price, one place.
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'MacAway',
+  applicationCategory: 'SecurityApplication',
+  operatingSystem: 'macOS 13 or later',
+  url: 'https://macaway.app/',
+  offers: {
+    '@type': 'Offer',
+    price: PRICE_USD,
+    priceCurrency: 'USD',
+  },
+};
 ---
 
 <Base
   title="MacAway — locks your Mac when you forget to"
   description="MacAway is a menu bar app that locks your Mac when you step away. It follows a device you already carry over Bluetooth. No account, no server, nothing to install on your phone."
 >
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+
   <Hero />
 
   <section class="where">

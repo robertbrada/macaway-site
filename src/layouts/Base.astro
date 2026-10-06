@@ -15,6 +15,11 @@ interface Props {
 
 const { title, description, noindex = false } = Astro.props;
 
+// Both the canonical link and og:url need the absolute address of this page. `Astro.url`
+// already carries `base`, so this is right for the github.io build too.
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const previewImage = new URL(link('icon.png'), Astro.site);
+
 // Inlined rather than left in base.css so the URL picks up Astro's `base`, which the
 // github.io project page needs and a plain stylesheet cannot express.
 const fontFace = `@font-face {
@@ -47,10 +52,17 @@ const fontFace = `@font-face {
       crossorigin
     />
     <style is:inline set:html={fontFace}></style>
+    <link rel="canonical" href={canonical} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={new URL(link('icon.png'), Astro.site)} />
+    <meta property="og:image" content={previewImage} />
+    <!-- Without this X shows a thumbnail, whatever og:image says. -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={previewImage} />
     <Analytics />
   </head>
   <body>
