@@ -1,6 +1,12 @@
 ---
 // Every Download button on the site. While there is no release, DOWNLOAD_URL is null and
 // this renders a disabled button; once it is set, the same markup becomes a real link.
+//
+// MacAway only runs on a Mac, so a phone or a tablet is given a line telling it where to go
+// instead of a button that cannot work. The test is `hover: none and pointer: coarse` — a
+// touch screen with nothing to point with — because no Mac ever matches it, however narrow
+// the window gets. A width query would have taken the button away from someone reading in a
+// half-width window, and sniffing the browser's name would have been a guess.
 import Icon from './Icon.astro';
 import { DOWNLOAD_URL } from '../lib/pricing';
 
@@ -9,9 +15,19 @@ interface Props {
   small?: boolean;
   /** Which of the four buttons this is, so the click event says which one was pressed. */
   place?: 'header' | 'hero' | 'pricing' | 'thanks';
+  /**
+   * What a touch screen reads in the button's place. `null` leaves the space empty, which is
+   * what the header wants: a fixed bar has no room for a sentence.
+   */
+  touchNote?: string | null;
 }
 
-const { label = 'Download free trial', small = false, place } = Astro.props;
+const {
+  label = 'Download free trial',
+  small = false,
+  place,
+  touchNote = 'Open this page on your Mac to download it.',
+} = Astro.props;
 const className = small ? 'download-btn small' : 'download-btn';
 const iconSize = small ? 16 : 18;
 ---
@@ -29,3 +45,42 @@ const iconSize = small ? 16 : 18;
     </button>
   )
 }
+
+{
+  touchNote && (
+    <p class="mac-only">
+      <b>MacAway is a Mac app.</b>
+      {touchNote}
+    </p>
+  )
+}
+
+<style>
+  .mac-only {
+    display: none;
+    max-width: 34ch;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    font-size: 0.9375rem;
+    line-height: 1.45;
+    color: var(--ink-muted);
+  }
+
+  /* The point first, on its own line, so it is read rather than skimmed past. */
+  .mac-only b {
+    display: block;
+    font-weight: 650;
+    color: var(--ink);
+  }
+
+  @media (hover: none) and (pointer: coarse) {
+    .download-btn {
+      display: none;
+    }
+
+    .mac-only {
+      display: block;
+    }
+  }
+</style>

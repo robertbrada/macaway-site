@@ -693,6 +693,17 @@ const structuredData = {
     justify-content: center;
   }
 
+  /* The panel is the dark band, so the Mac-only line takes the dark band's rule and ink. */
+  .price-panel :global(.mac-only) {
+    max-width: none;
+    border-color: var(--line-dark);
+    color: var(--ink-on-dark-muted);
+  }
+
+  .price-panel :global(.mac-only b) {
+    color: #fff;
+  }
+
   .buy {
     margin-top: 1rem;
     font-size: 0.9375rem;
