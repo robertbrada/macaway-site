@@ -1,6 +1,7 @@
 ---
 import DownloadButton from './DownloadButton.astro';
 import Logo from './Logo.astro';
+import ReviewBadge from './ReviewBadge.astro';
 import { link } from '../lib/links';
 ---
 
@@ -9,7 +10,10 @@ import { link } from '../lib/links';
     <a class="brand" href={link('')}>
       <Logo />
     </a>
-    <DownloadButton label="Download" small place="header" />
+    <div class="ends">
+      <ReviewBadge />
+      <DownloadButton label="Download" small place="header" />
+    </div>
   </div>
 </header>
 
@@ -48,8 +52,26 @@ import { link } from '../lib/links';
     text-decoration: none;
   }
 
+  .ends {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+  }
+
+  /* 250px wide at its own size: too much to carry in a narrow bar. */
+  .ends :global(.review-badge) {
+    display: none;
+  }
+
+  @media (min-width: 720px) {
+    .ends :global(.review-badge) {
+      display: inline-flex;
+    }
+  }
+
   @supports (animation-timeline: scroll()) {
     .site-header:global(:has(~ main .hero))::after,
+    .site-header:global(:has(~ main .hero)) :global(.review-badge),
     .site-header:global(:has(~ main .hero)) :global(.download-btn) {
       animation-name: fade-in;
       animation-timing-function: linear;

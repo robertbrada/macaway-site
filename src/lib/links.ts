@@ -16,3 +16,11 @@ export const CONTACT_EMAIL = 'support@macaway.app';
 /** Where the "Who built this" section points. Both open in a new tab. */
 export const MAKER_LINKEDIN = 'https://www.linkedin.com/in/robert-brada-252474112/';
 export const MAKER_PORTFOLIO = 'https://robertbrada.github.io/portfolio/';
+
+/**
+ * The Product Hunt page where someone who uses MacAway can leave a review. The badge beside
+ * it is `public/product-hunt-review.svg`, saved from Product Hunt rather than hotlinked, so
+ * opening this page tells Product Hunt nothing.
+ */
+export const PRODUCT_HUNT_REVIEW =
+  'https://www.producthunt.com/products/macaway/reviews/new?utm_source=badge-product_review&utm_medium=badge&utm_source=badge-macaway';

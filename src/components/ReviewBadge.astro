@@ -1,0 +1,34 @@
+---
+// Product Hunt's "leave a review" badge. The file is the one Product Hunt serves, saved to
+// public/ unchanged rather than hotlinked from api.producthunt.com, the way the typeface is:
+// so opening this page tells Product Hunt nothing, and the badge cannot vanish or shift the
+// header if their server is slow. Its own size is 250x54, shown at 0.74 so it stands the
+// same height as the Download button beside it.
+import { link, PRODUCT_HUNT_REVIEW } from '../lib/links';
+---
+
+<a
+  class="review-badge"
+  href={PRODUCT_HUNT_REVIEW}
+  target="_blank"
+  rel="noopener"
+  data-track="review"
+>
+  <img
+    src={link('product-hunt-review.svg')}
+    alt="Leave a review on Product Hunt"
+    width="185"
+    height="40"
+  />
+</a>
+
+<style>
+  .review-badge {
+    display: inline-flex;
+    border-radius: 8px;
+  }
+
+  .review-badge:hover {
+    opacity: 0.8;
+  }
+</style>
