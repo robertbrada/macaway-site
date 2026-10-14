@@ -42,9 +42,11 @@ const fontFace = `@font-face {
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="theme-color" content="#ffffff" />
-    <!-- The header's shield, as the tab icon. The PNG is for browsers without SVG icons. -->
+    <!-- The header's shield, as the tab icon. Google Search does not read SVG icons, so the
+         ICO is first and carries 16, 32 and 48px for it. Browsers that can use the SVG do.
+         The size on the ICO stops Chrome fetching both. -->
+    <link rel="icon" href={link('favicon.ico')} sizes="32x32" />
     <link rel="icon" href={link('favicon.svg')} type="image/svg+xml" />
-    <link rel="icon" href={link('favicon.png')} type="image/png" sizes="64x64" />
     <link rel="apple-touch-icon" href={link('icon.png')} />
     <link
       rel="preload"

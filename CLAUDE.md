@@ -51,7 +51,11 @@ Headings that are currently right, as a reference for tone: *Locks your Mac when
   link preview image.
 - The browser tab icon is the header's shield instead: `public/favicon.svg` copies
   `src/components/ShieldMark.astro` with the ink and green tokens written out, and
-  `public/favicon.png` is rendered from it with sharp at 64px. Change all three together.
+  `public/favicon.ico` is rendered from that SVG with sharp, as 16, 32 and 48px PNGs packed
+  into one ICO. Change all three together. The ICO exists because Google Search reads no SVG
+  icon — its supported list is BMP, GIF, ICO, PNG, JPEG, PPM and TIFF — so without it the
+  search result shows a blank globe. It is declared first, with `sizes="32x32"` so Chrome
+  still takes the SVG and fetches only one file.
 - Typeface is Satoshi, self-hosted in `public/fonts`. Nothing is loaded from a third
   party — the privacy page says so, so keep it true. It is under ITF's Free Font
   Licence, which forbids modification **including subsetting and format conversion**, so
