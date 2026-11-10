@@ -2,7 +2,7 @@
 import CopyEmail from '../components/CopyEmail.astro';
 import DownloadButton from '../components/DownloadButton.astro';
 import Base from '../layouts/Base.astro';
-import { link } from '../lib/links';
+import { link, PRODUCT_HUNT_REVIEW } from '../lib/links';
 ---
 
 <Base
@@ -56,6 +56,22 @@ import { link } from '../lib/links';
           place="thanks"
           touchNote="Open this page on your Mac to download it. Your key is in your email too."
         />
+      </section>
+
+      <section class="review">
+        <h2>Leave a review</h2>
+        <p>A short review on Product Hunt helps other people find MacAway. It takes a minute.</p>
+        <p>
+          <a
+            href={PRODUCT_HUNT_REVIEW}
+            target="_blank"
+            rel="noopener"
+            data-track="review"
+            data-track-place="thanks"
+          >
+            Write a review on Product Hunt<span aria-hidden="true"> &#8599;</span>
+          </a>
+        </p>
       </section>
 
       <p class="back"><a href={link('')}>Back to the home page</a></p>
@@ -171,6 +187,10 @@ import { link } from '../lib/links';
     font: inherit;
     font-weight: 600;
     cursor: pointer;
+  }
+
+  .review a {
+    font-weight: 600;
   }
 
   .back {
