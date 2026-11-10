@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import CopyEmail from '../components/CopyEmail.astro';
 import { link } from '../lib/links';
 
-const updated = '4 October 2026';
+const updated = '10 November 2026';
 ---
 
 <Base
@@ -28,8 +28,14 @@ const updated = '4 October 2026';
             The app collects nothing and sends nothing about you. The only thing it contacts is
             its own update feed.
           </li>
-          <li>It asks for one permission: Bluetooth.</li>
-          <li>It never reads, stores or types your password. It locks; you unlock.</li>
+          <li>
+            To lock, it needs one permission: Bluetooth. Unlocking, if you turn it on, also
+            needs Accessibility.
+          </li>
+          <li>
+            MacAway does not know your password unless you turn on unlocking. Then it keeps it in
+            your Mac&rsquo;s keychain, and it never leaves your Mac.
+          </li>
           <li>
             This website counts page views and clicks. It sets no cookies and saves nothing in
             your browser.
@@ -39,15 +45,21 @@ const updated = '4 October 2026';
 
       <section>
         <h2>What the app keeps</h2>
-        <p>Everything MacAway remembers stays on your Mac, in its own settings.</p>
+        <p>Everything MacAway remembers stays on your Mac.</p>
         <ul>
           <li>
             <strong>The devices you follow.</strong> The name macOS already gives each one, and
             an identifier that means nothing on any other Mac.
           </li>
           <li>
-            <strong>Your settings.</strong> Which mode you chose, any numbers you changed,
-            whether MacAway is paused, and whether it starts at login.
+            <strong>Your settings.</strong> Your modes, with their names and numbers, and which
+            one is in use. Whether MacAway is paused, whether it starts at login, and whether
+            unlocking is on.
+          </li>
+          <li>
+            <strong>Your login password, only if you turn on unlocking.</strong> It is kept in
+            your Mac&rsquo;s keychain and used for one thing: typing it at the lock screen when
+            you come back. Turning unlocking off deletes it.
           </li>
           <li>
             <strong>When your free days started</strong>, and, once you buy, your licence key.
@@ -87,12 +99,16 @@ const updated = '4 October 2026';
       <section>
         <h2>What it asks for</h2>
         <p>
-          Bluetooth, and nothing else. MacAway uses it to read how strong the signal from your
-          device is, once a second.
+          Bluetooth. MacAway uses it to read how strong the signal from your device is, once a
+          second.
         </p>
         <p>
-          It does not ask for your camera, your microphone, your location, your contacts, your
-          files or Accessibility.
+          If you turn on unlocking, it also asks for Accessibility. That is what lets it type your
+          password at the lock screen. Until you turn unlocking on, it does not ask.
+        </p>
+        <p>
+          It does not ask for your camera, your microphone, your location, your contacts or your
+          files.
         </p>
       </section>
 

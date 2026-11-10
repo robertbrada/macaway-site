@@ -3,7 +3,7 @@ import { Image } from 'astro:assets';
 import Icon from './Icon.astro';
 import DownloadButton from './DownloadButton.astro';
 import { TRIAL_DAYS } from '../lib/pricing';
-import menu from '../assets/app-menu.png';
+import menu from '../assets/app-menu.webp';
 
 const devices = [
   { name: 'iphone', label: 'iPhone' },
@@ -46,7 +46,7 @@ const MENU_WIDTH = 362;
     <div class="shot" style={`--menu-width: ${MENU_WIDTH}px`}>
       <Image
         src={menu}
-        alt="The MacAway menu, listing the devices it is watching and how close each one is."
+        alt="The MacAway menu, listing the devices it is watching, how close each one is, and the two modes, Normal and Strict."
         widths={[1, 2, 3].map((density) => MENU_WIDTH * density)}
         sizes={`(max-width: 899px) 78vw, ${MENU_WIDTH}px`}
         loading="eager"

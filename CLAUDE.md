@@ -22,8 +22,13 @@ The page is read by people whose first language is not English. Write for them.
 - **No em-dash pile-ups, no "simply", no "seamlessly", no "powerful".**
 
 Headings that are currently right, as a reference for tone: *Locks your Mac when you forget to*
-· *How it works* · *Choose how it locks* · *What the icon means* ·
+· *How it works* · *Unlock when you come back* · *Choose how it locks* · *What the icon means* ·
 *Nothing leaves your Mac*.
+
+**Careful, not complete.** Nothing on the page may be false, and nothing should hand a reader a
+reason to doubt the app that the app does not deserve. The page does not have to list every
+limit either: the edge cases live in the app repo's `docs/decisions.md`, not here. This matters
+most in the FAQ, the privacy rows and `/privacy`.
 
 ## Design
 
@@ -42,8 +47,9 @@ Headings that are currently right, as a reference for tone: *Locks your Mac when
   else.
 - Simple, predictable colour: a white band, a green-tinted band, a neutral grey band for
   the section the dark settings panel sits on, ink for text, one green that means
-  "MacAway is doing its job", and amber only where the app itself uses amber for the
-  stricter mode. Everything lives in `src/styles/tokens.css`; do not invent colours
+  "MacAway is doing its job", and amber only where the app itself uses amber: *Locking soon*.
+  Modes have no colour of their own, because since 1.1.0 the app gives them none.
+  Everything lives in `src/styles/tokens.css`; do not invent colours
   further down.
 - `public/icon.png` is the app's own icon, extracted straight from
   `mac/Resources/AppIcon.icns` (`iconutil -c iconset`, the 512x512 slice). Re-extract it
@@ -76,23 +82,40 @@ Headings that are currently right, as a reference for tone: *Locks your Mac when
 separate repo at `~/Documents/Personal/macaway` (Swift, `mac/Sources/MacAwayCore`). The
 site's own older copy is not evidence.
 
-Verified on 2026-10-01, and worth re-checking before you lean on any of it:
+Verified against 1.1.0 on 2026-11-10, and worth re-checking before you lean on any of it:
 
 - The app contacts one thing: its own update feed at `macaway.app/appcast.xml`, through
   Sparkle. Nothing else — no analytics, and the licence is checked on the Mac. Any claim that
   it "connects to nothing" is now wrong.
-- No password handling. No Keychain, `SecItem` or `LocalAuthentication`. Locking goes
-  through `SACLockScreenImmediate` in the private `login.framework`.
-- One permission. `mac/Resources/Info.plist` declares only
-  `NSBluetoothAlwaysUsageDescription`.
+- **The password, only with auto-unlock on.** "Unlock when I come back" in the gear menu is
+  off until turned on (`System/AutoUnlock.swift`). Turning it on asks for the login password
+  and keeps it in the login keychain, not synchronised, so it never leaves the Mac. Turning it
+  off deletes it. It is read only to type it at the lock screen. With it off, MacAway holds no
+  password. Locking still goes through `SACLockScreenImmediate` in the private
+  `login.framework`. "It never sees your password" is now wrong, unconditionally said.
+- **Permissions.** `mac/Resources/Info.plist` declares only
+  `NSBluetoothAlwaysUsageDescription`, and locking needs nothing else. Auto-unlock adds
+  Accessibility, which has no plist key: macOS asks only when auto-unlock is turned on
+  (`GuardController.turnOnAutoUnlock`). "One permission" is true of locking only.
+- **When it unlocks** (`GuardController.considerUnlocking`, `App/ReturnEvidence.swift`): only
+  after a followed device has read away while the screen was locked, then no device reads away
+  and the strongest reads −60 dBm or better. One try per lock, and the gear menu says so if it
+  failed. The strongest device can be a phone left on the desk, so do not promise that *you*
+  must be close: promise that a device had to leave and come back.
 - A followed device going quiet counts as away whatever the cause
   (`App/FollowedDevice.swift`). But when the Mac's *own* Bluetooth is unavailable,
   nothing counts as away (`App/GuardController.swift`) — so "if it can't tell, it locks"
   is true of the device and must not be widened to the Mac.
-- The two profiles are Home (−80 dBm, 15 s) and In public (−65 dBm, 5 s), from
-  `App/LockProfile.swift`, with the slider ends (-60 to -95 dBm) and the ten waits from
-  `LockSettings`. `src/components/LockPanel.astro` mirrors all of it; if they change in
-  the app, change them here.
+- **Modes**, from `App/LockMode.swift`: a Mac starts with Normal (−80 dBm, 15 s) and Strict
+  (−65 dBm, 5 s), and the user renames, retunes, adds and removes them. Home and In public
+  are gone. The slider ends (-60 to -95 dBm) and the ten waits are `LockSettings`'.
+  `src/components/LockPanel.astro` mirrors all of it; if they change in the app, change them
+  here.
+- The menu says *Not protected* when macOS waits a minute or more before asking for the
+  password after a lock (`System/PasswordGracePeriod.swift`). True, but not on the page: it
+  invites the question of whether a lock holds.
+- `src/components/GearMenu.astro` copies the gear menu item for item from
+  `MenuContentView.settingsMenu`. Change it when that menu changes.
 
 ## The worker
 

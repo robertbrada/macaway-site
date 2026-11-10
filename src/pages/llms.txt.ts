@@ -29,9 +29,17 @@ update feed.
 When MacAway cannot tell where you are, it locks. That is deliberate. A false lock costs one
 click; a missed lock costs your screen.
 
+How far you can walk and how long it waits are set by modes. A Mac starts with two, Normal and
+Strict, and you can rename them, change their numbers or add your own.
+
+MacAway can also unlock the Mac when you come back. This is off until you turn it on, and works
+only after your phone or watch has gone away and come back.
+
 ## Privacy
 
-Everything MacAway remembers stays on your Mac. It never reads, stores or types your password.
+Everything MacAway remembers stays on your Mac. To lock, it needs only Bluetooth. If you turn on
+unlocking, it keeps your login password in the Mac's keychain and asks for Accessibility so it
+can type it. Turning unlocking off deletes the password.
 
 ## Links
 

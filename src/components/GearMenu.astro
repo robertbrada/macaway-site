@@ -1,0 +1,146 @@
+---
+// A picture of where "Unlock when I come back" lives: the end of MacAway's menu and the gear
+// menu it opens. The items copy the app's gear menu (MenuContentView.swift); keep them in step.
+import Icon from './Icon.astro';
+
+const items = [
+  { label: 'Copy licence key' },
+  'divider',
+  { label: 'Open at login', checked: true },
+  { label: 'Unlock when I come back', checked: true, highlighted: true },
+  { label: 'Check for updates…' },
+  { label: 'Send feedback…' },
+  { label: 'Copy the last hour of the log' },
+  'divider',
+  { label: 'Quit MacAway', shortcut: '⌘Q' },
+] as const;
+---
+
+<div
+  class="scene"
+  role="img"
+  aria-label="The gear at the bottom of the MacAway menu, open, with Unlock when I come back turned on."
+>
+  <div class="menu-end">
+    <span class="footer">
+      <span>MacAway 1.1.0</span>
+      <span class="gear"><Icon name="gear" size={18} /></span>
+    </span>
+  </div>
+
+  <div class="gear-menu">
+    {
+      items.map((item) =>
+        item === 'divider' ? (
+          <span class="divider" />
+        ) : (
+          <span class:list={['item', { highlighted: 'highlighted' in item }]}>
+            <span class="check">{'checked' in item ? '✓' : ''}</span>
+            <span class="label">{item.label}</span>
+            {'shortcut' in item && <span class="shortcut">{item.shortcut}</span>}
+          </span>
+        )
+      )
+    }
+  </div>
+</div>
+
+<style>
+  .scene {
+    display: grid;
+    width: 20rem;
+    max-width: 100%;
+    font-size: 0.9375rem;
+    line-height: 1.3;
+    color: #fff;
+  }
+
+  /* The bottom of MacAway's menu ------------------------------------------- */
+
+  /* Fades in at the top, so it reads as the end of a longer menu. */
+  .menu-end {
+    --fade-height: 0.8rem;
+    --fade-mask: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(0 0 0 / 0.7) calc(var(--fade-height) / 3),
+      #000 var(--fade-height)
+    );
+
+    display: grid;
+    padding: var(--fade-height) 1.15rem 0.5rem;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    background: var(--bg-dark);
+    box-shadow: var(--shadow-lg);
+    -webkit-mask-image: var(--fade-mask);
+    mask-image: var(--fade-mask);
+  }
+
+  .footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgb(255 255 255 / 0.1);
+    font-size: 0.875rem;
+    color: var(--ink-on-dark-muted);
+  }
+
+  /* Pressed, and ringed in the same green as the item it opens. */
+  .gear {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    margin-right: -0.4rem;
+    border-radius: 8px;
+    background: rgb(255 255 255 / 0.12);
+    box-shadow: 0 0 0 1.5px var(--green);
+    color: #fff;
+  }
+
+  /* The menu that opens from the gear -------------------------------------- */
+
+  /* Drawn over the faded menu above, with a darker shadow to stand apart from it. */
+  .gear-menu {
+    position: relative;
+    z-index: 1;
+    justify-self: end;
+    display: grid;
+    width: max-content;
+    max-width: 100%;
+    margin-top: -0.35rem;
+    margin-right: 0.35rem;
+    padding: 0.35rem;
+    border: 1px solid rgb(255 255 255 / 0.16);
+    border-radius: var(--radius);
+    background: var(--bg-dark);
+    box-shadow:
+      0 14px 30px rgb(0 0 0 / 0.28),
+      0 2px 6px rgb(0 0 0 / 0.12);
+  }
+
+  .item {
+    display: grid;
+    grid-template-columns: 1.1em minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: 0.25rem;
+    padding: 0.32em 0.85em 0.32em 0.6em;
+    border-radius: 7px;
+  }
+
+  .highlighted {
+    background: var(--green);
+    color: var(--green-ink);
+  }
+
+  .shortcut {
+    padding-left: 2.5rem;
+    color: var(--ink-on-dark-muted);
+  }
+
+  .divider {
+    margin: 0.3rem 0.75rem;
+    border-top: 1px solid rgb(255 255 255 / 0.12);
+  }
+</style>

@@ -4,6 +4,7 @@ import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
 import Icon from '../components/Icon.astro';
 import LockPanel from '../components/LockPanel.astro';
+import GearMenu from '../components/GearMenu.astro';
 import Shield from '../components/Shield.astro';
 import DownloadButton from '../components/DownloadButton.astro';
 import CopyEmail from '../components/CopyEmail.astro';
@@ -36,7 +37,7 @@ const questions = [
   {
     question: 'Is MacAway safe?',
     answer:
-      'It locks your screen and does nothing else. It never sees your password. It asks for Bluetooth and no other permission. The only thing it contacts is its own update feed, and nothing about you or your devices is sent. You can check that yourself with a free firewall such as LuLu.',
+      'To lock your Mac, it needs only Bluetooth. Unlocking is off until you turn it on, and then your password stays in your Mac’s keychain. The only thing MacAway contacts is its own update feed, and nothing about you or your devices is sent. You can check that yourself with a free firewall such as LuLu.',
   },
   {
     question: 'Do I need to install anything on my phone?',
@@ -90,6 +91,14 @@ const steps = [
   },
 ] as const;
 
+// None of these promises that you are close to your Mac: with two devices, the close one can
+// be a phone left on the desk.
+const unlockFacts = [
+  'It is off until you turn it on in the gear menu.',
+  'It unlocks only after your phone or watch has been away.',
+  'Your password stays in your Mac’s keychain.',
+];
+
 const shields = [
   { shape: 'guarding', label: "You're covered" },
   { shape: 'connecting', label: 'Still checking' },
@@ -104,12 +113,12 @@ const promises = [
     line: 'Locking needs no connection, and there is no account to sign up for. The only thing MacAway contacts is its own update feed, to ask whether a newer version exists.',
   },
   {
-    title: 'It never sees your password',
-    line: 'MacAway only locks your Mac. You unlock it the way you always do.',
+    title: 'Your password stays on your Mac',
+    line: 'MacAway needs no password to lock. If you turn on unlocking, it keeps your password in your Mac’s keychain. Turn unlocking off and it is deleted.',
   },
   {
-    title: 'It asks for one thing: Bluetooth',
-    line: 'That is the only permission macOS shows you. Not your camera, not your location, not your files.',
+    title: 'Locking needs only Bluetooth',
+    line: 'Not your camera, not your location, not your files. If you turn on unlocking, it also needs Accessibility, so it can type your password.',
   },
   {
     title: "If it can't tell, it locks",
@@ -187,6 +196,21 @@ const structuredData = {
     </div>
   </section>
 
+  <section class="section unlock-section" id="unlock">
+    <div class="wrap unlock rise">
+      <div class="unlock-copy">
+        <h2>Unlock when you come back</h2>
+        <p class="lede">
+          Walk back to your Mac and MacAway unlocks it. You do not have to type your password.
+        </p>
+
+        <ul class="unlock-facts">{unlockFacts.map((fact) => <li>{fact}</li>)}</ul>
+      </div>
+
+      <GearMenu />
+    </div>
+  </section>
+
   <section class="section section-grey">
     <div class="wrap modes rise">
       <div class="panel-slot">
@@ -194,15 +218,15 @@ const structuredData = {
       </div>
 
       <div class="modes-copy">
-        <p class="eyebrow">Security mode</p>
+        <p class="eyebrow">Modes</p>
         <h2>Choose how it locks</h2>
         <p class="lede">
-          <strong>At home</strong> it waits longer, so you can walk further before it locks.{' '}
-          <strong>In public</strong> it locks sooner, and from closer.
+          <strong>Normal</strong> waits longer, so you can walk further before it locks.{' '}
+          <strong>Strict</strong> locks sooner, and from closer.
         </p>
         <p class="fine">
-          Want something in between? Open <strong>Advanced</strong> and set your own distance and
-          delay.
+          Want your own? Open <strong>Advanced</strong> to change the distance and the wait, or
+          choose <strong>Add mode</strong> to make a new one. You can rename any of them.
         </p>
       </div>
     </div>
@@ -230,7 +254,8 @@ const structuredData = {
       <div class="privacy-head rise">
         <h2>Nothing leaves your Mac</h2>
         <p class="lede">
-          MacAway never goes online. It locks your screen, and that is the whole of it.
+          There is no account and nothing to sign in to. What MacAway knows about you stays on
+          your Mac.
         </p>
       </div>
 
@@ -462,6 +487,43 @@ const structuredData = {
     margin-top: 0.5rem;
     max-width: 32ch;
     color: var(--ink-muted);
+  }
+
+  /* Unlock when you come back ------------------------------------------------ */
+
+  /* Less padding on top: it shares the white band with the steps above. */
+  .unlock-section {
+    padding-top: clamp(1.5rem, 4vw, 3rem);
+  }
+
+  /* The same grid as the modes section below, mirrored, so the two line up. */
+  .unlock {
+    display: grid;
+    gap: clamp(2.5rem, 5vw, 4.5rem);
+    align-items: center;
+  }
+
+  .unlock .lede {
+    max-width: 30rem;
+  }
+
+  .unlock-facts {
+    max-width: 30rem;
+    margin: 1.75rem 0 0;
+    padding: 0;
+    list-style: none;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .unlock-facts li {
+    padding-block: 0.8rem;
+    border-top: 1px solid var(--line);
+  }
+
+  @media (min-width: 900px) {
+    .unlock {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
   }
 
   /* Modes ------------------------------------------------------------------ */
