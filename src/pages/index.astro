@@ -755,14 +755,14 @@ const structuredData = {
     justify-content: center;
   }
 
-  /* The panel is the dark band, so the Mac-only line takes the dark band's rule and ink. */
-  .price-panel :global(.mac-only) {
-    max-width: none;
-    border-color: var(--line-dark);
+  /* A phone's grey Mac-only button, in the dark band's greys. */
+  .price-panel :global(.on-touch:disabled) {
+    background: rgb(255 255 255 / 0.07);
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.1);
     color: var(--ink-on-dark-muted);
   }
 
-  .price-panel :global(.mac-only b) {
+  .price-panel :global(.on-touch .touch-text b) {
     color: #fff;
   }
 

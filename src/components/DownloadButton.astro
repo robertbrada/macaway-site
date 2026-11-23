@@ -2,11 +2,12 @@
 // Every Download button on the site. While there is no release, DOWNLOAD_URL is null and
 // this renders a disabled button; once it is set, the same markup becomes a real link.
 //
-// MacAway only runs on a Mac, so a phone or a tablet is given a line telling it where to go
-// instead of a button that cannot work. The test is `hover: none and pointer: coarse` — a
-// touch screen with nothing to point with — because no Mac ever matches it, however narrow
-// the window gets. A width query would have taken the button away from someone reading in a
-// half-width window, and sniffing the browser's name would have been a guess.
+// MacAway only runs on a Mac, so a phone or a tablet gets a grey, disabled button in the same
+// place that says so. Hiding it left people who came to download looking for something that
+// was not there. The test is `hover: none and pointer: coarse` — a touch screen with nothing
+// to point with — because no Mac ever matches it, however narrow the window gets. A width
+// query would have taken the button away from someone reading in a half-width window, and
+// sniffing the browser's name would have been a guess.
 import Icon from './Icon.astro';
 import { DOWNLOAD_URL } from '../lib/pricing';
 
@@ -15,26 +16,23 @@ interface Props {
   small?: boolean;
   /** Which of the four buttons this is, so the click event says which one was pressed. */
   place?: 'header' | 'hero' | 'pricing' | 'thanks';
-  /**
-   * What a touch screen reads in the button's place. `null` leaves the space empty, which is
-   * what the header wants: a fixed bar has no room for a sentence.
-   */
-  touchNote?: string | null;
+  /** `false` shows a touch screen nothing: the header's fixed bar has no room for the button. */
+  showOnTouch?: boolean;
+  /** A line under it on a touch screen, for what the button cannot say. */
+  touchNote?: string;
 }
 
-const {
-  label = 'Download free trial',
-  small = false,
-  place,
-  touchNote = 'Open this page on your Mac to download it.',
-} = Astro.props;
+const { label = 'Download free trial', small = false, place, showOnTouch = true, touchNote } =
+  Astro.props;
 const className = small ? 'download-btn small' : 'download-btn';
 const iconSize = small ? 16 : 18;
+const noteId = `download-note-${place ?? 'page'}`;
+const onTouch = DOWNLOAD_URL && showOnTouch;
 ---
 
 {
   DOWNLOAD_URL ? (
-    <a class={className} href={DOWNLOAD_URL} data-track="download" data-track-place={place}>
+    <a class={`${className} on-mac`} href={DOWNLOAD_URL} data-track="download" data-track-place={place}>
       <Icon name="download" size={iconSize} />
       {label}
     </a>
@@ -47,39 +45,80 @@ const iconSize = small ? 16 : 18;
 }
 
 {
-  touchNote && (
-    <p class="mac-only">
-      <b>MacAway is a Mac app.</b>
+  onTouch && (
+    <button
+      class={`${className} on-touch`}
+      type="button"
+      disabled
+      aria-describedby={touchNote ? noteId : undefined}
+    >
+      <Icon name="laptop" size={22} />
+      <span class="touch-text">
+        <b>MacAway is a Mac app</b>
+        <span>Download it on your Mac</span>
+      </span>
+    </button>
+  )
+}
+
+{
+  onTouch && touchNote && (
+    <p class="touch-note" id={noteId}>
       {touchNote}
     </p>
   )
 }
 
 <style>
-  .mac-only {
+  .on-touch,
+  .touch-note {
     display: none;
-    max-width: 34ch;
-    padding: 0.8rem 1rem;
-    border: 1px solid var(--line-strong);
-    border-radius: var(--radius);
+  }
+
+  /* Grey, so it reads as a button that cannot be pressed rather than a faded green one. */
+  .on-touch:disabled {
+    gap: 0.65rem;
+    padding: 0.5rem 1.15rem 0.5rem 0.95rem;
+    text-align: left;
+    background: rgb(11 26 18 / 0.06);
+    box-shadow: inset 0 0 0 1px rgb(11 26 18 / 0.07);
+    color: var(--ink-faint);
+    opacity: 1;
+  }
+
+  .touch-text {
+    display: grid;
+    line-height: 1.2;
+  }
+
+  .touch-text b {
     font-size: 0.9375rem;
+    font-weight: 650;
+    color: var(--ink-muted);
+  }
+
+  .touch-text span {
+    font-size: 0.8125rem;
+    font-weight: 500;
+  }
+
+  .touch-note {
+    margin: 0.6rem 0 0;
+    font-size: 0.875rem;
     line-height: 1.45;
     color: var(--ink-muted);
   }
 
-  /* The point first, on its own line, so it is read rather than skimmed past. */
-  .mac-only b {
-    display: block;
-    font-weight: 650;
-    color: var(--ink);
-  }
-
   @media (hover: none) and (pointer: coarse) {
-    .download-btn {
+    .on-mac {
       display: none;
     }
 
-    .mac-only {
+    .on-touch {
+      display: inline-flex;
+    }
+
+    .touch-note {
       display: block;
     }
   }
