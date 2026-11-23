@@ -66,7 +66,11 @@ most in the FAQ, the privacy rows and `/privacy`.
   party — the privacy page says so, so keep it true. It is under ITF's Free Font
   Licence, which forbids modification **including subsetting and format conversion**, so
   never "optimise" the woff2; ship it exactly as downloaded. See
-  `public/fonts/satoshi-NOTICE.txt`.
+  `public/fonts/satoshi-NOTICE.txt`. One exception: the clock in the hero's drawn menu bar
+  uses the visitor's system font, which on a Mac is the real menu bar's. Nothing is loaded.
+- **The hero screenshot hangs from a drawn slice of a Mac screen** (`Hero.astro`): a clear
+  menu bar as macOS 26 draws it, with the shield centred over the menu, in the page's own
+  tints. The menu screenshot itself can lag the app; the menu bar is what says "menu bar app".
 - **`mailto:` on phones only.** On a desktop it opens a mail client plenty of people have
   never set up, so there the address is plain text to read and copy; under 720px it
   becomes a tappable link. `src/components/CopyEmail.astro` does both, and the address
