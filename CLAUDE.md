@@ -21,7 +21,7 @@ The page is read by people whose first language is not English. Write for them.
 - **One idea per sentence.** Two short sentences beat one with a semicolon.
 - **No em-dash pile-ups, no "simply", no "seamlessly", no "powerful".**
 
-Headings that are currently right, as a reference for tone: *Locks your Mac when you forget to*
+Headings that are currently right, as a reference for tone: *Walk away / Your Mac locks*
 · *How it works* · *Unlock when you come back* · *Choose how it locks* · *What the icon means* ·
 *Nothing leaves your Mac*.
 

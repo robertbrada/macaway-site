@@ -19,8 +19,8 @@ const MENU_WIDTH = 362;
 <section class="hero">
   <div class="wrap grid">
     <div class="copy">
-      <h1><span class="drawn">Locks</span> your Mac<br /> when you forget to</h1>
-      <p class="kicker">A small app in your menu bar.<br /> It locks your Mac when you walk away.</p>
+      <h1>Walk away<br /> Your Mac <span class="drawn">locks</span></h1>
+      <p class="kicker">Come back and it can unlock for you.<br /> A small app in your menu bar.</p>
 
       <div class="cta">
         <DownloadButton place="hero" />
@@ -98,6 +98,8 @@ const MENU_WIDTH = 362;
     max-width: 40ch;
     font-size: clamp(1.125rem, 1.7vw, 1.3125rem);
     color: var(--ink-muted);
+    /* On a phone a line can still wrap; this keeps the halves even instead of leaving one word. */
+    text-wrap: balance;
   }
 
   .cta {
@@ -157,10 +159,11 @@ const MENU_WIDTH = 362;
     filter: var(--shadow-shot);
   }
 
-  /* The copy gets the wider column, so the headline's longer second line fits whole. */
+  /* Equal columns: the headline is short, and a wider copy column only left a gap before the
+     screenshot. */
   @media (min-width: 900px) {
     .grid {
-      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     }
   }
 </style>
