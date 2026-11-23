@@ -3,14 +3,32 @@
     <channel>
         <title>MacAway</title>
         <item>
+            <title>1.2.0</title>
+            <pubDate>Mon, 23 Nov 2026 15:47:01 +0100</pubDate>
+            <link>https://macaway.app</link>
+            <sparkle:version>346</sparkle:version>
+            <sparkle:shortVersionString>1.2.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <description><![CDATA[<ul>
+  <li><b>Caffeine mode.</b> Keep your Mac awake for 1 to 12 hours, or until you turn it off. The screen stays on and the screen saver waits while you are at your Mac, and MacAway still locks it when you walk away. With the lid closed, your Mac stays awake only if an external display is connected.</li>
+  <li><b>See it at a glance.</b> While Caffeine mode is on and your Mac is protected, steam rises from the shield in the menu bar.</li>
+</ul>
+]]></description>
+            <enclosure url="https://github.com/robertbrada/macaway-releases/releases/download/archives/MacAway-1.2.0.zip" length="2621193" type="application/octet-stream" sparkle:edSignature="XKWAE98kbliaMXz1YqBJ7t1zMDBoMkQJr7EgRnM3eX11yaWWF/ow7Zj5bdKhUHIwIcz86Kv6LRhMwVOZAETfCg=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/robertbrada/macaway-releases/releases/download/archives/MacAway346-339.delta" sparkle:deltaFrom="339" length="295806" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976432" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="45k4pTAbT5IU9N6dFgNkD6Beax1IKTClTS+1RCCzC0cSBErXppGZwTAcRWsl/ApgMNFZQo62VTm7WR1k6f1vDw=="/>
+                <enclosure url="https://github.com/robertbrada/macaway-releases/releases/download/archives/MacAway346-303.delta" sparkle:deltaFrom="303" length="467746" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976432" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="zdNpcCedGkIi7wgrGpWepNh3F6So7pY2eDn5MqX6326lyKzSY58zIvmrUsdVQQT2CdLTpPnVipPhahzV+ZTUAw=="/>
+                <enclosure url="https://github.com/robertbrada/macaway-releases/releases/download/archives/MacAway346-300.delta" sparkle:deltaFrom="300" length="765338" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976432" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="rSKCn3Bub0RLsy8Xw560T+DLJ1ko2JBPmnF0a+lCj+tCr5ePKtpINKkb+Dvyd5R6679y6nFFK2tHKVXlJtmeAg=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>1.1.0</title>
             <pubDate>Tue, 10 Nov 2026 13:26:06 +0100</pubDate>
             <link>https://macaway.app</link>
             <sparkle:version>339</sparkle:version>
             <sparkle:shortVersionString>1.1.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <description><![CDATA[
-<ul>
+            <description><![CDATA[<ul>
   <li><b>Unlock when you come back.</b> MacAway can type your password when you walk back to your Mac. It is off until you turn it on in the gear menu, and it works only after your phone or watch has been away.</li>
   <li><b>Modes you can name.</b> Home and In public are now Normal and Strict, with the same numbers you had. Rename them, change them, or add your own.</li>
   <li><b>A warning when a lock keeps nobody out.</b> If your Mac waits a minute or more before it asks for your password, the menu now tells you.</li>
@@ -33,15 +51,6 @@
             <sparkle:deltas>
                 <enclosure url="https://github.com/robertbrada/macaway-releases/releases/download/archives/MacAway303-300.delta" sparkle:deltaFrom="300" length="308178" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976432" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="C+PPp56QRM49UrNljoWZ/tBL0DOFrstoIA2klJopm8r+Qap41J1piMZFk1W6RCGdIh63257JR8t3Po7/e6vwDw=="/>
             </sparkle:deltas>
-        </item>
-        <item>
-            <title>1.0.0</title>
-            <pubDate>Thu, 01 Oct 2026 10:07:36 +0200</pubDate>
-            <link>https://macaway.app</link>
-            <sparkle:version>300</sparkle:version>
-            <sparkle:shortVersionString>1.0.0</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/robertbrada/macaway-releases/releases/download/archives/MacAway-1.0.0.zip" length="2541552" type="application/octet-stream" sparkle:edSignature="QHn5rzdXcSHKGiFIvUXHlof4i7tQnNj+XzoAokGzzGqwxR+QJ4bfchtNN6IwVgYCQy04z/zZ5MnPGu0tJgEvBA=="/>
         </item>
     </channel>
 </rss>

@@ -16,7 +16,7 @@ export const REFUND_DAYS = 30;
  * takes people forward from there. Setting it to `null` disables every Download button again.
  */
 export const DOWNLOAD_URL: string | null =
-  'https://github.com/robertbrada/macaway-releases/releases/download/archives/MacAway-1.0.1.zip';
+  'https://github.com/robertbrada/macaway-releases/releases/download/archives/MacAway-1.2.0.zip';
 
 /**
  * `/buy` is served by the worker, which opens a Stripe checkout and redirects to it, so this
