@@ -1,10 +1,13 @@
 ---
-import { Image } from 'astro:assets';
 import Icon from './Icon.astro';
 import Shield from './Shield.astro';
 import DownloadButton from './DownloadButton.astro';
 import { APP_VERSION, TRIAL_DAYS } from '../lib/pricing';
-import menu from '../assets/app-menu.webp';
+import { ICON_BOX, shieldOff } from '../icons/paths';
+// The menu as a drawing, so its parts can move. Exported from the design file, with the parts
+// that change tagged by class (m-track, m-knob, m-shield, m-title, m-row, m-signal) and the
+// coordinates rounded to one decimal.
+import menuDrawing from '../assets/hero-menu.svg?raw';
 
 const devices = [
   { name: 'iphone', label: 'iPhone' },
@@ -13,8 +16,30 @@ const devices = [
   { name: 'airtag', label: 'AirTag' },
 ] as const;
 
-// How wide the menu shows on a desktop. The screenshot is cropped to the menu itself.
+// How wide the menu shows on a desktop.
 const MENU_WIDTH = 362;
+
+// What the menu shows while MacAway is off, laid over the "on" drawing and hidden until the
+// script below turns the page to "off". The shield is the app's own off shape, put where the
+// green one is: both fill the same 536 x 603 box inside the icon's 774 box, and the green one
+// sits at (59.6, 53.4), 49.4 wide. "Off" is the app's word for it, in the Mac's own font at
+// the size that draws "Protected" as wide as the drawing does.
+const iconScale = 49.4 / 536.24;
+const offParts = `
+  <svg class="m-off" x="${59.6 - 118.88 * iconScale}" y="${53.4 - 85.54 * iconScale}"
+    width="${ICON_BOX * iconScale}" height="${ICON_BOX * iconScale}"
+    viewBox="0 0 ${ICON_BOX} ${ICON_BOX}" fill="#A7A6A7">
+    ${shieldOff.map((d) => `<path d="${d}" fill-rule="evenodd" clip-rule="evenodd"/>`).join('')}
+  </svg>
+  <text class="m-off" x="151.4" y="81.1" fill="white" font-size="39" font-weight="600"
+    font-family="-apple-system, BlinkMacSystemFont, system-ui, sans-serif">Off</text>`;
+
+const menuAlt =
+  'The MacAway menu, open under its shield in the menu bar, listing the devices it is watching, how close each one is, and the two modes, Normal and Strict.';
+
+const menuSvg = menuDrawing
+  .replace('<svg ', `<svg class="menu" role="img" aria-label="${menuAlt}" `)
+  .replace('</svg>', `${offParts}</svg>`);
 ---
 
 <section class="hero">
@@ -51,7 +76,10 @@ const MENU_WIDTH = 362;
     <div class="shot" style={`--menu-width: ${MENU_WIDTH}px`}>
       <div class="desktop">
         <div class="menubar" aria-hidden="true">
-          <span class="status-item"><Shield shape="guarding" size={22} /></span>
+          <span class="status-item">
+            <span class="bar-on"><Shield shape="guarding" size={22} /></span>
+            <span class="bar-off"><Shield shape="off" size={22} /></span>
+          </span>
           <span class="system">
             <svg class="battery" viewBox="0 0 25 12" fill="none">
               <rect x="0.6" y="0.6" width="21" height="10.8" rx="3.2" stroke="currentColor" stroke-opacity="0.35" stroke-width="1.2" />
@@ -66,15 +94,36 @@ const MENU_WIDTH = 362;
             <span>Mon 9:41</span>
           </span>
         </div>
-        <Image
-          src={menu}
-          alt="The MacAway menu, open under its shield in the menu bar, listing the devices it is watching, how close each one is, and the two modes, Normal and Strict."
-          widths={[1, 2, 3].map((density) => MENU_WIDTH * density)}
-          sizes={`(max-width: 899px) 78vw, ${MENU_WIDTH}px`}
-          loading="eager"
-        />
+        <Fragment set:html={menuSvg} />
       </div>
     </div>
+    {/*
+      The picture plays once, when it comes into view: the screen comes up, the menu opens
+      from its icon, then MacAway turns on, with a moment between each so "Off" can be read.
+      It runs here, straight after the picture and before the first paint, so the finished
+      picture never flashes up first. Without the script, without IntersectionObserver, or
+      with reduced motion asked for, the picture is simply there, on.
+    */}
+    <script is:inline>
+      (() => {
+        const shot = document.currentScript.previousElementSibling;
+        if (!shot || !('IntersectionObserver' in window)) return;
+        if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        shot.dataset.play = '';
+        const reach = (stage) => (shot.dataset.stage = `${shot.dataset.stage || ''} ${stage}`.trim());
+        const seen = new IntersectionObserver(
+          ([entry]) => {
+            if (!entry.isIntersecting) return;
+            seen.disconnect();
+            setTimeout(() => reach('shown'), 100);
+            setTimeout(() => reach('open'), 900);
+            setTimeout(() => reach('on'), 2100);
+          },
+          { threshold: 0.4 },
+        );
+        seen.observe(shot);
+      })();
+    </script>
   </div>
 </section>
 
@@ -212,14 +261,127 @@ const MENU_WIDTH = 362;
     box-shadow: inset 0 0 0 1px rgb(11 26 18 / 0.08);
   }
 
-  /* A drop shadow rather than a box shadow, so it follows the menu's rounded corners
-     through the transparent edge of the screenshot. */
-  .desktop :global(img) {
+  /* A drop shadow rather than a box shadow, so it follows the menu's rounded corners. */
+  .desktop :global(.menu) {
     display: block;
     width: 100%;
     height: auto;
     margin-top: 0.7rem;
     filter: var(--shadow-shot);
+    /* It hangs from the menu bar, so it opens from its top edge. */
+    transform-origin: 50% 0;
+  }
+
+  /* The picture plays the app's first minute, once: the screen comes up, the menu opens from
+     its icon, and MacAway turns on. The script sets data-play before the first paint, then adds
+     "shown", "open" and "on" to data-stage in turn. Everything here hangs off those, so a page
+     without the script, or with reduced motion, shows the finished picture: the drawing is
+     "on", and "off" is laid over it only while the page plays. Each transition is set on the
+     step it leads into, so the start lands at once and only the steps move. */
+
+  /* 1. The screen comes up, so the eye goes to it on a page that otherwise sits still. */
+  .shot[data-play]:not([data-stage~='shown']) .desktop {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+
+  .shot[data-stage~='shown'] .desktop {
+    transition:
+      opacity 0.6s ease,
+      transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  /* 2. The menu opens from its icon: the icon takes the highlight macOS gives an item you
+     click, and the menu drops in under it. */
+  .shot[data-play]:not([data-stage~='open']) .status-item {
+    background-color: transparent;
+  }
+
+  .shot[data-play]:not([data-stage~='open']) :global(.menu) {
+    opacity: 0;
+    transform: translateY(-0.6rem) scale(0.97);
+  }
+
+  .shot[data-stage~='open'] .status-item {
+    transition: background-color 0.15s ease;
+  }
+
+  .shot[data-stage~='open'] :global(.menu) {
+    transition:
+      opacity 0.2s ease-out,
+      transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  /* 3. MacAway turns on. Until then the off parts show over the drawing. The colours are the
+     app's, like the rest of the drawing: macOS's grey for a switch that is off, and the
+     drawing's own greys. */
+  .desktop :global(.m-off),
+  .bar-off {
+    opacity: 0;
+  }
+
+  .shot[data-play]:not([data-stage~='on']) :global(.m-off),
+  .shot[data-play]:not([data-stage~='on']) .bar-off {
+    opacity: 1;
+  }
+
+  .shot[data-play]:not([data-stage~='on']) :global(.m-shield),
+  .shot[data-play]:not([data-stage~='on']) :global(.m-title),
+  .shot[data-play]:not([data-stage~='on']) .bar-on {
+    opacity: 0;
+  }
+
+  .shot[data-play]:not([data-stage~='on']) :global(.m-track) {
+    fill: #39393d;
+  }
+
+  /* To the other end of the track: the knob's gap on the right, mirrored on the left. */
+  .shot[data-play]:not([data-stage~='on']) :global(.m-knob) {
+    transform: translateX(-37.5px);
+  }
+
+  .shot[data-play]:not([data-stage~='on']) :global(.m-row) {
+    opacity: 0.35;
+  }
+
+  .shot[data-play]:not([data-stage~='on']) :global(.m-signal) {
+    fill: #5e5e5e;
+  }
+
+  /* First the switch, then the shields and the title as it lands, then the devices wake. */
+  .shot[data-stage~='on'] :global(.m-knob) {
+    transition: transform 0.35s cubic-bezier(0.3, 0.7, 0.2, 1);
+  }
+
+  .shot[data-stage~='on'] :global(.m-track) {
+    transition: fill 0.3s ease;
+  }
+
+  .shot[data-stage~='on'] :global(.m-off),
+  .shot[data-stage~='on'] :global(.m-shield),
+  .shot[data-stage~='on'] .bar-off,
+  .shot[data-stage~='on'] .bar-on {
+    transition: opacity 0.3s ease 0.2s;
+  }
+
+  /* The two words do not cross-fade, or for a moment they read as one: "Off" goes, then
+     "Protected" comes. The shields can cross-fade, as they share one outline. */
+  .shot[data-stage~='on'] :global(text.m-off) {
+    transition: opacity 0.12s ease 0.15s;
+  }
+
+  .shot[data-stage~='on'] :global(.m-title) {
+    transition: opacity 0.25s ease 0.27s;
+  }
+
+  .shot[data-stage~='on'] :global(.m-row) {
+    transition: opacity 0.5s ease 0.35s;
+  }
+
+  .shot[data-stage~='on'] :global(.m-signal) {
+    transition:
+      opacity 0.5s ease 0.35s,
+      fill 0.5s ease 0.35s;
   }
 
   /* Clear, as macOS 26 draws it, so only the items sit on the wallpaper. macOS hangs a menu bar
@@ -245,6 +407,12 @@ const MENU_WIDTH = 362;
     padding-inline: 0.7rem;
     border-radius: 0.65rem;
     background: rgb(11 26 18 / 0.09);
+  }
+
+  /* The off and on shields share the one spot, so one can fade into the other. */
+  .status-item > span {
+    grid-area: 1 / 1;
+    display: grid;
   }
 
   /* Faded, so the eye goes to the shield: these only say "this is a Mac's menu bar". */

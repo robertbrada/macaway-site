@@ -70,9 +70,20 @@ most in the FAQ, the privacy rows and `/privacy`.
   never "optimise" the woff2; ship it exactly as downloaded. See
   `public/fonts/satoshi-NOTICE.txt`. One exception: the clock in the hero's drawn menu bar
   uses the visitor's system font, which on a Mac is the real menu bar's. Nothing is loaded.
-- **The hero screenshot hangs from a drawn slice of a Mac screen** (`Hero.astro`): a clear
+- **The hero menu hangs from a drawn slice of a Mac screen** (`Hero.astro`): a clear
   menu bar as macOS 26 draws it, with the shield centred over the menu, in the page's own
-  tints. The menu screenshot itself can lag the app; the menu bar is what says "menu bar app".
+  tints. The menu itself can lag the app, numbers and all; the menu bar is what says "menu bar
+  app".
+- **The hero menu is a drawing, and it plays the app's first minute once.** The page around it
+  sits still, so the picture moves to be looked at: the screen comes up, the menu opens from
+  its icon showing "Off", then MacAway turns on. `src/assets/hero-menu.svg` is the design
+  file's export, inlined, with the parts that move tagged by class (`m-track`, `m-knob`,
+  `m-shield`, `m-title`, `m-row`, `m-signal`). Re-export it, tag those again and round the
+  coordinates to one decimal when the menu changes. `Hero.astro` lays the "off" parts over it
+  (the app's off shield and the word "Off"). An inline script sets `data-play` before the first
+  paint, and once the picture is in view adds `shown`, `open` and `on` to `data-stage`; the
+  CSS hangs off those. Without the script, or with reduced motion, the picture is simply there,
+  on.
 - **`mailto:` on phones only.** On a desktop it opens a mail client plenty of people have
   never set up, so there the address is plain text to read and copy; under 720px it
   becomes a tappable link. `src/components/CopyEmail.astro` does both, and the address
