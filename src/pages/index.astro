@@ -13,17 +13,17 @@ import { link, MAKER_LINKEDIN, MAKER_PORTFOLIO } from '../lib/links';
 import { BUY_PATH, CHECKOUT_OPEN, PRICE, PRICE_USD, REFUND_DAYS, TRIAL_DAYS } from '../lib/pricing';
 
 const places = [
-  { title: 'Conferences', line: 'Leave it at your seat. If someone takes it, it locks.' },
-  { title: 'Cafés', line: 'Go to the counter to order. Your laptop locks at the table.' },
-  { title: 'Coworking spaces', line: 'Step out to take a call. Your screen locks at your desk.' },
-  { title: 'Offices', line: 'Go to a meeting. Nobody can read your email.' },
-];
+  { icon: 'screen', title: 'Conferences', line: 'Leave it at your seat. If someone takes it, it locks.' },
+  { icon: 'cup', title: 'Cafés', line: 'Go to the counter to order. Your laptop locks at the table.' },
+  { icon: 'people', title: 'Coworking spaces', line: 'Step out to take a call. Your screen locks at your desk.' },
+  { icon: 'building', title: 'Offices', line: 'Go to a meeting. Nobody can read your email.' },
+] as const;
 
 // What happens, in order. It answers "what happens after the trial?" before anyone asks.
 const trialStops = [
   { when: 'Today', line: `Download MacAway and use it free for ${TRIAL_DAYS} days. No card needed.` },
   { when: `Day ${TRIAL_DAYS}`, line: 'MacAway stops locking and tells you.' },
-  { when: 'When you are ready', line: `Buy it once for ${PRICE} and keep it.` },
+  { when: 'When you are ready', line: `Buy it once for ${PRICE} and keep it forever.` },
 ];
 
 // Only what people ask before they buy: how to get it, whether it fits their kit, and what
@@ -159,7 +159,10 @@ const structuredData = {
         {
           places.map((place) => (
             <div>
-              <dt>{place.title}</dt>
+              <dt>
+                <Icon name={place.icon} />
+                {place.title}
+              </dt>
               <dd>{place.line}</dd>
             </div>
           ))
@@ -173,8 +176,7 @@ const structuredData = {
       <div class="head rise">
         <h2>How it works</h2>
         <p class="lede">
-          It uses your phone, your watch or an AirTag on your keys. There is nothing to
-          install on them. Your Mac does all the work.
+          There is nothing to install on your phone. Your Mac does all the work.
         </p>
       </div>
 
@@ -193,6 +195,23 @@ const structuredData = {
           ))
         }
       </ol>
+    </div>
+  </section>
+
+  <section class="section icons">
+    <div class="wrap">
+      <h2 class="eyebrow rise">Menu bar icon</h2>
+
+      <ul class="shields rise">
+        {
+          shields.map((shield) => (
+            <li class={`shield-${shield.shape}`}>
+              <Shield shape={shield.shape} size={24} />
+              <span>{shield.label}</span>
+            </li>
+          ))
+        }
+      </ul>
     </div>
   </section>
 
@@ -226,26 +245,9 @@ const structuredData = {
         </p>
         <p class="fine">
           Want your own? Open <strong>Advanced</strong> to change the distance and the wait, or
-          choose <strong>Add mode</strong> to make a new one. You can rename any of them.
+          choose <strong>Add mode</strong> to make a new one.
         </p>
       </div>
-    </div>
-  </section>
-
-  <section class="section icons">
-    <div class="wrap">
-      <h2 class="eyebrow rise">Menu bar icon</h2>
-
-      <ul class="shields rise">
-        {
-          shields.map((shield) => (
-            <li class={`shield-${shield.shape}`}>
-              <Shield shape={shield.shape} size={24} />
-              <span>{shield.label}</span>
-            </li>
-          ))
-        }
-      </ul>
     </div>
   </section>
 
@@ -424,6 +426,18 @@ const structuredData = {
     letter-spacing: -0.01em;
   }
 
+  /* A light line drawing of the place, in the green the "Works with" icons use, to catch the
+     eye on the way down. Sized in em and centred on the cap height, as every icon by text is.
+     A heavier line than the icon's own, to sit with a bold heading rather than look faint. */
+  .places dt :global(.icon) {
+    width: 1.25em;
+    height: 1.25em;
+    margin-right: 0.45em;
+    vertical-align: -0.27em;
+    stroke-width: 1.8;
+    color: var(--green-deep);
+  }
+
   .places dd {
     margin: 0.2rem 0 0;
     text-wrap: pretty;
@@ -563,9 +577,11 @@ const structuredData = {
 
   /* Menu bar icon ----------------------------------------------------------- */
 
-  /* The five icon states are a legend, not a headline. */
+  /* The five icon states are a legend, not a headline. It comes straight after the steps, as
+     what you see in the menu bar while they happen, so it shares their white band: less
+     padding on top, as the unlock section below it has. */
   .icons {
-    padding-block: clamp(3.5rem, 7vw, 5.5rem);
+    padding-block: clamp(1.5rem, 4vw, 3rem) clamp(3.5rem, 7vw, 5.5rem);
   }
 
   .icons .eyebrow {

@@ -36,7 +36,9 @@ most in the FAQ, the privacy rows and `/privacy`.
   thing, and the page should look like it.
 - **Icons must carry meaning.** A device, a Bluetooth mark and a padlock on the three
   steps tell the story on their own, so they belong. An icon chip beside a list item
-  whose heading already says it is clutter, so it does not.
+  whose heading already says it is clutter, so it does not. The one exception, asked for on
+  2026-11-24: the four places in *Where it helps* carry a plain green line icon inline with
+  their heading, to catch the eye on the way down. No chip, no tinted square.
 - **No uniform card grids.** Four identical rounded boxes each with a tinted icon square
   reads as filler. Hairline-divided rows in a two-column block read as considered.
 - **Controls copied from the app should look like the app's.** The mode switch is

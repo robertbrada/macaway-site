@@ -21,7 +21,9 @@ const MENU_WIDTH = 362;
   <div class="wrap grid">
     <div class="copy">
       <h1>Walk away<br /> Your Mac <span class="drawn">locks</span></h1>
-      <p class="kicker">Come back and it can unlock for you.<br /> A small app in your menu bar.</p>
+      <p class="kicker">
+        A small menu bar app that locks and unlocks your Mac for you.
+      </p>
 
       <div class="cta">
         <DownloadButton place="hero" />
@@ -117,7 +119,7 @@ const MENU_WIDTH = 362;
     max-width: 40ch;
     font-size: clamp(1.125rem, 1.7vw, 1.3125rem);
     color: var(--ink-muted);
-    /* On a phone a line can still wrap; this keeps the halves even instead of leaving one word. */
+    /* Two even lines rather than a full one and a short one. */
     text-wrap: balance;
   }
 
@@ -223,12 +225,14 @@ const MENU_WIDTH = 362;
     background: rgb(11 26 18 / 0.09);
   }
 
+  /* Faded, so the eye goes to the shield: these only say "this is a Mac's menu bar". */
   .system {
     grid-column: 3;
     justify-self: end;
     display: flex;
     align-items: center;
     gap: 0.9rem;
+    opacity: 0.5;
   }
 
   .battery {

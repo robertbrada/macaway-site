@@ -30,8 +30,11 @@ import { link } from '../lib/links';
     align-items: center;
     justify-content: space-between;
     gap: 0.5rem 1.5rem;
-    border-top: 1px solid var(--line);
     padding-top: 2rem;
+    /* The rule spans the text, as every other rule on the page does. A border would run on
+       across the wrap's gutters and stick out past the content on both sides. */
+    background: linear-gradient(var(--line), var(--line)) top center / calc(100% - 2 * var(--gutter)) 1px
+      no-repeat;
   }
 
   .ends {
