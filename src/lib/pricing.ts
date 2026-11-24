@@ -19,6 +19,12 @@ export const DOWNLOAD_URL: string | null =
   'https://github.com/robertbrada/macaway-releases/releases/download/archives/MacAway-1.2.0.zip';
 
 /**
+ * The version the Download button gives you, read from its zip's name, so the "Version 1.2.0"
+ * beside the button moves with every release and cannot name a version nobody downloads.
+ */
+export const APP_VERSION = DOWNLOAD_URL?.match(/\/MacAway-(\d+(?:\.\d+)+)\.zip$/)?.[1] ?? null;
+
+/**
  * `/buy` is served by the worker, which opens a Stripe checkout and redirects to it, so this
  * site never loads Stripe's script. Setting `CHECKOUT_OPEN` to false disables the Buy link,
  * which is the way to stop selling without taking the page down.

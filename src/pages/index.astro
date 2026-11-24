@@ -10,7 +10,15 @@ import DownloadButton from '../components/DownloadButton.astro';
 import CopyEmail from '../components/CopyEmail.astro';
 import portrait from '../assets/author.webp';
 import { link, MAKER_LINKEDIN, MAKER_PORTFOLIO } from '../lib/links';
-import { BUY_PATH, CHECKOUT_OPEN, PRICE, PRICE_USD, REFUND_DAYS, TRIAL_DAYS } from '../lib/pricing';
+import {
+  APP_VERSION,
+  BUY_PATH,
+  CHECKOUT_OPEN,
+  PRICE,
+  PRICE_USD,
+  REFUND_DAYS,
+  TRIAL_DAYS,
+} from '../lib/pricing';
 
 const places = [
   { icon: 'screen', title: 'Conferences', line: 'Leave it at your seat. If someone takes it, it locks.' },
@@ -77,7 +85,7 @@ const steps = [
   {
     icon: 'iphone',
     title: 'Pick what you carry',
-    line: 'Any device on the same Apple ID as your Mac: a phone, a watch, even an AirTag on your keys.',
+    line: 'Any device on the same Apple ID as your Mac: a phone, a watch, AirPods, even an AirTag on your keys.',
   },
   {
     icon: 'bluetooth',
@@ -134,6 +142,7 @@ const structuredData = {
   name: 'MacAway',
   applicationCategory: 'SecurityApplication',
   operatingSystem: 'macOS 13 or later',
+  ...(APP_VERSION && { softwareVersion: APP_VERSION }),
   url: 'https://macaway.app/',
   offers: {
     '@type': 'Offer',
