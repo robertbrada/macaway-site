@@ -57,7 +57,24 @@ const menuSvg = menuDrawing
           <span>{APP_VERSION && <>Version&nbsp;{APP_VERSION}&nbsp;· </>}macOS&nbsp;13+</span>
         </p>
       </div>
-      <p class="brew">Or with Homebrew: <code>brew install --cask robertbrada/tap/macaway</code></p>
+      <p class="brew">
+        or
+        <span class="command">
+          <code>brew install --cask robertbrada/tap/macaway</code>
+          <button class="copy-command" type="button" aria-label="Copy the command" data-track="homebrew_copy">
+            <span class="to-copy"><Icon name="copy" size={14} /></span>
+            <span class="copied"><Icon name="check" size={14} /></span>
+          </button>
+        </span>
+      </p>
+      <script>
+        const copy = document.querySelector<HTMLButtonElement>('.copy-command');
+        copy?.addEventListener('click', async () => {
+          await navigator.clipboard.writeText(copy.previousElementSibling?.textContent ?? '');
+          copy.dataset.copied = '';
+          setTimeout(() => delete copy.dataset.copied, 1500);
+        });
+      </script>
 
       <div class="works">
         <p class="works-label">Works with</p>
@@ -199,24 +216,62 @@ const menuSvg = menuDrawing
     color: var(--ink);
   }
 
-  /* One click selects the whole command. Hidden where the Download button is, on a touch
-     screen, because nobody runs it there. */
+  /* Hidden where the Download button is, on a touch screen, because nobody runs it there. */
   .brew {
     margin: 0.85rem 0 0;
     font-size: 0.8125rem;
     color: var(--ink-faint);
   }
 
-  .brew code {
-    display: inline-block;
-    padding: 0.2em 0.5em;
+  .command {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-left: 0.25rem;
+    padding: 0.15rem 0.2rem 0.15rem 0.55rem;
     border-radius: 6px;
     background: rgb(11 26 18 / 0.045);
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  .command code {
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
     font-size: 0.75rem;
     color: var(--ink-muted);
-    white-space: nowrap;
     user-select: all;
+  }
+
+  .copy-command {
+    display: grid;
+    place-items: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0;
+    border: 0;
+    border-radius: 4px;
+    background: none;
+    color: var(--ink-faint);
+    cursor: pointer;
+  }
+
+  .copy-command:hover {
+    background: rgb(11 26 18 / 0.06);
+    color: var(--ink);
+  }
+
+  .copy-command span {
+    display: grid;
+  }
+
+  .copy-command .copied,
+  .copy-command[data-copied] .to-copy {
+    display: none;
+  }
+
+  .copy-command[data-copied] .copied {
+    display: grid;
+    color: var(--green-deep);
   }
 
   @media (hover: none) and (pointer: coarse) {
