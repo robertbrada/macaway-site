@@ -3,6 +3,30 @@
     <channel>
         <title>MacAway</title>
         <item>
+            <title>1.3.0</title>
+            <pubDate>Wed, 25 Nov 2026 14:38:18 +0100</pubDate>
+            <link>https://macaway.app</link>
+            <sparkle:version>369</sparkle:version>
+            <sparkle:shortVersionString>1.3.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
+            <description><![CDATA[<ul>
+  <li><b>Watch it unlock.</b> With Caffeine mode on, the screen now stays on behind the lock, so as you walk back you can see MacAway type your password.</li>
+  <li><b>Keep just your Mac awake.</b> Untick Keep screen on in the Caffeine mode menu, and the screen turns off and locks as usual while your Mac stays awake.</li>
+  <li><b>Time left.</b> Caffeine mode now shows when it ends and how much time is left.</li>
+  <li><b>Choose when it unlocks.</b> A new slider under Advanced sets how close you need to be before MacAway unlocks your Mac.</li>
+  <li><b>Quicker and more careful.</b> Unlocking reacts a little sooner when you come back, and waits for more than one reading before it decides.</li>
+  <li><b>Fixes.</b> Keeping a menu open no longer interrupts measuring. A new mode starts from the standard settings.</li>
+</ul>
+]]></description>
+            <enclosure url="https://github.com/robertbrada/macaway-releases/releases/download/archives/MacAway-1.3.0.zip" length="2665097" type="application/octet-stream" sparkle:edSignature="9gD2WQj6OX4yAGIhqdXF9adgswKLAyDXuLTqmUC3V7qYuxUzPIuiVYHQy6nUDifE1iMa07AbfGij+dCgG5s5CA=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/robertbrada/macaway-releases/releases/download/archives/MacAway369-346.delta" sparkle:deltaFrom="346" length="324618" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976432" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="fwZWpvSiHhE+sa2NGhz9/CmO8RkQ0J0wimTsA8lDxASoaYiX0iO1zBX8mg1RI7UIU0oOY75kzHDmsGk01LtrDA=="/>
+                <enclosure url="https://github.com/robertbrada/macaway-releases/releases/download/archives/MacAway369-339.delta" sparkle:deltaFrom="339" length="380246" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976432" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="7+WaK7KR4gbBrb3LFhZVj9Kt7+Nt4JCw12jxJEv0pvoqN9VzQQs7PwEfbWXw56JVXMWYt+LkMdQAcH3PGzy0Bw=="/>
+                <enclosure url="https://github.com/robertbrada/macaway-releases/releases/download/archives/MacAway369-303.delta" sparkle:deltaFrom="303" length="509422" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976432" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="Wr4SR6Y2/CnWhc7hvh4haOVBXrVPgpejv5FH6GTojBmzjBluDHdk+6/EgNN7nputyrT3bZL7CA/FdfMHUyltBg=="/>
+                <enclosure url="https://github.com/robertbrada/macaway-releases/releases/download/archives/MacAway369-300.delta" sparkle:deltaFrom="300" length="805262" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976432" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="slEzbzsnbokvZtdIFFs0LlwJuIww3CjL7NL8m1ku3aY/hTkVkevon6/hjAcb2xpOp77SWpNTxylOniuHglNLAg=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>1.2.0</title>
             <pubDate>Mon, 23 Nov 2026 15:47:01 +0100</pubDate>
             <link>https://macaway.app</link>
@@ -38,18 +62,6 @@
             <sparkle:deltas>
                 <enclosure url="https://github.com/robertbrada/macaway-releases/releases/download/archives/MacAway339-303.delta" sparkle:deltaFrom="303" length="406454" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976432" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="ql1AF1iznvHBwr7aYMVsAF5XLibxgHCU38/8RRwGN5DQ1SF52IQd/i34bjpE4OSGCiUOsTWyf74wxAZeGR4/BA=="/>
                 <enclosure url="https://github.com/robertbrada/macaway-releases/releases/download/archives/MacAway339-300.delta" sparkle:deltaFrom="300" length="701770" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976432" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="9n/njP5VpaOfhZ1SWCH6ihCDZlBkKCCpT27S9ZSmKD/kW1sxaEyrX+fjr9MSv0s61J1iXCq0mVpHlwcMyEROAQ=="/>
-            </sparkle:deltas>
-        </item>
-        <item>
-            <title>1.0.1</title>
-            <pubDate>Thu, 01 Oct 2026 13:26:09 +0200</pubDate>
-            <link>https://macaway.app</link>
-            <sparkle:version>303</sparkle:version>
-            <sparkle:shortVersionString>1.0.1</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/robertbrada/macaway-releases/releases/download/archives/MacAway-1.0.1.zip" length="2475523" type="application/octet-stream" sparkle:edSignature="GSMVGOgsrpMwsRkfamckkfpztRSPU3nD/CY7vEqLGb2vIU9FYbWzeDSjssrrMqTzpgyQ2frHibKWWeW47VxBBw=="/>
-            <sparkle:deltas>
-                <enclosure url="https://github.com/robertbrada/macaway-releases/releases/download/archives/MacAway303-300.delta" sparkle:deltaFrom="300" length="308178" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="976432" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,uk" sparkle:edSignature="C+PPp56QRM49UrNljoWZ/tBL0DOFrstoIA2klJopm8r+Qap41J1piMZFk1W6RCGdIh63257JR8t3Po7/e6vwDw=="/>
             </sparkle:deltas>
         </item>
     </channel>

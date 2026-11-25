@@ -16,7 +16,7 @@ export const REFUND_DAYS = 30;
  * takes people forward from there. Setting it to `null` disables every Download button again.
  */
 export const DOWNLOAD_URL: string | null =
-  'https://github.com/robertbrada/macaway-releases/releases/download/archives/MacAway-1.2.0.zip';
+  'https://github.com/robertbrada/macaway-releases/releases/download/archives/MacAway-1.3.0.zip';
 
 /**
  * The version the Download button gives you, read from its zip's name, so the "Version 1.2.0"
