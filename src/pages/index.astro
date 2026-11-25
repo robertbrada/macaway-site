@@ -34,13 +34,13 @@ const trialStops = [
   { when: 'When you are ready', line: `Buy it once for ${PRICE} and keep it forever.` },
 ];
 
-// Only what people ask before they buy: how to get it, whether it fits their kit, and what
-// the money buys. Anything a section above already answers stays out.
+// What people ask before they buy, and what they asked on Reddit about how it behaves. The
+// numbers are the app's defaults; check them in the app repo when they change.
 const questions = [
   {
     question: 'Is MacAway on the App Store?',
     answer:
-      'No. You download it straight from this page. It is signed and checked by Apple, so macOS opens it like any other app.',
+      'No. You download it straight from this page, or install it with Homebrew. It is signed and checked by Apple, so macOS opens it like any other app.',
   },
   {
     question: 'Is MacAway safe?',
@@ -51,6 +51,30 @@ const questions = [
     question: 'Do I need to install anything on my phone?',
     answer:
       'No. There is nothing to install and nothing to set up. Your Mac does all the work. You only pick which device it should follow.',
+  },
+  {
+    question: 'How does it know I walked away?',
+    answer:
+      'Never from one reading. It averages the last 8 readings, about 8 seconds. When that average gets weaker than your limit, a countdown starts. Your Mac locks at the end, unless your device comes back 10 dB stronger first. Normal mode uses −80 dBm and 15 seconds, and you can change both. A device next to you reads −40 to −60 dBm, so its usual ups and downs don’t come close.',
+  },
+  {
+    question: 'What if my phone’s battery dies?',
+    answer:
+      'After 30 seconds with no signal, it counts as gone, and your Mac locks after the wait you set. If your Mac’s own Bluetooth is off, MacAway can’t see anything, so it doesn’t lock. The menu then says Not protected.',
+  },
+  {
+    question: 'Can a phone left on my desk unlock my Mac?',
+    answer:
+      'No. Unlocking is off until you turn it on. Even then, MacAway types your password only when one of your devices left while your Mac was locked and came back, none is still away, the last 5 readings average −60 dBm or stronger, and your own account is on the screen. A phone on your desk never left. It tries once per lock, and if the password doesn’t work, it stops and tells you. The one thing it can’t know is who is carrying your phone.',
+  },
+  {
+    question: 'Does unlocking work if my Mac goes to sleep?',
+    answer:
+      'Not while it sleeps, because a sleeping Mac can’t hear your phone. Locking doesn’t put your Mac to sleep, but macOS may later. Caffeine mode keeps it awake while it is locked, and can keep the screen on so you see it unlock.',
+  },
+  {
+    question: 'Does it work with the lid closed on an external display?',
+    answer: 'Yes, the same as with the lid open.',
   },
   {
     question: 'Does it work with an Android phone?',
@@ -75,6 +99,7 @@ const profiles = [
 ];
 
 const facts = [
+  `${TRIAL_DAYS} days free. No card needed`,
   'Pay once. No subscription',
   'For all your Macs',
   `Full refund within ${REFUND_DAYS} days`,
