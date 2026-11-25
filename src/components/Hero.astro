@@ -202,19 +202,19 @@ const menuSvg = menuDrawing
   /* One click selects the whole command. Hidden where the Download button is, on a touch
      screen, because nobody runs it there. */
   .brew {
-    margin: 0.9rem 0 0;
-    font-size: 0.875rem;
-    color: var(--ink-muted);
+    margin: 0.85rem 0 0;
+    font-size: 0.8125rem;
+    color: var(--ink-faint);
   }
 
   .brew code {
     display: inline-block;
-    padding: 0.15em 0.45em;
+    padding: 0.2em 0.5em;
     border-radius: 6px;
-    background: rgb(11 26 18 / 0.06);
+    background: rgb(11 26 18 / 0.045);
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 0.8125rem;
-    color: var(--ink);
+    font-size: 0.75rem;
+    color: var(--ink-muted);
     white-space: nowrap;
     user-select: all;
   }
@@ -230,12 +230,12 @@ const menuSvg = menuDrawing
      stays quiet, and the devices on one line under it. The icons are fainter than the names,
      sized in em and centred on the cap height. */
   .works {
-    margin-top: clamp(2.25rem, 4vw, 3rem);
+    margin-top: clamp(2.5rem, 4.5vw, 3.25rem);
   }
 
   .works-label {
-    margin: 0 0 0.55rem;
-    font-size: 0.75rem;
+    margin: 0 0 0.5rem;
+    font-size: 0.6875rem;
     font-weight: 600;
     letter-spacing: 0.09em;
     text-transform: uppercase;
@@ -245,11 +245,11 @@ const menuSvg = menuDrawing
   .devices {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.35rem 1.35rem;
+    gap: 0.35rem 1.15rem;
     margin: 0;
     padding: 0;
     list-style: none;
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
     font-weight: 500;
     color: var(--ink-muted);
   }
