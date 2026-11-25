@@ -57,6 +57,7 @@ const menuSvg = menuDrawing
           <span>{APP_VERSION && <>Version&nbsp;{APP_VERSION}&nbsp;· </>}macOS&nbsp;13+</span>
         </p>
       </div>
+      <p class="brew">Or with Homebrew: <code>brew install --cask robertbrada/tap/macaway</code></p>
 
       <div class="works">
         <p class="works-label">Works with</p>
@@ -196,6 +197,32 @@ const menuSvg = menuDrawing
   .cta-trial {
     font-weight: 600;
     color: var(--ink);
+  }
+
+  /* One click selects the whole command. Hidden where the Download button is, on a touch
+     screen, because nobody runs it there. */
+  .brew {
+    margin: 0.9rem 0 0;
+    font-size: 0.875rem;
+    color: var(--ink-muted);
+  }
+
+  .brew code {
+    display: inline-block;
+    padding: 0.15em 0.45em;
+    border-radius: 6px;
+    background: rgb(11 26 18 / 0.06);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.8125rem;
+    color: var(--ink);
+    white-space: nowrap;
+    user-select: all;
+  }
+
+  @media (hover: none) and (pointer: coarse) {
+    .brew {
+      display: none;
+    }
   }
 
   /* Which devices it follows: a small block of its own, well clear of the button. A small
