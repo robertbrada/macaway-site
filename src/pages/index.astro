@@ -134,6 +134,11 @@ const unlockFacts = [
 
 const shields = [
   { shape: 'guarding', label: "You're covered" },
+  {
+    shape: 'guarding-awake',
+    label: 'Caffeine mode on',
+    tip: 'Your Mac stays awake. It still locks when you walk away.',
+  },
   { shape: 'connecting', label: 'Still checking' },
   { shape: 'away', label: 'Locking soon' },
   { shape: 'not-protected', label: 'Not protected' },
@@ -239,9 +244,18 @@ const structuredData = {
       <ul class="shields rise">
         {
           shields.map((shield) => (
-            <li class={`shield-${shield.shape}`}>
+            <li
+              class={`shield-${shield.shape}`}
+              tabindex={'tip' in shield ? 0 : undefined}
+              aria-describedby={'tip' in shield ? `tip-${shield.shape}` : undefined}
+            >
               <Shield shape={shield.shape} size={24} />
-              <span>{shield.label}</span>
+              <span class={'tip' in shield ? 'has-tip' : undefined}>{shield.label}</span>
+              {'tip' in shield && (
+                <span class="tip" role="tooltip" id={`tip-${shield.shape}`}>
+                  {shield.tip}
+                </span>
+              )}
             </li>
           ))
         }
@@ -611,7 +625,7 @@ const structuredData = {
 
   /* Menu bar icon ----------------------------------------------------------- */
 
-  /* The five icon states are a legend, not a headline. It comes straight after the steps, as
+  /* The six icon states are a legend, not a headline. It comes straight after the steps, as
      what you see in the menu bar while they happen, so it shares their white band: less
      padding on top, as the unlock section below it has. */
   .icons {
@@ -622,26 +636,81 @@ const structuredData = {
     margin-bottom: 1.5rem;
   }
 
+  /* Rules between the cells, not a clipped grid, so a tooltip can rise above the list. */
   .shields {
     display: grid;
-    gap: 1px;
     margin: 0;
     padding: 0;
     list-style: none;
     border: 1px solid var(--line);
     border-radius: var(--radius-lg);
-    background: var(--line);
-    overflow: hidden;
+    background: var(--bg);
   }
 
   .shields li {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 0.85rem;
     padding: 1.1rem 1.35rem;
-    background: var(--bg);
     font-size: 0.9375rem;
     font-weight: 500;
+  }
+
+  .shields li + li {
+    border-top: 1px solid var(--line);
+  }
+
+  /* A dotted line under the words, as the usual sign that there is more on hover. */
+  .has-tip {
+    text-decoration: underline dotted var(--ink-faint);
+    text-underline-offset: 0.25em;
+  }
+
+  .shields li[tabindex] {
+    cursor: help;
+  }
+
+  .shields li[tabindex]:focus-visible {
+    outline: 2px solid var(--green-deep);
+    outline-offset: -2px;
+    border-radius: var(--radius);
+  }
+
+  .tip {
+    position: absolute;
+    bottom: calc(100% + 0.5rem);
+    left: 2.8rem;
+    z-index: 2;
+    width: max-content;
+    max-width: 15rem;
+    padding: 0.55rem 0.8rem;
+    border-radius: var(--radius);
+    background: var(--bg-dark);
+    color: #fff;
+    box-shadow: var(--shadow-lg);
+    font-size: 0.8125rem;
+    font-weight: 400;
+    line-height: 1.4;
+    text-align: left;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .tip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 1.6rem;
+    border: 6px solid transparent;
+    border-top-color: var(--bg-dark);
+  }
+
+  .shields li:hover .tip,
+  .shields li:focus .tip {
+    opacity: 1;
+    visibility: visible;
   }
 
   .shields :global(svg) {
@@ -649,7 +718,8 @@ const structuredData = {
     color: var(--ink-faint);
   }
 
-  .shield-guarding :global(svg) {
+  .shield-guarding :global(svg),
+  .shield-guarding-awake :global(svg) {
     color: var(--green-deep);
   }
 
@@ -1012,7 +1082,23 @@ const structuredData = {
     }
 
     .shields {
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(6, 1fr);
+    }
+
+    .shields li + li {
+      border-top: 0;
+      border-left: 1px solid var(--line);
+    }
+
+    .tip {
+      left: 50%;
+      text-align: center;
+      transform: translateX(-50%);
+    }
+
+    .tip::after {
+      left: 50%;
+      transform: translateX(-50%);
     }
 
     .shields li {
