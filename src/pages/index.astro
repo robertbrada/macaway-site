@@ -263,21 +263,6 @@ const structuredData = {
     </div>
   </section>
 
-  <section class="section unlock-section" id="unlock">
-    <div class="wrap unlock rise">
-      <div class="unlock-copy">
-        <h2>Unlock when you come back</h2>
-        <p class="lede">
-          Walk back to your Mac and MacAway unlocks it. You do not have to type your password.
-        </p>
-
-        <ul class="unlock-facts">{unlockFacts.map((fact) => <li>{fact}</li>)}</ul>
-      </div>
-
-      <GearMenu />
-    </div>
-  </section>
-
   <section class="section section-grey">
     <div class="wrap modes rise">
       <div class="panel-slot">
@@ -296,6 +281,21 @@ const structuredData = {
           choose <strong>Add mode</strong> to make a new one.
         </p>
       </div>
+    </div>
+  </section>
+
+  <section class="section" id="unlock">
+    <div class="wrap unlock rise">
+      <div class="unlock-copy">
+        <h2>Unlock when you come back</h2>
+        <p class="lede">
+          Walk back to your Mac and MacAway unlocks it. You do not have to type your password.
+        </p>
+
+        <ul class="unlock-facts">{unlockFacts.map((fact) => <li>{fact}</li>)}</ul>
+      </div>
+
+      <GearMenu />
     </div>
   </section>
 
@@ -554,11 +554,7 @@ const structuredData = {
   /* Unlock when you come back ------------------------------------------------ */
 
   /* Less padding on top: it shares the white band with the steps above. */
-  .unlock-section {
-    padding-top: clamp(1.5rem, 4vw, 3rem);
-  }
-
-  /* The same grid as the modes section below, mirrored, so the two line up. */
+  /* The same grid as the modes section above, mirrored, so the two line up. */
   .unlock {
     display: grid;
     gap: clamp(2.5rem, 5vw, 4.5rem);
@@ -627,7 +623,7 @@ const structuredData = {
 
   /* The six icon states are a legend, not a headline. It comes straight after the steps, as
      what you see in the menu bar while they happen, so it shares their white band: less
-     padding on top, as the unlock section below it has. */
+     padding on top. */
   .icons {
     padding-block: clamp(1.5rem, 4vw, 3rem) clamp(3.5rem, 7vw, 5.5rem);
   }
