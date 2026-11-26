@@ -2,6 +2,7 @@
 // A picture of where "Unlock when I come back" lives: the end of MacAway's menu and the gear
 // menu it opens. The items copy the app's gear menu (MenuContentView.swift); keep them in step.
 import Icon from './Icon.astro';
+import { APP_VERSION } from '../lib/pricing';
 
 const items = [
   { label: 'Copy licence key' },
@@ -23,7 +24,7 @@ const items = [
 >
   <div class="menu-end">
     <span class="footer">
-      <span>MacAway 1.1.0</span>
+      <span>{APP_VERSION ? `MacAway ${APP_VERSION}` : 'MacAway'}</span>
       <span class="gear"><Icon name="gear" size={18} /></span>
     </span>
   </div>
