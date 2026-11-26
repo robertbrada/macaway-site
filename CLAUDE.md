@@ -125,7 +125,8 @@ Verified against 1.1.0 on 2026-11-10, and worth re-checking before you lean on a
   is true of the device and must not be widened to the Mac.
 - **Modes**, from `App/LockMode.swift`: a Mac starts with Normal (−80 dBm, 15 s) and Strict
   (−65 dBm, 5 s), and the user renames, retunes, adds and removes them. Home and In public
-  are gone. The slider ends (-60 to -95 dBm) and the ten waits are `LockSettings`'.
+  are gone. The slider ends (-60 to -95 dBm), the ten waits and the unlock line (-65 to -50 dBm, -60 to
+  start, the same in both modes) are `LockSettings`'.
   `src/components/LockPanel.astro` mirrors all of it; if they change in the app, change them
   here.
 - The menu says *Not protected* when macOS waits a minute or more before asking for the

@@ -1,23 +1,29 @@
 ---
 // The app menu's Advanced view, rebuilt in HTML so it can be handled and can wear this
 // site's colours instead of the system accent. Every number here mirrors
-// LockMode.swift in the app repo — Normal is -80 dBm / 15 s, Strict -65 dBm / 5 s.
+// LockMode.swift in the app repo — Normal is -80 dBm / 15 s, Strict -65 dBm / 5 s, and both
+// unlock at -60 dBm.
 //
-// Both sliders are real range inputs, so dragging, tapping and the arrow keys all work
+// The sliders are real range inputs, so dragging, tapping and the arrow keys all work
 // without any of it being written here.
 const FAR_SOONEST = -60; // LockSettings.strongestFar, the "locks sooner" end
 const FAR_LATEST = -95; // LockSettings.weakestFar, the "locks later" end
 const FAR_STEPS = FAR_SOONEST - FAR_LATEST; // 35 whole dBm between the two ends
 const DELAY_SECONDS = [3, 4, 5, 10, 15, 20, 30, 45, 60, 90];
+const UNLOCK_SOONEST = -65; // LockSettings.weakestUnlock, the "unlocks sooner" end
+const UNLOCK_LATEST = -50; // LockSettings.strongestUnlock, the "unlocks later" end
+const UNLOCK_STEPS = UNLOCK_LATEST - UNLOCK_SOONEST;
 
 /** Slider position for a signal threshold: 0 at -60 dBm, 35 at -95. */
 const farStop = (dbm: number) => FAR_SOONEST - dbm;
 /** Slider position for a wait: its index among the waits the app offers. */
 const delayStop = (seconds: number) => DELAY_SECONDS.indexOf(seconds);
+/** Slider position for the unlock line: 0 at -65 dBm, 15 at -50. */
+const unlockStop = (dbm: number) => dbm - UNLOCK_SOONEST;
 
 const modes = [
-  { id: 'normal', name: 'Normal', far: -80, delay: 15 },
-  { id: 'strict', name: 'Strict', far: -65, delay: 5 },
+  { id: 'normal', name: 'Normal', far: -80, delay: 15, unlock: -60 },
+  { id: 'strict', name: 'Strict', far: -65, delay: 5, unlock: -60 },
 ] as const;
 
 /** "-80 dBm · 15 s", as the app shows it beside the mode's name. */
@@ -30,7 +36,7 @@ const start = modes[0];
 const settings = Object.fromEntries(
   modes.map((mode) => [
     mode.id,
-    { far: farStop(mode.far), delay: delayStop(mode.delay) },
+    { far: farStop(mode.far), delay: delayStop(mode.delay), unlock: unlockStop(mode.unlock) },
   ])
 );
 
@@ -44,6 +50,8 @@ const pct = (stop: number, of: number) => `${(stop / of) * 100}%`;
   data-delay-seconds={JSON.stringify(DELAY_SECONDS)}
   data-far-soonest={FAR_SOONEST}
   data-far-steps={FAR_STEPS}
+  data-unlock-soonest={UNLOCK_SOONEST}
+  data-unlock-steps={UNLOCK_STEPS}
 >
   <div class="mode-list" role="group" aria-label="Modes">
     {
@@ -77,52 +85,75 @@ const pct = (stop: number, of: number) => `${(stop / of) * 100}%`;
     </span>
   </p>
 
-  <p class="hint">Change how soon your Mac locks.</p>
+  <div class="settings">
+    <p class="hint">Change how soon your Mac locks and unlocks.</p>
 
-  <div class="setting">
-    <p class="row">
-      <label for="far-slider">Far away means weaker than</label>
-      <span class="value">
-        <b data-far-value>{start.far} dBm</b>
-        <small>signal strength</small>
-      </span>
-    </p>
-    <input
-      class="slider"
-      id="far-slider"
-      type="range"
-      min="0"
-      max={FAR_STEPS}
-      step="any"
-      value={farStop(start.far)}
-      style={`--pos:${pct(farStop(start.far), FAR_STEPS)}`}
-      data-far-input
-      aria-valuetext={`${start.far} dBm`}
-    />
-    <p class="ends"><span>Locks sooner</span><span>Locks later</span></p>
+    <div class="setting">
+      <p class="row">
+        <label for="far-slider">Far away means weaker than</label>
+        <span class="value">
+          <b data-far-value>{start.far} dBm</b>
+          <small>signal strength</small>
+        </span>
+      </p>
+      <input
+        class="slider"
+        id="far-slider"
+        type="range"
+        min="0"
+        max={FAR_STEPS}
+        step="any"
+        value={farStop(start.far)}
+        style={`--pos:${pct(farStop(start.far), FAR_STEPS)}`}
+        data-far-input
+        aria-valuetext={`${start.far} dBm`}
+      />
+      <p class="ends"><span>Locks sooner</span><span>Locks later</span></p>
+    </div>
+
+    <div class="setting">
+      <p class="row">
+        <label for="delay-slider">Wait before locking</label>
+        <span class="value"><b data-delay-value>{start.delay} seconds</b></span>
+      </p>
+      <input
+        class="slider"
+        id="delay-slider"
+        type="range"
+        min="0"
+        max={DELAY_SECONDS.length - 1}
+        step="any"
+        value={delayStop(start.delay)}
+        style={`--pos:${pct(delayStop(start.delay), DELAY_SECONDS.length - 1)}`}
+        data-delay-input
+        aria-valuetext={`${start.delay} seconds`}
+      />
+      <p class="ends"><span>Locks sooner</span><span>Locks later</span></p>
+    </div>
+
+    <div class="setting">
+      <p class="row">
+        <label for="unlock-slider">Unlock when stronger than</label>
+        <span class="value">
+          <b data-unlock-value>{start.unlock} dBm</b>
+          <small>signal strength</small>
+        </span>
+      </p>
+      <input
+        class="slider"
+        id="unlock-slider"
+        type="range"
+        min="0"
+        max={UNLOCK_STEPS}
+        step="any"
+        value={unlockStop(start.unlock)}
+        style={`--pos:${pct(unlockStop(start.unlock), UNLOCK_STEPS)}`}
+        data-unlock-input
+        aria-valuetext={`${start.unlock} dBm`}
+      />
+      <p class="ends"><span>Unlocks sooner</span><span>Unlocks later</span></p>
+    </div>
   </div>
-
-  <div class="setting">
-    <p class="row">
-      <label for="delay-slider">Wait before locking</label>
-      <span class="value"><b data-delay-value>{start.delay} seconds</b></span>
-    </p>
-    <input
-      class="slider"
-      id="delay-slider"
-      type="range"
-      min="0"
-      max={DELAY_SECONDS.length - 1}
-      step="any"
-      value={delayStop(start.delay)}
-      style={`--pos:${pct(delayStop(start.delay), DELAY_SECONDS.length - 1)}`}
-      data-delay-input
-      aria-valuetext={`${start.delay} seconds`}
-    />
-    <p class="ends"><span>Locks sooner</span><span>Locks later</span></p>
-  </div>
-
-  <p class="foot">Coming back needs a little more signal.</p>
 </div>
 
 <style>
@@ -199,8 +230,6 @@ const pct = (stop: number, of: number) => `${(stop / of) * 100}%`;
     justify-content: space-between;
     gap: 1rem;
     margin-top: 0.6rem;
-    padding-bottom: 1.1rem;
-    border-bottom: 1px solid rgb(255 255 255 / 0.1);
     font-size: 0.8125rem;
     color: var(--panel-muted);
   }
@@ -216,10 +245,18 @@ const pct = (stop: number, of: number) => `${(stop / of) * 100}%`;
 
   /* Rows ------------------------------------------------------------------- */
 
+  /* The app draws Advanced on the same faint panel as its device list. */
+  .settings {
+    margin-top: 1rem;
+    padding: 1.1rem 1.1rem 1.2rem;
+    border-radius: 9px;
+    background: rgb(255 255 255 / 0.06);
+  }
+
   .hint {
-    margin-top: 1.1rem;
     color: var(--panel-muted);
   }
+
 
   .setting {
     margin-top: 1.4rem;
@@ -332,13 +369,6 @@ const pct = (stop: number, of: number) => `${(stop / of) * 100}%`;
     color: var(--panel-muted);
   }
 
-  .foot {
-    margin-top: 1.4rem;
-    padding-top: 1.2rem;
-    border-top: 1px solid rgb(255 255 255 / 0.1);
-    color: var(--panel-muted);
-  }
-
   @media (prefers-reduced-motion: no-preference) {
     .dot {
       transition:
@@ -349,13 +379,17 @@ const pct = (stop: number, of: number) => `${(stop / of) * 100}%`;
 
   @media (min-width: 900px) {
     .panel {
-      padding: 1.4rem 1.5rem 1.7rem;
+      padding: 1.4rem 1.5rem 1.5rem;
+    }
+
+    .settings {
+      padding: 1.2rem 1.3rem 1.3rem;
     }
   }
 </style>
 
 <script>
-  type Preset = { far: number; delay: number };
+  type Preset = { far: number; delay: number; unlock: number };
 
   const DURATION = 420;
   const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
@@ -366,6 +400,8 @@ const pct = (stop: number, of: number) => `${(stop / of) * 100}%`;
     const delaySeconds: number[] = JSON.parse(panel.dataset.delaySeconds ?? '[]');
     const farSoonest = Number(panel.dataset.farSoonest);
     const farSteps = Number(panel.dataset.farSteps);
+    const unlockSoonest = Number(panel.dataset.unlockSoonest);
+    const unlockSteps = Number(panel.dataset.unlockSteps);
     const buttons = panel.querySelectorAll<HTMLButtonElement>('[data-mode-btn]');
 
     // Both sliders are driven by their position, and the reading is derived from it, so
@@ -389,10 +425,16 @@ const pct = (stop: number, of: number) => `${(stop / of) * 100}%`;
           return `${Math.round(seconds)} seconds`;
         },
       },
+      unlock: {
+        input: panel.querySelector<HTMLInputElement>('[data-unlock-input]'),
+        value: panel.querySelector<HTMLElement>('[data-unlock-value]'),
+        max: unlockSteps,
+        read: (stop: number) => `${Math.round(unlockSoonest + stop)} dBm`,
+      },
     };
 
     type Dial = keyof typeof dials;
-    const live: Record<Dial, number> = { far: 0, delay: 0 };
+    const live: Record<Dial, number> = { far: 0, delay: 0, unlock: 0 };
     let frame = 0;
 
     const paint = (name: Dial, stop: number, moveThumb = true) => {
@@ -415,7 +457,7 @@ const pct = (stop: number, of: number) => `${(stop / of) * 100}%`;
       for (const name of Object.keys(dials) as Dial[]) {
         if (!Number.isInteger(live[name])) paint(name, Math.round(live[name]));
       }
-      presets[id] = { far: live.far, delay: live.delay };
+      presets[id] = { far: live.far, delay: live.delay, unlock: live.unlock };
       const modeSummary = panel.querySelector<HTMLElement>(`[data-summary="${id}"]`);
       if (modeSummary) {
         modeSummary.textContent = `${farSoonest - live.far} dBm · ${delaySeconds[live.delay]} s`;
@@ -451,6 +493,7 @@ const pct = (stop: number, of: number) => `${(stop / of) * 100}%`;
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         paint('far', next.far);
         paint('delay', next.delay);
+        paint('unlock', next.unlock);
         return;
       }
 
@@ -459,6 +502,7 @@ const pct = (stop: number, of: number) => `${(stop / of) * 100}%`;
         const t = ease(Math.min((now - started) / DURATION, 1));
         paint('far', from.far + (next.far - from.far) * t);
         paint('delay', from.delay + (next.delay - from.delay) * t);
+        paint('unlock', from.unlock + (next.unlock - from.unlock) * t);
         if (t < 1) frame = requestAnimationFrame(tick);
       };
       frame = requestAnimationFrame(tick);
